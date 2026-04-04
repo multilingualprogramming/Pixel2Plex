@@ -553,16 +553,16 @@ function chargerImageDepuisFichier(fichier) {
 }
 
 function afficherZoneCanvas() {
-  document.getElementById("upload-zone").hidden = true;
   document.getElementById("canvas-area").hidden = false;
+  document.querySelector(".viewer-shell")?.classList.add("has-image");
 }
 
 function afficherZoneUpload() {
-  document.getElementById("upload-zone").hidden = false;
   document.getElementById("canvas-area").hidden = true;
   loadedImage = null;
   document.getElementById("btn-download").disabled = true;
   afficherOverlay(false);
+  document.querySelector(".viewer-shell")?.classList.remove("has-image");
 }
 
 function lierControles() {
