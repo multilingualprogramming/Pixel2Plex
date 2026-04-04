@@ -317,6 +317,92 @@ def _ajouter_etoile_triangle_hex(cx, cy, a, larg, haut):
     retour 0
 
 
+def _ajouter_motif_tri_snubsq(cx, cy, a, larg, haut):
+    s3 = math.sqrt(3.0)
+    soit hx0 = sommet_hex_x(cx, cy, a, 0)
+    soit hy0 = sommet_hex_y(cx, cy, a, 0)
+    soit hx1 = sommet_hex_x(cx, cy, a, 1)
+    soit hy1 = sommet_hex_y(cx, cy, a, 1)
+    soit hx2 = sommet_hex_x(cx, cy, a, 2)
+    soit hy2 = sommet_hex_y(cx, cy, a, 2)
+    soit hx3 = sommet_hex_x(cx, cy, a, 3)
+    soit hy3 = sommet_hex_y(cx, cy, a, 3)
+    soit hx4 = sommet_hex_x(cx, cy, a, 4)
+    soit hy4 = sommet_hex_y(cx, cy, a, 4)
+    soit hx5 = sommet_hex_x(cx, cy, a, 5)
+    soit hy5 = sommet_hex_y(cx, cy, a, 5)
+
+    _ajouter_etoile_triangle_hex(cx, cy, a, larg, haut)
+
+    soit t01x = _point_triangle_arete_exterieur_x(hx0, hy0, hx1, hy1, cx, cy)
+    soit t01y = _point_triangle_arete_exterieur_y(hx0, hy0, hx1, hy1, cx, cy)
+    soit o01x = (2.0 / s3) * (t01x - (hx0 + hx1) / 2.0)
+    soit o01y = (2.0 / s3) * (t01y - (hy0 + hy1) / 2.0)
+    soit q01ax = hx0 + o01x
+    soit q01ay = hy0 + o01y
+    soit q01bx = hx1 + o01x
+    soit q01by = hy1 + o01y
+    _ajouter_tuile_4_direct(hx0, hy0, hx1, hy1, q01bx, q01by, q01ax, q01ay, larg, haut)
+
+    soit t12x = _point_triangle_arete_exterieur_x(hx1, hy1, hx2, hy2, cx, cy)
+    soit t12y = _point_triangle_arete_exterieur_y(hx1, hy1, hx2, hy2, cx, cy)
+    soit o12x = (2.0 / s3) * (t12x - (hx1 + hx2) / 2.0)
+    soit o12y = (2.0 / s3) * (t12y - (hy1 + hy2) / 2.0)
+    soit q12ax = hx1 + o12x
+    soit q12ay = hy1 + o12y
+    soit q12bx = hx2 + o12x
+    soit q12by = hy2 + o12y
+    _ajouter_tuile_4_direct(hx1, hy1, hx2, hy2, q12bx, q12by, q12ax, q12ay, larg, haut)
+
+    soit t23x = _point_triangle_arete_exterieur_x(hx2, hy2, hx3, hy3, cx, cy)
+    soit t23y = _point_triangle_arete_exterieur_y(hx2, hy2, hx3, hy3, cx, cy)
+    soit o23x = (2.0 / s3) * (t23x - (hx2 + hx3) / 2.0)
+    soit o23y = (2.0 / s3) * (t23y - (hy2 + hy3) / 2.0)
+    soit q23ax = hx2 + o23x
+    soit q23ay = hy2 + o23y
+    soit q23bx = hx3 + o23x
+    soit q23by = hy3 + o23y
+    _ajouter_tuile_4_direct(hx2, hy2, hx3, hy3, q23bx, q23by, q23ax, q23ay, larg, haut)
+
+    soit t34x = _point_triangle_arete_exterieur_x(hx3, hy3, hx4, hy4, cx, cy)
+    soit t34y = _point_triangle_arete_exterieur_y(hx3, hy3, hx4, hy4, cx, cy)
+    soit o34x = (2.0 / s3) * (t34x - (hx3 + hx4) / 2.0)
+    soit o34y = (2.0 / s3) * (t34y - (hy3 + hy4) / 2.0)
+    soit q34ax = hx3 + o34x
+    soit q34ay = hy3 + o34y
+    soit q34bx = hx4 + o34x
+    soit q34by = hy4 + o34y
+    _ajouter_tuile_4_direct(hx3, hy3, hx4, hy4, q34bx, q34by, q34ax, q34ay, larg, haut)
+
+    soit t45x = _point_triangle_arete_exterieur_x(hx4, hy4, hx5, hy5, cx, cy)
+    soit t45y = _point_triangle_arete_exterieur_y(hx4, hy4, hx5, hy5, cx, cy)
+    soit o45x = (2.0 / s3) * (t45x - (hx4 + hx5) / 2.0)
+    soit o45y = (2.0 / s3) * (t45y - (hy4 + hy5) / 2.0)
+    soit q45ax = hx4 + o45x
+    soit q45ay = hy4 + o45y
+    soit q45bx = hx5 + o45x
+    soit q45by = hy5 + o45y
+    _ajouter_tuile_4_direct(hx4, hy4, hx5, hy5, q45bx, q45by, q45ax, q45ay, larg, haut)
+
+    soit t50x = _point_triangle_arete_exterieur_x(hx5, hy5, hx0, hy0, cx, cy)
+    soit t50y = _point_triangle_arete_exterieur_y(hx5, hy5, hx0, hy0, cx, cy)
+    soit o50x = (2.0 / s3) * (t50x - (hx5 + hx0) / 2.0)
+    soit o50y = (2.0 / s3) * (t50y - (hy5 + hy0) / 2.0)
+    soit q50ax = hx5 + o50x
+    soit q50ay = hy5 + o50y
+    soit q50bx = hx0 + o50x
+    soit q50by = hy0 + o50y
+    _ajouter_tuile_4_direct(hx5, hy5, hx0, hy0, q50bx, q50by, q50ax, q50ay, larg, haut)
+
+    _ajouter_tuile_3_direct(hx0, hy0, q50bx, q50by, q01ax, q01ay, larg, haut)
+    _ajouter_tuile_3_direct(hx1, hy1, q01bx, q01by, q12ax, q12ay, larg, haut)
+    _ajouter_tuile_3_direct(hx2, hy2, q12bx, q12by, q23ax, q23ay, larg, haut)
+    _ajouter_tuile_3_direct(hx3, hy3, q23bx, q23by, q34ax, q34ay, larg, haut)
+    _ajouter_tuile_3_direct(hx4, hy4, q34bx, q34by, q45ax, q45ay, larg, haut)
+    _ajouter_tuile_3_direct(hx5, hy5, q45bx, q45by, q50ax, q50ay, larg, haut)
+    retour 0
+
+
 def _sommet_reseau_tri_x(i, j, a):
     retour (math.sqrt(3.0) * a / 2.0) * i
 
@@ -1852,37 +1938,14 @@ def _gen_bi_hexhex_snubhex(larg, haut, a):
 def _gen_bi_tri_snubsq(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
     pas_x = a + 2.0 * h
-    pas_y = a + 2.0 * h
+    pas_y = 1.5 * a + h
     rang = 0
     y = -pas_y
     tantque y <= haut + pas_y:
         soit decal = (rang % 2) * (pas_x / 2.0)
         x = -pas_x + decal
         tantque x <= larg + pas_x:
-            soit x0 = x
-            soit y0 = y
-            soit x1 = x + a
-            soit y1 = y
-            soit x2 = x + a
-            soit y2 = y + a
-            soit x3 = x
-            soit y3 = y + a
-            soit cx = x + a / 2.0
-            soit cy = y + a / 2.0
-            soit tx = cx
-            soit ty = y - h
-            soit rx = x + a + h
-            soit ry = cy
-            soit bx = cx
-            soit by = y + a + h
-            soit lx = x - h
-            soit ly = cy
-
-            _ajouter_tuile_4_direct(x0, y0, x1, y1, x2, y2, x3, y3, larg, haut)
-            _ajouter_tuile_3_direct(x0, y0, x1, y1, tx, ty, larg, haut)
-            _ajouter_tuile_3_direct(x1, y1, x2, y2, rx, ry, larg, haut)
-            _ajouter_tuile_3_direct(x2, y2, x3, y3, bx, by, larg, haut)
-            _ajouter_tuile_3_direct(x3, y3, x0, y0, lx, ly, larg, haut)
+            _ajouter_motif_tri_snubsq(x, y, a, larg, haut)
 
             x = x + pas_x
         rang = rang + 1
