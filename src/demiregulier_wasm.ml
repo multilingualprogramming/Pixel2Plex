@@ -877,10 +877,10 @@ def _gen_bi_snubsq_b(larg, haut, a):
     retour 0
 
 
-# 9 — [4⁴ ; 3²·4·3·4] variante a : bandes alternées carrés / triangulaire allongé
+# 9 — [4⁴ ; 3³·4²] variante a : bandes alternées carrés / triangulaire allongé
 def _gen_bi_sq_elongtri_a(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
-    periode_y = 2.0 * a + h
+    periode_y = 2.0 * a + 2.0 * h
     y = -periode_y
     tantque y <= haut + periode_y:
         # bande carrés
@@ -893,15 +893,16 @@ def _gen_bi_sq_elongtri_a(larg, haut, a):
         tantque x <= larg + a:
             _ajouter_tuile_3_direct(x, y + a + h, x + a / 2.0, y + a, x + a, y + a + h, larg, haut)
             _ajouter_tuile_4_direct(x, y + a + h, x + a, y + a + h, x + a, y + a + h + a, x, y + a + h + a, larg, haut)
+            _ajouter_tuile_3_direct(x, y + a + h + a, x + a / 2.0, y + 2.0 * a + 2.0 * h, x + a, y + a + h + a, larg, haut)
             x = x + a
         y = y + periode_y
     retour 0
 
 
-# 10 — [4⁴ ; 3²·4·3·4] variante b : bandes décalées
+# 10 — [4⁴ ; 3³·4²] variante b : bandes décalées
 def _gen_bi_sq_elongtri_b(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
-    periode_y = 2.0 * a + h
+    periode_y = 2.0 * a + 2.0 * h
     y = -periode_y
     rang = 0
     tantque y <= haut + periode_y:
