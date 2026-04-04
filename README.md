@@ -20,6 +20,12 @@ https://multilingualprogramming.github.io/pixel2plex/
 - Geometry computed in WebAssembly compiled from French Multilingual sources
 - Static frontend with GitHub Pages deployment
 
+## Canonical mapping
+
+See [docs/demiregular-mapping.md](docs/demiregular-mapping.md) for the current
+mapping notes between the project's 20 methods and the canonical 20
+demiregular tilings.
+
 ## Project structure
 
 ```text
