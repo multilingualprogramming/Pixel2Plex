@@ -23,8 +23,8 @@ This note exists to make that correspondence explicit and reviewable.
 | 0 | `bi_trihex_a` | Damier trihex / triangles | `[3.6.3.6 ; 3^6]` |
 | 1 | `bi_trihex_b` | Rangées trihex | `[3.6.3.6 ; 3^6]` |
 | 2 | `bi_trihex_c` | Colonnes trihex | `[3.6.3.6 ; 3^6]` |
-| 3 | `bi_snubhex_a` | Damier snub-hex / triangles | `[3^4.6 ; 3^6]` |
-| 4 | `bi_snubhex_b` | Rangées snub-hex | `[3^4.6 ; 3^6]` |
+| 3 | `bi_snubhex_a` | Damier snub-hex / triangles | `[3^6 ; 3^4.6]` |
+| 4 | `bi_snubhex_b` | Rangées snub-hex | `[3^6 ; 3^4.6]` |
 | 5 | `bi_elongtri_a` | Allongé + double bande | `[3^3.4^2 ; 3^6]` |
 | 6 | `bi_elongtri_b` | Allongé colonnes alt. | `[3^3.4^2 ; 3^6]` |
 | 7 | `bi_snubsq_a` | Snub-carré + tri. int. | `[3^2.4.3.4 ; 3^6]` |

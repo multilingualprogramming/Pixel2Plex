@@ -245,6 +245,56 @@ def _ajouter_triangle_depuis_arete_exterieur(p1x, p1y, p2x, p2y, cx, cy, larg, h
     retour _ajouter_tuile_3_direct(p1x, p1y, p2x, p2y, t2x, t2y, larg, haut)
 
 
+def _point_triangle_arete_exterieur_x(p1x, p1y, p2x, p2y, cx, cy):
+    soit t1x = tri_arete_x3(p1x, p1y, p2x, p2y)
+    soit t1y = tri_arete_y3(p1x, p1y, p2x, p2y)
+    soit t2x = tri_arete_x3(p2x, p2y, p1x, p1y)
+    soit t2y = tri_arete_y3(p2x, p2y, p1x, p1y)
+    si _distance2(t1x, t1y, cx, cy) >= _distance2(t2x, t2y, cx, cy):
+        retour t1x
+    retour t2x
+
+
+def _point_triangle_arete_exterieur_y(p1x, p1y, p2x, p2y, cx, cy):
+    soit t1x = tri_arete_x3(p1x, p1y, p2x, p2y)
+    soit t1y = tri_arete_y3(p1x, p1y, p2x, p2y)
+    soit t2x = tri_arete_x3(p2x, p2y, p1x, p1y)
+    soit t2y = tri_arete_y3(p2x, p2y, p1x, p1y)
+    si _distance2(t1x, t1y, cx, cy) >= _distance2(t2x, t2y, cx, cy):
+        retour t1y
+    retour t2y
+
+
+def _ajouter_snubhex_triangles(cx, cy, a, larg, haut):
+    soit apx0 = _point_triangle_arete_exterieur_x(sommet_hex_x(cx, cy, a, 0), sommet_hex_y(cx, cy, a, 0), sommet_hex_x(cx, cy, a, 1), sommet_hex_y(cx, cy, a, 1), cx, cy)
+    soit apy0 = _point_triangle_arete_exterieur_y(sommet_hex_x(cx, cy, a, 0), sommet_hex_y(cx, cy, a, 0), sommet_hex_x(cx, cy, a, 1), sommet_hex_y(cx, cy, a, 1), cx, cy)
+    soit apx1 = _point_triangle_arete_exterieur_x(sommet_hex_x(cx, cy, a, 1), sommet_hex_y(cx, cy, a, 1), sommet_hex_x(cx, cy, a, 2), sommet_hex_y(cx, cy, a, 2), cx, cy)
+    soit apy1 = _point_triangle_arete_exterieur_y(sommet_hex_x(cx, cy, a, 1), sommet_hex_y(cx, cy, a, 1), sommet_hex_x(cx, cy, a, 2), sommet_hex_y(cx, cy, a, 2), cx, cy)
+    soit apx2 = _point_triangle_arete_exterieur_x(sommet_hex_x(cx, cy, a, 2), sommet_hex_y(cx, cy, a, 2), sommet_hex_x(cx, cy, a, 3), sommet_hex_y(cx, cy, a, 3), cx, cy)
+    soit apy2 = _point_triangle_arete_exterieur_y(sommet_hex_x(cx, cy, a, 2), sommet_hex_y(cx, cy, a, 2), sommet_hex_x(cx, cy, a, 3), sommet_hex_y(cx, cy, a, 3), cx, cy)
+    soit apx3 = _point_triangle_arete_exterieur_x(sommet_hex_x(cx, cy, a, 3), sommet_hex_y(cx, cy, a, 3), sommet_hex_x(cx, cy, a, 4), sommet_hex_y(cx, cy, a, 4), cx, cy)
+    soit apy3 = _point_triangle_arete_exterieur_y(sommet_hex_x(cx, cy, a, 3), sommet_hex_y(cx, cy, a, 3), sommet_hex_x(cx, cy, a, 4), sommet_hex_y(cx, cy, a, 4), cx, cy)
+    soit apx4 = _point_triangle_arete_exterieur_x(sommet_hex_x(cx, cy, a, 4), sommet_hex_y(cx, cy, a, 4), sommet_hex_x(cx, cy, a, 5), sommet_hex_y(cx, cy, a, 5), cx, cy)
+    soit apy4 = _point_triangle_arete_exterieur_y(sommet_hex_x(cx, cy, a, 4), sommet_hex_y(cx, cy, a, 4), sommet_hex_x(cx, cy, a, 5), sommet_hex_y(cx, cy, a, 5), cx, cy)
+    soit apx5 = _point_triangle_arete_exterieur_x(sommet_hex_x(cx, cy, a, 5), sommet_hex_y(cx, cy, a, 5), sommet_hex_x(cx, cy, a, 0), sommet_hex_y(cx, cy, a, 0), cx, cy)
+    soit apy5 = _point_triangle_arete_exterieur_y(sommet_hex_x(cx, cy, a, 5), sommet_hex_y(cx, cy, a, 5), sommet_hex_x(cx, cy, a, 0), sommet_hex_y(cx, cy, a, 0), cx, cy)
+
+    _ajouter_triangle_depuis_arete_exterieur(sommet_hex_x(cx, cy, a, 0), sommet_hex_y(cx, cy, a, 0), sommet_hex_x(cx, cy, a, 1), sommet_hex_y(cx, cy, a, 1), cx, cy, larg, haut)
+    _ajouter_triangle_depuis_arete_exterieur(sommet_hex_x(cx, cy, a, 1), sommet_hex_y(cx, cy, a, 1), sommet_hex_x(cx, cy, a, 2), sommet_hex_y(cx, cy, a, 2), cx, cy, larg, haut)
+    _ajouter_triangle_depuis_arete_exterieur(sommet_hex_x(cx, cy, a, 2), sommet_hex_y(cx, cy, a, 2), sommet_hex_x(cx, cy, a, 3), sommet_hex_y(cx, cy, a, 3), cx, cy, larg, haut)
+    _ajouter_triangle_depuis_arete_exterieur(sommet_hex_x(cx, cy, a, 3), sommet_hex_y(cx, cy, a, 3), sommet_hex_x(cx, cy, a, 4), sommet_hex_y(cx, cy, a, 4), cx, cy, larg, haut)
+    _ajouter_triangle_depuis_arete_exterieur(sommet_hex_x(cx, cy, a, 4), sommet_hex_y(cx, cy, a, 4), sommet_hex_x(cx, cy, a, 5), sommet_hex_y(cx, cy, a, 5), cx, cy, larg, haut)
+    _ajouter_triangle_depuis_arete_exterieur(sommet_hex_x(cx, cy, a, 5), sommet_hex_y(cx, cy, a, 5), sommet_hex_x(cx, cy, a, 0), sommet_hex_y(cx, cy, a, 0), cx, cy, larg, haut)
+
+    _ajouter_tuile_3_direct(sommet_hex_x(cx, cy, a, 0), sommet_hex_y(cx, cy, a, 0), apx5, apy5, apx0, apy0, larg, haut)
+    _ajouter_tuile_3_direct(sommet_hex_x(cx, cy, a, 1), sommet_hex_y(cx, cy, a, 1), apx0, apy0, apx1, apy1, larg, haut)
+    _ajouter_tuile_3_direct(sommet_hex_x(cx, cy, a, 2), sommet_hex_y(cx, cy, a, 2), apx1, apy1, apx2, apy2, larg, haut)
+    _ajouter_tuile_3_direct(sommet_hex_x(cx, cy, a, 3), sommet_hex_y(cx, cy, a, 3), apx2, apy2, apx3, apy3, larg, haut)
+    _ajouter_tuile_3_direct(sommet_hex_x(cx, cy, a, 4), sommet_hex_y(cx, cy, a, 4), apx3, apy3, apx4, apy4, larg, haut)
+    _ajouter_tuile_3_direct(sommet_hex_x(cx, cy, a, 5), sommet_hex_y(cx, cy, a, 5), apx4, apy4, apx5, apy5, larg, haut)
+    retour 0
+
+
 def _ajouter_carre_depuis_arete(p1x, p1y, p2x, p2y, larg, haut):
     soit dx = p2x - p1x
     soit dy = p2y - p1y
@@ -639,12 +689,11 @@ def _gen_bi_trihex_c(larg, haut, a):
     retour 0
 
 
-# 3 — [3⁴·6 ; 3⁶] variante a : snub-hex damier
+# 3 — [3⁶ ; 3⁴·6] variante a : snub-hex damier
 def _gen_bi_snubhex_a(larg, haut, a):
     s3 = math.sqrt(3.0)
     pas_x = 2.0 * s3 * a
     pas_y = 3.0 * a
-    at = a * 0.78
     rangs = _nb_pas_inclusifs(-pas_y, haut + pas_y, pas_y)
     cols = _nb_pas_inclusifs(-pas_x, larg + pas_x, pas_x)
     pour rang dans range(rangs):
@@ -666,33 +715,7 @@ def _gen_bi_snubhex_a(larg, haut, a):
             soit hy5 = sommet_hex_y(x, y, a, 5)
             si (col + rang) % 2 == 0:
                 _ajouter_tuile_6_direct(hx0, hy0, hx1, hy1, hx2, hy2, hx3, hy3, hx4, hy4, hx5, hy5, larg, haut)
-                pour i dans range(6):
-                    soit pvx = sommet_hex_x(x, y, a, i)
-                    soit pvy = sommet_hex_y(x, y, a, i)
-                    soit ppx = sommet_hex_x(x, y, a, (i + 5) % 6)
-                    soit ppy = sommet_hex_y(x, y, a, (i + 5) % 6)
-                    soit pnx = sommet_hex_x(x, y, a, (i + 1) % 6)
-                    soit pny = sommet_hex_y(x, y, a, (i + 1) % 6)
-                    soit dx1 = pvx - ppx
-                    soit dy1 = pvy - ppy
-                    soit dx2 = pnx - pvx
-                    soit dy2 = pny - pvy
-                    soit lon1 = math.sqrt(dx1 * dx1 + dy1 * dy1)
-                    soit lon2 = math.sqrt(dx2 * dx2 + dy2 * dy2)
-                    si lon1 == 0 ou lon2 == 0:
-                        continuer
-                    soit n1x = dy1 / lon1
-                    soit n1y = -dx1 / lon1
-                    soit n2x = dy2 / lon2
-                    soit n2y = -dx2 / lon2
-                    soit ax = pvx + n1x * at
-                    soit ay = pvy + n1y * at
-                    soit bx = pvx + n2x * at
-                    soit by = pvy + n2y * at
-                    soit tri_min_y = min(min(pvy, ay), by)
-                    soit tri_max_y = max(max(pvy, ay), by)
-                    si tri_max_y <= y ou tri_min_y >= y + a:
-                        _ajouter_tuile_3_direct(pvx, pvy, ax, ay, bx, by, larg, haut)
+                _ajouter_snubhex_triangles(x, y, a, larg, haut)
             sinon:
                 _ajouter_tuile_3_direct(x, y, hx0, hy0, hx1, hy1, larg, haut)
                 _ajouter_tuile_3_direct(x, y, hx1, hy1, hx2, hy2, larg, haut)
@@ -703,12 +726,11 @@ def _gen_bi_snubhex_a(larg, haut, a):
     retour 0
 
 
-# 4 — [3⁴·6 ; 3⁶] variante b : snub-hex alternance par rangées
+# 4 — [3⁶ ; 3⁴·6] variante b : snub-hex alternance par rangées
 def _gen_bi_snubhex_b(larg, haut, a):
     s3 = math.sqrt(3.0)
     pas_x = 2.0 * s3 * a
     pas_y = 3.0 * a
-    at = a * 0.78
     rangs = _nb_pas_inclusifs(-pas_y, haut + pas_y, pas_y)
     cols = _nb_pas_inclusifs(-pas_x, larg + pas_x, pas_x)
     pour rang dans range(rangs):
@@ -730,26 +752,7 @@ def _gen_bi_snubhex_b(larg, haut, a):
             soit hy5 = sommet_hex_y(x, y, a, 5)
             si rang % 2 == 0:
                 _ajouter_tuile_6_direct(hx0, hy0, hx1, hy1, hx2, hy2, hx3, hy3, hx4, hy4, hx5, hy5, larg, haut)
-                pour i dans range(6):
-                    soit pvx = sommet_hex_x(x, y, a, i)
-                    soit pvy = sommet_hex_y(x, y, a, i)
-                    soit ppx = sommet_hex_x(x, y, a, (i + 5) % 6)
-                    soit ppy = sommet_hex_y(x, y, a, (i + 5) % 6)
-                    soit pnx = sommet_hex_x(x, y, a, (i + 1) % 6)
-                    soit pny = sommet_hex_y(x, y, a, (i + 1) % 6)
-                    soit dx1 = pvx - ppx
-                    soit dy1 = pvy - ppy
-                    soit dx2 = pnx - pvx
-                    soit dy2 = pny - pvy
-                    soit lon1 = math.sqrt(dx1 * dx1 + dy1 * dy1)
-                    soit lon2 = math.sqrt(dx2 * dx2 + dy2 * dy2)
-                    si lon1 == 0 ou lon2 == 0:
-                        continuer
-                    soit n1x = dy1 / lon1
-                    soit n1y = -dx1 / lon1
-                    soit n2x = dy2 / lon2
-                    soit n2y = -dx2 / lon2
-                    _ajouter_tuile_3_direct(pvx, pvy, pvx + n1x * at, pvy + n1y * at, pvx + n2x * at, pvy + n2y * at, larg, haut)
+                _ajouter_snubhex_triangles(x, y, a, larg, haut)
             sinon:
                 _ajouter_tuile_3_direct(x, y, hx0, hy0, hx1, hy1, larg, haut)
                 _ajouter_tuile_3_direct(x, y, hx1, hy1, hx2, hy2, larg, haut)
@@ -913,7 +916,6 @@ def _gen_bi_sq_snubhex(larg, haut, a):
     s3 = math.sqrt(3.0)
     pas_x = 2.0 * s3 * a
     pas_y = 3.0 * a
-    at = a * 0.78
     periode_y = 2.0 * pas_y
     y = -periode_y
     tantque y <= haut + periode_y:
@@ -931,26 +933,7 @@ def _gen_bi_sq_snubhex(larg, haut, a):
             pour col dans range(cols):
                 xl = -pas_x + decal + col * pas_x
                 _ajouter_tuile_6_direct(sommet_hex_x(xl, yl, a, 0), sommet_hex_y(xl, yl, a, 0), sommet_hex_x(xl, yl, a, 1), sommet_hex_y(xl, yl, a, 1), sommet_hex_x(xl, yl, a, 2), sommet_hex_y(xl, yl, a, 2), sommet_hex_x(xl, yl, a, 3), sommet_hex_y(xl, yl, a, 3), sommet_hex_x(xl, yl, a, 4), sommet_hex_y(xl, yl, a, 4), sommet_hex_x(xl, yl, a, 5), sommet_hex_y(xl, yl, a, 5), larg, haut)
-                pour i dans range(6):
-                    soit pvx = sommet_hex_x(xl, yl, a, i)
-                    soit pvy = sommet_hex_y(xl, yl, a, i)
-                    soit ppx = sommet_hex_x(xl, yl, a, (i + 5) % 6)
-                    soit ppy = sommet_hex_y(xl, yl, a, (i + 5) % 6)
-                    soit pnx = sommet_hex_x(xl, yl, a, (i + 1) % 6)
-                    soit pny = sommet_hex_y(xl, yl, a, (i + 1) % 6)
-                    soit dx1 = pvx - ppx
-                    soit dy1 = pvy - ppy
-                    soit dx2 = pnx - pvx
-                    soit dy2 = pny - pvy
-                    soit lon1 = math.sqrt(dx1 * dx1 + dy1 * dy1)
-                    soit lon2 = math.sqrt(dx2 * dx2 + dy2 * dy2)
-                    si lon1 == 0 ou lon2 == 0:
-                        continuer
-                    soit n1x = dy1 / lon1
-                    soit n1y = -dx1 / lon1
-                    soit n2x = dy2 / lon2
-                    soit n2y = -dx2 / lon2
-                    _ajouter_tuile_3_direct(pvx, pvy, pvx + n1x * at, pvy + n1y * at, pvx + n2x * at, pvy + n2y * at, larg, haut)
+                _ajouter_snubhex_triangles(xl, yl, a, larg, haut)
         y = y + periode_y
     retour 0
 
@@ -1070,7 +1053,6 @@ def _gen_bi_snubhex_trihex(larg, haut, a):
     s3 = math.sqrt(3.0)
     pas_x = 2.0 * s3 * a
     pas_y = 3.0 * a
-    at = a * 0.78
     rangs = _nb_pas_inclusifs(-2.0 * pas_y, haut + 2.0 * pas_y, pas_y)
     cols = _nb_pas_inclusifs(-pas_x, larg + pas_x, pas_x)
     pour rang dans range(rangs):
@@ -1113,26 +1095,7 @@ def _gen_bi_snubhex_trihex(larg, haut, a):
                 _ajouter_tuile_3_direct(hx5, hy5, hx0, hy0, t5x, t5y, larg, haut)
             sinon:
                 # snub-hex : triangles en spirale aux sommets
-                pour i dans range(6):
-                    soit pvx = sommet_hex_x(x, y, a, i)
-                    soit pvy = sommet_hex_y(x, y, a, i)
-                    soit ppx = sommet_hex_x(x, y, a, (i + 5) % 6)
-                    soit ppy = sommet_hex_y(x, y, a, (i + 5) % 6)
-                    soit pnx = sommet_hex_x(x, y, a, (i + 1) % 6)
-                    soit pny = sommet_hex_y(x, y, a, (i + 1) % 6)
-                    soit dx1 = pvx - ppx
-                    soit dy1 = pvy - ppy
-                    soit dx2 = pnx - pvx
-                    soit dy2 = pny - pvy
-                    soit lon1 = math.sqrt(dx1 * dx1 + dy1 * dy1)
-                    soit lon2 = math.sqrt(dx2 * dx2 + dy2 * dy2)
-                    si lon1 == 0 ou lon2 == 0:
-                        continuer
-                    soit n1x = dy1 / lon1
-                    soit n1y = -dx1 / lon1
-                    soit n2x = dy2 / lon2
-                    soit n2y = -dx2 / lon2
-                    _ajouter_tuile_3_direct(pvx, pvy, pvx + n1x * at, pvy + n1y * at, pvx + n2x * at, pvy + n2y * at, larg, haut)
+                _ajouter_snubhex_triangles(x, y, a, larg, haut)
     retour 0
 
 

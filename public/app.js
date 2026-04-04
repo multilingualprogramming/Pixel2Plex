@@ -69,11 +69,11 @@ const GROUPES_GALERIE = [
     ],
   },
   {
-    titre: "[3\u2074\xB7 6\u00A0;\u00A03\u2076]",
-    notation: "3.3.3.3.6 + 3\u2076",
+    titre: "[3\u2076\u00A0;\u00A03\u2074\xB7 6]",
+    notation: "3\u2076 + 3.3.3.3.6",
     tuiles: [
-      { methode: "bi_snubhex_a", nom: "Damier snub-hex / triangles", notation: "3.3.3.3.6 + 3\u2076\u00A0\u2014\u00A0a", desc: "Hexagones snub en damier, zones de 6&nbsp;triangles int&eacute;rieurs entre eux.", c1: "#0e0a20", c2: "#818cf8" },
-      { methode: "bi_snubhex_b", nom: "Rang&eacute;es snub-hex",     notation: "3.3.3.3.6 + 3\u2076\u00A0\u2014\u00A0b", desc: "Alternance de rang&eacute;es de snub-hex et de triangles purs.",                c1: "#0c0a1c", c2: "#6366f1" },
+      { methode: "bi_snubhex_a", nom: "Damier snub-hex / triangles", notation: "3\u2076 + 3.3.3.3.6\u00A0\u2014\u00A0a", desc: "Hexagones snub en damier, zones de 6&nbsp;triangles int&eacute;rieurs entre eux.", c1: "#0e0a20", c2: "#818cf8" },
+      { methode: "bi_snubhex_b", nom: "Rang&eacute;es snub-hex",     notation: "3\u2076 + 3.3.3.3.6\u00A0\u2014\u00A0b", desc: "Alternance de rang&eacute;es de snub-hex et de triangles purs.",                c1: "#0c0a1c", c2: "#6366f1" },
     ],
   },
   {
