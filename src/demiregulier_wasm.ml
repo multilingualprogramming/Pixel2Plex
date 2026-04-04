@@ -295,6 +295,28 @@ def _ajouter_snubhex_triangles(cx, cy, a, larg, haut):
     retour 0
 
 
+def _ajouter_etoile_triangle_hex(cx, cy, a, larg, haut):
+    soit hx0 = sommet_hex_x(cx, cy, a, 0)
+    soit hy0 = sommet_hex_y(cx, cy, a, 0)
+    soit hx1 = sommet_hex_x(cx, cy, a, 1)
+    soit hy1 = sommet_hex_y(cx, cy, a, 1)
+    soit hx2 = sommet_hex_x(cx, cy, a, 2)
+    soit hy2 = sommet_hex_y(cx, cy, a, 2)
+    soit hx3 = sommet_hex_x(cx, cy, a, 3)
+    soit hy3 = sommet_hex_y(cx, cy, a, 3)
+    soit hx4 = sommet_hex_x(cx, cy, a, 4)
+    soit hy4 = sommet_hex_y(cx, cy, a, 4)
+    soit hx5 = sommet_hex_x(cx, cy, a, 5)
+    soit hy5 = sommet_hex_y(cx, cy, a, 5)
+    _ajouter_tuile_3_direct(cx, cy, hx0, hy0, hx1, hy1, larg, haut)
+    _ajouter_tuile_3_direct(cx, cy, hx1, hy1, hx2, hy2, larg, haut)
+    _ajouter_tuile_3_direct(cx, cy, hx2, hy2, hx3, hy3, larg, haut)
+    _ajouter_tuile_3_direct(cx, cy, hx3, hy3, hx4, hy4, larg, haut)
+    _ajouter_tuile_3_direct(cx, cy, hx4, hy4, hx5, hy5, larg, haut)
+    _ajouter_tuile_3_direct(cx, cy, hx5, hy5, hx0, hy0, larg, haut)
+    retour 0
+
+
 def _ajouter_carre_depuis_arete(p1x, p1y, p2x, p2y, larg, haut):
     soit dx = p2x - p1x
     soit dy = p2y - p1y
@@ -713,16 +735,13 @@ def _gen_bi_snubhex_a(larg, haut, a):
             soit hy4 = sommet_hex_y(x, y, a, 4)
             soit hx5 = sommet_hex_x(x, y, a, 5)
             soit hy5 = sommet_hex_y(x, y, a, 5)
-            si (col + rang) % 2 == 0:
+            soit sous_reseau = ((col - rang) % 3) == 0
+            soit cle = entier((col - rang) / 3)
+            si sous_reseau et ((cle + rang) % 2 == 0):
                 _ajouter_tuile_6_direct(hx0, hy0, hx1, hy1, hx2, hy2, hx3, hy3, hx4, hy4, hx5, hy5, larg, haut)
                 _ajouter_snubhex_triangles(x, y, a, larg, haut)
             sinon:
-                _ajouter_tuile_3_direct(x, y, hx0, hy0, hx1, hy1, larg, haut)
-                _ajouter_tuile_3_direct(x, y, hx1, hy1, hx2, hy2, larg, haut)
-                _ajouter_tuile_3_direct(x, y, hx2, hy2, hx3, hy3, larg, haut)
-                _ajouter_tuile_3_direct(x, y, hx3, hy3, hx4, hy4, larg, haut)
-                _ajouter_tuile_3_direct(x, y, hx4, hy4, hx5, hy5, larg, haut)
-                _ajouter_tuile_3_direct(x, y, hx5, hy5, hx0, hy0, larg, haut)
+                _ajouter_etoile_triangle_hex(x, y, a, larg, haut)
     retour 0
 
 
@@ -750,16 +769,13 @@ def _gen_bi_snubhex_b(larg, haut, a):
             soit hy4 = sommet_hex_y(x, y, a, 4)
             soit hx5 = sommet_hex_x(x, y, a, 5)
             soit hy5 = sommet_hex_y(x, y, a, 5)
-            si rang % 2 == 0:
+            soit sous_reseau = ((col - rang) % 3) == 0
+            soit cle = entier((col - rang) / 3)
+            si sous_reseau et (rang % 2 == 0):
                 _ajouter_tuile_6_direct(hx0, hy0, hx1, hy1, hx2, hy2, hx3, hy3, hx4, hy4, hx5, hy5, larg, haut)
                 _ajouter_snubhex_triangles(x, y, a, larg, haut)
             sinon:
-                _ajouter_tuile_3_direct(x, y, hx0, hy0, hx1, hy1, larg, haut)
-                _ajouter_tuile_3_direct(x, y, hx1, hy1, hx2, hy2, larg, haut)
-                _ajouter_tuile_3_direct(x, y, hx2, hy2, hx3, hy3, larg, haut)
-                _ajouter_tuile_3_direct(x, y, hx3, hy3, hx4, hy4, larg, haut)
-                _ajouter_tuile_3_direct(x, y, hx4, hy4, hx5, hy5, larg, haut)
-                _ajouter_tuile_3_direct(x, y, hx5, hy5, hx0, hy0, larg, haut)
+                _ajouter_etoile_triangle_hex(x, y, a, larg, haut)
     retour 0
 
 
