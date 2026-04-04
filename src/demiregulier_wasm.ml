@@ -763,39 +763,35 @@ def _gen_bi_snubhex_b(larg, haut, a):
 # 5 — [3³·4² ; 3⁶] variante a : triangulaire allongé + bande triangle double
 def _gen_bi_elongtri_a(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
-    y = -2.0 * h
-    tantque y <= haut + 2.0 * h:
+    periode_y = a + 2.0 * h
+    y = -periode_y
+    tantque y <= haut + periode_y:
         x = -a
         tantque x <= larg + a:
-            _ajouter_tuile_3_direct(x, y + h, x + a / 2.0, y, x + a, y + h, larg, haut)
-            _ajouter_tuile_4_direct(x, y + h, x + a, y + h, x + a, y + h + a, x, y + h + a, larg, haut)
-            _ajouter_tuile_3_direct(x, y + h + a, x + a / 2.0, y + h + a + h, x + a, y + h + a, larg, haut)
-            _ajouter_tuile_3_direct(x, y + h + a + h, x + a / 2.0, y + h + a + 2.0 * h, x + a, y + h + a + h, larg, haut)
+            _ajouter_tuile_4_direct(x, y, x + a, y, x + a, y + a, x, y + a, larg, haut)
+            _ajouter_tuile_3_direct(x, y + a, x + a / 2.0, y + a + h, x + a, y + a, larg, haut)
+            _ajouter_tuile_3_direct(x, y + a + 2.0 * h, x + a / 2.0, y + a + h, x + a, y + a + 2.0 * h, larg, haut)
+            _ajouter_tuile_4_direct(x, y + a + 2.0 * h, x + a, y + a + 2.0 * h, x + a, y + 2.0 * a + 2.0 * h, x, y + 2.0 * a + 2.0 * h, larg, haut)
             x = x + a
-        y = y + a + 2.0 * h
+        y = y + periode_y + a
     retour 0
 
 
 # 6 — [3³·4² ; 3⁶] variante b : triangulaire allongé, colonnes alternées
 def _gen_bi_elongtri_b(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
-    y = -h
-    tantque y <= haut + h:
-        col = 0
+    periode_y = a + 3.0 * h
+    y = -periode_y
+    tantque y <= haut + periode_y:
         x = -a
         tantque x <= larg + a:
-            si col % 2 == 0:
-                _ajouter_tuile_3_direct(x, y + h, x + a / 2.0, y, x + a, y + h, larg, haut)
-                _ajouter_tuile_4_direct(x, y + h, x + a, y + h, x + a, y + h + a, x, y + h + a, larg, haut)
-                _ajouter_tuile_3_direct(x, y + h + a, x + a / 2.0, y + h + a + h, x + a, y + h + a, larg, haut)
-            sinon:
-                _ajouter_tuile_3_direct(x, y, x + a / 2.0, y + h, x + a, y, larg, haut)
-                _ajouter_tuile_3_direct(x, y + h, x + a / 2.0, y, x + a, y + h, larg, haut)
-                _ajouter_tuile_3_direct(x, y + h, x + a / 2.0, y + 2.0 * h, x + a, y + h, larg, haut)
-                _ajouter_tuile_3_direct(x, y + h + a, x + a / 2.0, y + a, x + a, y + h + a, larg, haut)
-            col = col + 1
+            _ajouter_tuile_4_direct(x, y, x + a, y, x + a, y + a, x, y + a, larg, haut)
+            _ajouter_tuile_3_direct(x, y + a, x + a / 2.0, y + a + h, x + a, y + a, larg, haut)
+            _ajouter_tuile_3_direct(x, y + a + h, x + a / 2.0, y + a + 2.0 * h, x + a, y + a + h, larg, haut)
+            _ajouter_tuile_3_direct(x, y + a + 2.0 * h, x + a / 2.0, y + a + 3.0 * h, x + a, y + a + 2.0 * h, larg, haut)
+            _ajouter_tuile_4_direct(x, y + a + 3.0 * h, x + a, y + a + 3.0 * h, x + a, y + 2.0 * a + 3.0 * h, x, y + 2.0 * a + 3.0 * h, larg, haut)
             x = x + a
-        y = y + a + h
+        y = y + periode_y + a
     retour 0
 
 
