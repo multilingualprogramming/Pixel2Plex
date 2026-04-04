@@ -16,6 +16,12 @@ const DENSITE_METHODE = {
   bi_dodec_grandrhombi: 0.20,
   bi_rhombi_grandrhombi: 0.15,
   bi_dodec_rhombi: 0.25,
+  bi_grandrhombi: 0.20,
+  bi_dodec_snub: 0.25,
+  bi_rhombi_snubhex: 1.10,
+  bi_tri_hexhex: 1.20,
+  bi_hexhex_snubhex: 1.30,
+  bi_tri_snubsq: 1.60,
 };
 
 const METHODES = {
@@ -32,6 +38,12 @@ const METHODES = {
   bi_dodec_grandrhombi: 17,
   bi_rhombi_grandrhombi: 18,
   bi_dodec_rhombi: 19,
+  bi_grandrhombi: 20,
+  bi_dodec_snub: 21,
+  bi_rhombi_snubhex: 22,
+  bi_tri_hexhex: 23,
+  bi_hexhex_snubhex: 24,
+  bi_tri_snubsq: 25,
 };
 
 const EXPORTS_CODES = {
@@ -55,9 +67,15 @@ const EXPORTS_CODES = {
   bi_dodec_grandrhombi: "code_bi_dodec_grandrhombi",
   bi_rhombi_grandrhombi: "code_bi_rhombi_grandrhombi",
   bi_dodec_rhombi: "code_bi_dodec_rhombi",
+  bi_grandrhombi: "code_bi_grandrhombi",
+  bi_dodec_snub: "code_bi_dodec_snub",
+  bi_rhombi_snubhex: "code_bi_rhombi_snubhex",
+  bi_tri_hexhex: "code_bi_tri_hexhex",
+  bi_hexhex_snubhex: "code_bi_hexhex_snubhex",
+  bi_tri_snubsq: "code_bi_tri_snubsq",
 };
 
-// Définition des 20 pavages 2-uniformes, groupés par paire de sommets
+// Définition des pavages 2-uniformes, groupés par paire de sommets
 const GROUPES_GALERIE = [
   {
     titre: "[3\xB7 6\xB7 3\xB7 6\u00A0;\u00A03\u2076]",
@@ -161,6 +179,48 @@ const GROUPES_GALERIE = [
     notation: "3.12.12 + 3.4.6.4",
     tuiles: [
       { methode: "bi_dodec_rhombi", nom: "Dod&eacute;c. tronq. + rhombitrihex", notation: "3.12.12 + 3.4.6.4", desc: "Dod&eacute;cagones avec triangles (paires) et carr&eacute;s (impaires).", c1: "#100a20", c2: "#818cf8" },
+    ],
+  },
+  {
+    titre: "[4\xB7 6\xB7 12\u00A0;\u00A03\xB7 4\xB7 6\xB7 4]",
+    notation: "4.6.12 + 3.4.6.4",
+    tuiles: [
+      { methode: "bi_grandrhombi", nom: "Grand rhombitrihex", notation: "4.6.12 + 3.4.6.4", desc: "Dod&eacute;cagones avec hexagones (paires) et carr&eacute;s (impaires).", c1: "#1a0818", c2: "#f472b6" },
+    ],
+  },
+  {
+    titre: "[3\xB7 12\xB2\u00A0;\u00A03\xB7 4\xB7 3\xB7 12]",
+    notation: "3.12.12 + 3.4.3.12",
+    tuiles: [
+      { methode: "bi_dodec_snub", nom: "Dod&eacute;c. + snub", notation: "3.12.12 + 3.4.3.12", desc: "Dod&eacute;cagones avec triangles (paires) et carr&eacute;s (impaires).", c1: "#0c0818", c2: "#c084fc" },
+    ],
+  },
+  {
+    titre: "[3\xB7 4\xB7 6\xB7 4\u00A0;\u00A03\u2074\xB7 6]",
+    notation: "3.4.6.4 + 3.3.3.3.6",
+    tuiles: [
+      { methode: "bi_rhombi_snubhex", nom: "Rhombitrihex + snub-hex", notation: "3.4.6.4 + 3.3.3.3.6", desc: "Rang&eacute;es alternant rhombitrihexagonal et snub-hexagonal.", c1: "#081810", c2: "#22c55e" },
+    ],
+  },
+  {
+    titre: "[3\u2076\u00A0;\u00A03\xB2\xB7 6\xB2]",
+    notation: "3\u2076 + 3.3.6.6",
+    tuiles: [
+      { methode: "bi_tri_hexhex", nom: "Triangles + hex. jumels", notation: "3\u2076 + 3.3.6.6", desc: "Paires d\u2019hexagones partageant une ar&ecirc;te, triangles comblant les espaces.", c1: "#0a1418", c2: "#06b6d4" },
+    ],
+  },
+  {
+    titre: "[3\xB2\xB7 6\xB2\u00A0;\u00A03\u2074\xB7 6]",
+    notation: "3.3.6.6 + 3.3.3.3.6",
+    tuiles: [
+      { methode: "bi_hexhex_snubhex", nom: "Hex. jumels + snub-hex", notation: "3.3.6.6 + 3.3.3.3.6", desc: "Hexagones avec triangles simples et snub-hex en alternance.", c1: "#10080a", c2: "#fb7185" },
+    ],
+  },
+  {
+    titre: "[3\u2076\u00A0;\u00A03\xB2\xB7 4\xB7 3\xB7 4]",
+    notation: "3\u2076 + 3.3.4.3.4",
+    tuiles: [
+      { methode: "bi_tri_snubsq", nom: "Triangles + snub-carr&eacute;", notation: "3\u2076 + 3.3.4.3.4", desc: "Carr&eacute;s snub avec bandes de triangles purs entre les rang&eacute;es.", c1: "#18100a", c2: "#f59e0b" },
     ],
   },
 ];

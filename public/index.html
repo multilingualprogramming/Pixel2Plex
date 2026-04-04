@@ -75,53 +75,71 @@
             <p class="ctrl-title">Pavage d&eacute;mir&eacute;gulier</p>
             <label class="select-wrap" for="method-select">
               <select id="method-select" aria-label="Forme des tuiles">
-                <optgroup label="n6-n7, n11 &mdash; (3.6.3.6 ; 3&#x2076;) [custom variants]">
+                <optgroup label="(3.6.3.6 ; 3&#x2076;) &mdash; variantes">
                   <option value="bi_trihex_a" selected>Damier trihex&#x2215;triangles</option>
                   <option value="bi_trihex_b">Rangées trihex&#x2215;triangles</option>
                   <option value="bi_trihex_c">Colonnes trihex&#x2215;triangles</option>
                 </optgroup>
-                <optgroup label="n19-n20 &mdash; (3&#x2076; ; 3&#x2074;.6)">
-                  <option value="bi_snubhex_a">n19 &#x2014; Snub-hex damier (p6)</option>
-                  <option value="bi_snubhex_b">n20 &#x2014; Snub-hex rangées (cmm)</option>
+                <optgroup label="(3&#x2076; ; 3&#x2074;.6)">
+                  <option value="bi_snubhex_a">Snub-hex damier</option>
+                  <option value="bi_snubhex_b">Snub-hex rangées</option>
                 </optgroup>
-                <optgroup label="n14-n15 &mdash; (3&#x2076; ; 3&#xB3;.4&#xB2;)">
-                  <option value="bi_elongtri_a">n14 &#x2014; Allong&eacute; + double bande (p2)</option>
-                  <option value="bi_elongtri_b">n15 &#x2014; Allong&eacute; colonnes alt. (cmm)</option>
+                <optgroup label="(3&#x2076; ; 3&#xB3;.4&#xB2;)">
+                  <option value="bi_elongtri_a">Allong&eacute; + double bande</option>
+                  <option value="bi_elongtri_b">Allong&eacute; colonnes alt.</option>
                 </optgroup>
-                <optgroup label="n16-n17 &mdash; (3&#xB3;.4&#xB2; ; 3&#xB2;.4.3.4)">
-                  <option value="bi_snubsq_a">n16 &#x2014; Snub-carré int&eacute;rieurs (p4g)</option>
-                  <option value="bi_snubsq_b">n17 &#x2014; Snub-carré &eacute;largis (pmg)</option>
+                <optgroup label="(3&#xB3;.4&#xB2; ; 3&#xB2;.4.3.4)">
+                  <option value="bi_snubsq_a">Snub-carré int&eacute;rieurs</option>
+                  <option value="bi_snubsq_b">Snub-carré &eacute;largis</option>
                 </optgroup>
-                <optgroup label="n4, n3 &mdash; (4&#x2074; ; 3&#xB3;.4&#xB2;)">
-                  <option value="bi_sq_elongtri_a">n4 &#x2014; Carré + allong&eacute; (p4g)</option>
-                  <option value="bi_sq_elongtri_b">n3 &#x2014; Carré + allong&eacute; (pmg)</option>
+                <optgroup label="(4&#x2074; ; 3&#xB3;.4&#xB2;)">
+                  <option value="bi_sq_elongtri_a">Carré + allong&eacute; a</option>
+                  <option value="bi_sq_elongtri_b">Carré + allong&eacute; b</option>
                 </optgroup>
-                <optgroup label="Custom &mdash; (4&#x2074; ; 3&#x2074;.6)">
+                <optgroup label="(4&#x2074; ; 3&#x2074;.6) &mdash; variante">
                   <option value="bi_sq_snubhex">Carrés + snub-hex</option>
                 </optgroup>
-                <optgroup label="Custom &mdash; (3&#xB3;.4&#xB2; ; 3&#xB2;.4.3.4)">
+                <optgroup label="(3&#xB3;.4&#xB2; ; 3&#xB2;.4.3.4) &mdash; variante">
                   <option value="bi_snubsq_elongtri">Snub-carré + allong&eacute;</option>
                 </optgroup>
-                <optgroup label="n9 &mdash; (3.4.6.4 ; 3&#x2076;)">
+                <optgroup label="(3.4.6.4 ; 3&#x2076;)">
                   <option value="bi_rhombi_tri">Rhombitrihex + triangles</option>
                 </optgroup>
-                <optgroup label="n8 &mdash; (3.4.6.4 ; 4&#x2074;)">
+                <optgroup label="(3.4.6.4 ; 4&#x2074;)">
                   <option value="bi_rhombi_sq">Rhombitrihex + carr&eacute;s</option>
                 </optgroup>
-                <optgroup label="Custom &mdash; (3&#x2074;.6 ; 3.6.3.6)">
+                <optgroup label="(3&#x2074;.6 ; 3.6.3.6) &mdash; variante">
                   <option value="bi_snubhex_trihex">Snub-hex + trihex</option>
                 </optgroup>
-                <optgroup label="Custom &mdash; (3.6.3.6 ; 3.4.6.4)">
+                <optgroup label="(3.6.3.6 ; 3.4.6.4) &mdash; variante">
                   <option value="bi_trihex_rhombi">Trihex + rhombitrihex</option>
                 </optgroup>
-                <optgroup label="Custom &mdash; (3.12&#xB2; ; 4.6.12)">
+                <optgroup label="(3.12&#xB2; ; 4.6.12) &mdash; variante">
                   <option value="bi_dodec_grandrhombi">Dodéc. tronqué + grand rhombi</option>
                 </optgroup>
-                <optgroup label="Custom &mdash; (3.4.6.4 ; 4.6.12)">
+                <optgroup label="(3.4.6.4 ; 4.6.12) &mdash; variante">
                   <option value="bi_rhombi_grandrhombi">Rhombi + grand rhombitrihex</option>
                 </optgroup>
-                <optgroup label="Custom &mdash; (3.12&#xB2; ; 3.4.6.4)">
+                <optgroup label="(3.12&#xB2; ; 3.4.6.4) &mdash; variante">
                   <option value="bi_dodec_rhombi">Dodéc. tronqué + rhombitrihex</option>
+                </optgroup>
+                <optgroup label="(4.6.12 ; 3.4.6.4)">
+                  <option value="bi_grandrhombi">Grand rhombitrihex</option>
+                </optgroup>
+                <optgroup label="(3.12&#xB2; ; 3.4.3.12)">
+                  <option value="bi_dodec_snub">Dodéc. + snub</option>
+                </optgroup>
+                <optgroup label="(3.4.6.4 ; 3&#x2074;.6)">
+                  <option value="bi_rhombi_snubhex">Rhombitrihex + snub-hex</option>
+                </optgroup>
+                <optgroup label="(3&#x2076; ; 3&#xB2;.6&#xB2;)">
+                  <option value="bi_tri_hexhex">Triangles + hex. jumelés</option>
+                </optgroup>
+                <optgroup label="(3&#xB2;.6&#xB2; ; 3&#x2074;.6)">
+                  <option value="bi_hexhex_snubhex">Hex. jumelés + snub-hex</option>
+                </optgroup>
+                <optgroup label="(3&#x2076; ; 3&#xB2;.4.3.4)">
+                  <option value="bi_tri_snubsq">Triangles + snub-carré</option>
                 </optgroup>
               </select>
             </label>
@@ -170,8 +188,8 @@
         <div class="gallery-header">
           <h2>Galerie des pavages d&eacute;mir&eacute;guliers</h2>
           <p>Pavages <strong>k-uniformes</strong> (k &ge; 2) &mdash; chaque sommet appartient &agrave; exactement
-            <strong>k</strong> types de configurations de sommets distincts. Les 20 pavages&nbsp;2-uniformes sont
-            impl&eacute;ment&eacute;s. Les pavages 3-uniformes (61) et 4-uniformes (151) sont r&eacute;f&eacute;renc&eacute;s.</p>
+            <strong>k</strong> types de configurations de sommets distincts. Les 20 pavages&nbsp;2-uniformes canoniques et
+            des variantes sont impl&eacute;ment&eacute;s. Les pavages 3-uniformes (61) et 4-uniformes (151) sont r&eacute;f&eacute;renc&eacute;s.</p>
           <div class="gallery-filter-bar">
             <button type="button" class="filter-btn active" data-k="2">2-uniformes (20)</button>
             <button type="button" class="filter-btn" data-k="3">3-uniformes (61)</button>
@@ -226,7 +244,7 @@
               <article class="source-card source-card-file">
                 <h4><span class="filename-pill">src/demiregulier_wasm.ml</span></h4>
                 <p>Module WASM principal &mdash; primitives g&eacute;om&eacute;triques et
-                  20&nbsp;g&eacute;n&eacute;rateurs de pavages 2-uniformes en multilingual
+                  G&eacute;n&eacute;rateurs de pavages 2-uniformes en multilingual
                   fran&ccedil;ais. Compil&eacute; vers <code>public/demiregulier.wasm</code>.</p>
               </article>
 
@@ -270,7 +288,7 @@
 
               <article class="source-card source-card-export">
                 <h4><code>code_bi_*()</code></h4>
-                <p>20&nbsp;fonctions retournant le code entier de chaque m&eacute;thode de pavage.</p>
+                <p>Fonctions retournant le code entier de chaque m&eacute;thode de pavage.</p>
               </article>
 
             </div>
@@ -298,7 +316,7 @@ multilingual run scripts/compile_wasm.ml</code></pre>
 
       <!-- Barre de statut -->
       <section class="hero">
-        <p>Pixel2Plex pave une image avec les 20&nbsp;pavages 2-uniformes (d&eacute;mir&eacute;guliers),
+        <p>Pixel2Plex pave une image avec les pavages 2-uniformes (d&eacute;mir&eacute;guliers),
           fond&eacute;s sur des polygones r&eacute;guliers de m&ecirc;me ar&ecirc;te.</p>
         <p id="wasm-status" class="hero-note">V&eacute;rification du moteur WASM&hellip;</p>
       </section>

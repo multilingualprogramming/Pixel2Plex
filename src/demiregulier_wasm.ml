@@ -1387,6 +1387,310 @@ def _gen_bi_dodec_rhombi(larg, haut, a):
     retour 0
 
 
+# (4.6.12 ; 3.4.6.4) : truncated trihexagonal + rhombitrihexagonal
+def _gen_bi_grandrhombi(larg, haut, a):
+    apo12 = apotheme_dodec(a)
+    pas_x = 2.0 * apo12
+    pas_y = math.sqrt(3.0) * apo12
+    rang = 0
+    y = -pas_y
+    tantque y <= haut + pas_y:
+        decal = (rang % 2) * (pas_x / 2.0)
+        x = -pas_x + decal
+        tantque x <= larg + pas_x:
+            soit d0x = sommet_dodec_x(x, y, a, 0)
+            soit d0y = sommet_dodec_y(x, y, a, 0)
+            soit d1x = sommet_dodec_x(x, y, a, 1)
+            soit d1y = sommet_dodec_y(x, y, a, 1)
+            soit d2x = sommet_dodec_x(x, y, a, 2)
+            soit d2y = sommet_dodec_y(x, y, a, 2)
+            soit d3x = sommet_dodec_x(x, y, a, 3)
+            soit d3y = sommet_dodec_y(x, y, a, 3)
+            soit d4x = sommet_dodec_x(x, y, a, 4)
+            soit d4y = sommet_dodec_y(x, y, a, 4)
+            soit d5x = sommet_dodec_x(x, y, a, 5)
+            soit d5y = sommet_dodec_y(x, y, a, 5)
+            soit d6x = sommet_dodec_x(x, y, a, 6)
+            soit d6y = sommet_dodec_y(x, y, a, 6)
+            soit d7x = sommet_dodec_x(x, y, a, 7)
+            soit d7y = sommet_dodec_y(x, y, a, 7)
+            soit d8x = sommet_dodec_x(x, y, a, 8)
+            soit d8y = sommet_dodec_y(x, y, a, 8)
+            soit d9x = sommet_dodec_x(x, y, a, 9)
+            soit d9y = sommet_dodec_y(x, y, a, 9)
+            soit d10x = sommet_dodec_x(x, y, a, 10)
+            soit d10y = sommet_dodec_y(x, y, a, 10)
+            soit d11x = sommet_dodec_x(x, y, a, 11)
+            soit d11y = sommet_dodec_y(x, y, a, 11)
+            _ajouter_tuile_12_direct(d0x, d0y, d1x, d1y, d2x, d2y, d3x, d3y, d4x, d4y, d5x, d5y, d6x, d6y, d7x, d7y, d8x, d8y, d9x, d9y, d10x, d10y, d11x, d11y, larg, haut)
+            # hexagons on even edges
+            pour i dans range(0, 12, 2):
+                soit p1x = sommet_dodec_x(x, y, a, i)
+                soit p1y = sommet_dodec_y(x, y, a, i)
+                soit p2x = sommet_dodec_x(x, y, a, i + 1)
+                soit p2y = sommet_dodec_y(x, y, a, i + 1)
+                _ajouter_hex_depuis_arete(p2x, p2y, p1x, p1y, larg, haut)
+            # squares on odd edges
+            pour i dans range(1, 12, 2):
+                soit p1x = sommet_dodec_x(x, y, a, i)
+                soit p1y = sommet_dodec_y(x, y, a, i)
+                soit p2x = sommet_dodec_x(x, y, a, (i + 1) % 12)
+                soit p2y = sommet_dodec_y(x, y, a, (i + 1) % 12)
+                _ajouter_carre_depuis_arete(p2x, p2y, p1x, p1y, larg, haut)
+            x = x + pas_x
+        rang = rang + 1
+        y = y + pas_y
+    retour 0
+
+
+# (3.12² ; 3.4.3.12) : truncated hexagonal + dodecagonal
+def _gen_bi_dodec_snub(larg, haut, a):
+    apo12 = apotheme_dodec(a)
+    pas_x = 2.0 * apo12
+    pas_y = math.sqrt(3.0) * apo12
+    rang = 0
+    y = -pas_y
+    tantque y <= haut + pas_y:
+        decal = (rang % 2) * (pas_x / 2.0)
+        x = -pas_x + decal
+        tantque x <= larg + pas_x:
+            soit d0x = sommet_dodec_x(x, y, a, 0)
+            soit d0y = sommet_dodec_y(x, y, a, 0)
+            soit d1x = sommet_dodec_x(x, y, a, 1)
+            soit d1y = sommet_dodec_y(x, y, a, 1)
+            soit d2x = sommet_dodec_x(x, y, a, 2)
+            soit d2y = sommet_dodec_y(x, y, a, 2)
+            soit d3x = sommet_dodec_x(x, y, a, 3)
+            soit d3y = sommet_dodec_y(x, y, a, 3)
+            soit d4x = sommet_dodec_x(x, y, a, 4)
+            soit d4y = sommet_dodec_y(x, y, a, 4)
+            soit d5x = sommet_dodec_x(x, y, a, 5)
+            soit d5y = sommet_dodec_y(x, y, a, 5)
+            soit d6x = sommet_dodec_x(x, y, a, 6)
+            soit d6y = sommet_dodec_y(x, y, a, 6)
+            soit d7x = sommet_dodec_x(x, y, a, 7)
+            soit d7y = sommet_dodec_y(x, y, a, 7)
+            soit d8x = sommet_dodec_x(x, y, a, 8)
+            soit d8y = sommet_dodec_y(x, y, a, 8)
+            soit d9x = sommet_dodec_x(x, y, a, 9)
+            soit d9y = sommet_dodec_y(x, y, a, 9)
+            soit d10x = sommet_dodec_x(x, y, a, 10)
+            soit d10y = sommet_dodec_y(x, y, a, 10)
+            soit d11x = sommet_dodec_x(x, y, a, 11)
+            soit d11y = sommet_dodec_y(x, y, a, 11)
+            _ajouter_tuile_12_direct(d0x, d0y, d1x, d1y, d2x, d2y, d3x, d3y, d4x, d4y, d5x, d5y, d6x, d6y, d7x, d7y, d8x, d8y, d9x, d9y, d10x, d10y, d11x, d11y, larg, haut)
+            # triangles on even edges (3·12²)
+            pour i dans range(0, 12, 2):
+                soit p1x = sommet_dodec_x(x, y, a, i)
+                soit p1y = sommet_dodec_y(x, y, a, i)
+                soit p2x = sommet_dodec_x(x, y, a, i + 1)
+                soit p2y = sommet_dodec_y(x, y, a, i + 1)
+                soit t3x = tri_arete_x3(p2x, p2y, p1x, p1y)
+                soit t3y = tri_arete_y3(p2x, p2y, p1x, p1y)
+                _ajouter_tuile_3_direct(p1x, p1y, p2x, p2y, t3x, t3y, larg, haut)
+            # squares on odd edges (3.4.3.12)
+            pour i dans range(1, 12, 2):
+                soit p1x = sommet_dodec_x(x, y, a, i)
+                soit p1y = sommet_dodec_y(x, y, a, i)
+                soit p2x = sommet_dodec_x(x, y, a, (i + 1) % 12)
+                soit p2y = sommet_dodec_y(x, y, a, (i + 1) % 12)
+                _ajouter_carre_depuis_arete(p2x, p2y, p1x, p1y, larg, haut)
+            x = x + pas_x
+        rang = rang + 1
+        y = y + pas_y
+    retour 0
+
+
+# (3.4.6.4 ; 3⁴.6) : rhombitrihexagonal + snub hexagonal
+def _gen_bi_rhombi_snubhex(larg, haut, a):
+    pas_x = a * (2.0 + math.sqrt(3.0))
+    pas_y = a * (1.5 + math.sqrt(3.0))
+    rang = 0
+    y = -pas_y
+    tantque y <= haut + pas_y:
+        decal = (rang % 2) * (pas_x / 2.0)
+        x = -pas_x + decal
+        tantque x <= larg + pas_x:
+            soit h0x = sommet_hex_x(x, y, a, 0)
+            soit h0y = sommet_hex_y(x, y, a, 0)
+            soit h1x = sommet_hex_x(x, y, a, 1)
+            soit h1y = sommet_hex_y(x, y, a, 1)
+            soit h2x = sommet_hex_x(x, y, a, 2)
+            soit h2y = sommet_hex_y(x, y, a, 2)
+            soit h3x = sommet_hex_x(x, y, a, 3)
+            soit h3y = sommet_hex_y(x, y, a, 3)
+            soit h4x = sommet_hex_x(x, y, a, 4)
+            soit h4y = sommet_hex_y(x, y, a, 4)
+            soit h5x = sommet_hex_x(x, y, a, 5)
+            soit h5y = sommet_hex_y(x, y, a, 5)
+            _ajouter_tuile_6_direct(h0x, h0y, h1x, h1y, h2x, h2y, h3x, h3y, h4x, h4y, h5x, h5y, larg, haut)
+            si rang % 2 == 0:
+                # rhombitrihexagonal: triangles on even edges, squares on odd
+                pour i dans range(6):
+                    soit p1x = sommet_hex_x(x, y, a, i)
+                    soit p1y = sommet_hex_y(x, y, a, i)
+                    soit p2x = sommet_hex_x(x, y, a, (i + 1) % 6)
+                    soit p2y = sommet_hex_y(x, y, a, (i + 1) % 6)
+                    si i % 2 == 0:
+                        _ajouter_triangle_depuis_arete_exterieur(p1x, p1y, p2x, p2y, x, y, larg, haut)
+                    sinon:
+                        _ajouter_carre_depuis_arete(p1x, p1y, p2x, p2y, larg, haut)
+            sinon:
+                # snub hexagonal: all triangles (spiral)
+                _ajouter_snubhex_triangles(x, y, a, larg, haut)
+            x = x + pas_x
+        rang = rang + 1
+        y = y + pas_y
+    retour 0
+
+
+# (3⁶ ; 3².6²) : triangular + hexagonal pairs
+def _gen_bi_tri_hexhex(larg, haut, a):
+    s3 = math.sqrt(3.0)
+    pas_x = 2.0 * s3 * a
+    pas_y = 3.0 * a
+    rang = 0
+    y = -pas_y
+    tantque y <= haut + pas_y:
+        decal = (rang % 2) * (pas_x / 2.0)
+        x = -pas_x + decal
+        tantque x <= larg + pas_x:
+            # hex A at (x, y)
+            soit a0x = sommet_hex_x(x, y, a, 0)
+            soit a0y = sommet_hex_y(x, y, a, 0)
+            soit a1x = sommet_hex_x(x, y, a, 1)
+            soit a1y = sommet_hex_y(x, y, a, 1)
+            soit a2x = sommet_hex_x(x, y, a, 2)
+            soit a2y = sommet_hex_y(x, y, a, 2)
+            soit a3x = sommet_hex_x(x, y, a, 3)
+            soit a3y = sommet_hex_y(x, y, a, 3)
+            soit a4x = sommet_hex_x(x, y, a, 4)
+            soit a4y = sommet_hex_y(x, y, a, 4)
+            soit a5x = sommet_hex_x(x, y, a, 5)
+            soit a5y = sommet_hex_y(x, y, a, 5)
+            _ajouter_tuile_6_direct(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, a4x, a4y, a5x, a5y, larg, haut)
+            # hex B at (x + s3*a/2, y + 1.5*a) shares edge 2-3 of A
+            soit bx = x + s3 * a / 2.0
+            soit by = y + 1.5 * a
+            soit b0x = sommet_hex_x(bx, by, a, 0)
+            soit b0y = sommet_hex_y(bx, by, a, 0)
+            soit b1x = sommet_hex_x(bx, by, a, 1)
+            soit b1y = sommet_hex_y(bx, by, a, 1)
+            soit b2x = sommet_hex_x(bx, by, a, 2)
+            soit b2y = sommet_hex_y(bx, by, a, 2)
+            soit b3x = sommet_hex_x(bx, by, a, 3)
+            soit b3y = sommet_hex_y(bx, by, a, 3)
+            soit b4x = sommet_hex_x(bx, by, a, 4)
+            soit b4y = sommet_hex_y(bx, by, a, 4)
+            soit b5x = sommet_hex_x(bx, by, a, 5)
+            soit b5y = sommet_hex_y(bx, by, a, 5)
+            _ajouter_tuile_6_direct(b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, b4x, b4y, b5x, b5y, larg, haut)
+            # triangles on A edges (skip shared edge 2)
+            pour i dans range(6):
+                si i != 2:
+                    _ajouter_triangle_depuis_arete_exterieur(sommet_hex_x(x, y, a, i), sommet_hex_y(x, y, a, i), sommet_hex_x(x, y, a, (i + 1) % 6), sommet_hex_y(x, y, a, (i + 1) % 6), x, y, larg, haut)
+            # triangles on B edges (skip shared edge 5)
+            pour i dans range(6):
+                si i != 5:
+                    _ajouter_triangle_depuis_arete_exterieur(sommet_hex_x(bx, by, a, i), sommet_hex_y(bx, by, a, i), sommet_hex_x(bx, by, a, (i + 1) % 6), sommet_hex_y(bx, by, a, (i + 1) % 6), bx, by, larg, haut)
+            x = x + pas_x
+        rang = rang + 1
+        y = y + pas_y
+    retour 0
+
+
+# (3².6² ; 3⁴.6) : hexagonal pairs + snub hexagonal
+def _gen_bi_hexhex_snubhex(larg, haut, a):
+    s3 = math.sqrt(3.0)
+    pas_x = 2.0 * s3 * a
+    pas_y = 3.0 * a
+    rang = 0
+    y = -pas_y
+    tantque y <= haut + pas_y:
+        decal = (rang % 2) * (pas_x / 2.0)
+        x = -pas_x + decal
+        tantque x <= larg + pas_x:
+            # hex at (x, y) with snub-hex triangles on even rows, simple triangles on odd
+            soit h0x = sommet_hex_x(x, y, a, 0)
+            soit h0y = sommet_hex_y(x, y, a, 0)
+            soit h1x = sommet_hex_x(x, y, a, 1)
+            soit h1y = sommet_hex_y(x, y, a, 1)
+            soit h2x = sommet_hex_x(x, y, a, 2)
+            soit h2y = sommet_hex_y(x, y, a, 2)
+            soit h3x = sommet_hex_x(x, y, a, 3)
+            soit h3y = sommet_hex_y(x, y, a, 3)
+            soit h4x = sommet_hex_x(x, y, a, 4)
+            soit h4y = sommet_hex_y(x, y, a, 4)
+            soit h5x = sommet_hex_x(x, y, a, 5)
+            soit h5y = sommet_hex_y(x, y, a, 5)
+            _ajouter_tuile_6_direct(h0x, h0y, h1x, h1y, h2x, h2y, h3x, h3y, h4x, h4y, h5x, h5y, larg, haut)
+            si rang % 2 == 0:
+                # snub-hex triangles (3⁴.6 vertex type)
+                _ajouter_snubhex_triangles(x, y, a, larg, haut)
+            sinon:
+                # simple edge triangles (3².6² vertex type)
+                pour i dans range(6):
+                    soit p1x = sommet_hex_x(x, y, a, i)
+                    soit p1y = sommet_hex_y(x, y, a, i)
+                    soit p2x = sommet_hex_x(x, y, a, (i + 1) % 6)
+                    soit p2y = sommet_hex_y(x, y, a, (i + 1) % 6)
+                    soit tx = tri_arete_x3(p1x, p1y, p2x, p2y)
+                    soit ty = tri_arete_y3(p1x, p1y, p2x, p2y)
+                    _ajouter_tuile_3_direct(p1x, p1y, p2x, p2y, tx, ty, larg, haut)
+            x = x + pas_x
+        rang = rang + 1
+        y = y + pas_y
+    retour 0
+
+
+# (3⁶ ; 3².4.3.4) : triangular + snub square
+def _gen_bi_tri_snubsq(larg, haut, a):
+    h = math.sqrt(3.0) * a / 2.0
+    pas = a * (1.0 + math.sqrt(3.0))
+    periode_y = pas + 2.0 * h
+    y = -periode_y
+    tantque y <= haut + periode_y:
+        # snub square band
+        x = -pas
+        tantque x <= larg + pas:
+            soit x0 = sommet_carre_pointe_x(x, y, a, 0)
+            soit y0 = sommet_carre_pointe_y(x, y, a, 0)
+            soit x1 = sommet_carre_pointe_x(x, y, a, 1)
+            soit y1 = sommet_carre_pointe_y(x, y, a, 1)
+            soit x2 = sommet_carre_pointe_x(x, y, a, 2)
+            soit y2 = sommet_carre_pointe_y(x, y, a, 2)
+            soit x3 = sommet_carre_pointe_x(x, y, a, 3)
+            soit y3 = sommet_carre_pointe_y(x, y, a, 3)
+            _ajouter_tuile_4_direct(x0, y0, x1, y1, x2, y2, x3, y3, larg, haut)
+            soit ta0x = tri_arete_x3(x0, y0, x1, y1)
+            soit ta0y = tri_arete_y3(x0, y0, x1, y1)
+            _ajouter_tuile_3_direct(x0, y0, x1, y1, ta0x, ta0y, larg, haut)
+            soit ta1x = tri_arete_x3(x1, y1, x2, y2)
+            soit ta1y = tri_arete_y3(x1, y1, x2, y2)
+            _ajouter_tuile_3_direct(x1, y1, x2, y2, ta1x, ta1y, larg, haut)
+            soit ta2x = tri_arete_x3(x2, y2, x3, y3)
+            soit ta2y = tri_arete_y3(x2, y2, x3, y3)
+            _ajouter_tuile_3_direct(x2, y2, x3, y3, ta2x, ta2y, larg, haut)
+            soit ta3x = tri_arete_x3(x3, y3, x0, y0)
+            soit ta3y = tri_arete_y3(x3, y3, x0, y0)
+            _ajouter_tuile_3_direct(x3, y3, x0, y0, ta3x, ta3y, larg, haut)
+            # corner triangles bridging to triangle band (3⁶ region)
+            _ajouter_tuile_3_direct(ta0x, ta0y, x0, y0, ta3x, ta3y, larg, haut)
+            _ajouter_tuile_3_direct(ta0x, ta0y, x1, y1, ta1x, ta1y, larg, haut)
+            _ajouter_tuile_3_direct(ta2x, ta2y, x2, y2, ta1x, ta1y, larg, haut)
+            _ajouter_tuile_3_direct(ta2x, ta2y, x3, y3, ta3x, ta3y, larg, haut)
+            x = x + pas
+        # triangle band between square rows (3⁶ zone)
+        soit ty_base = y + pas / 2.0
+        x = -a
+        tantque x <= larg + a:
+            _ajouter_tuile_3_direct(x, ty_base, x + a / 2.0, ty_base + h, x + a, ty_base, larg, haut)
+            _ajouter_tuile_3_direct(x, ty_base + 2.0 * h, x + a / 2.0, ty_base + h, x + a, ty_base + 2.0 * h, larg, haut)
+            x = x + a
+        y = y + periode_y
+    retour 0
+
+
 # ── Dispatch principal ────────────────────────────────────────
 
 def generer_tuiles(larg, haut, a, methode):
@@ -1441,6 +1745,18 @@ def generer_tuiles(larg, haut, a, methode):
         _gen_bi_rhombi_grandrhombi(larg, haut, a)
     si m == 19:
         _gen_bi_dodec_rhombi(larg, haut, a)
+    si m == 20:
+        _gen_bi_grandrhombi(larg, haut, a)
+    si m == 21:
+        _gen_bi_dodec_snub(larg, haut, a)
+    si m == 22:
+        _gen_bi_rhombi_snubhex(larg, haut, a)
+    si m == 23:
+        _gen_bi_tri_hexhex(larg, haut, a)
+    si m == 24:
+        _gen_bi_hexhex_snubhex(larg, haut, a)
+    si m == 25:
+        _gen_bi_tri_snubsq(larg, haut, a)
     retour _compte_tuiles
 
 
@@ -1485,6 +1801,18 @@ def _rejouer_methode(m, larg, haut, a):
         _gen_bi_rhombi_grandrhombi(larg, haut, a)
     si m == 19:
         _gen_bi_dodec_rhombi(larg, haut, a)
+    si m == 20:
+        _gen_bi_grandrhombi(larg, haut, a)
+    si m == 21:
+        _gen_bi_dodec_snub(larg, haut, a)
+    si m == 22:
+        _gen_bi_rhombi_snubhex(larg, haut, a)
+    si m == 23:
+        _gen_bi_tri_hexhex(larg, haut, a)
+    si m == 24:
+        _gen_bi_hexhex_snubhex(larg, haut, a)
+    si m == 25:
+        _gen_bi_tri_snubsq(larg, haut, a)
 
 
 def _charger_tuile_cache(i):
@@ -1597,3 +1925,21 @@ def code_bi_rhombi_grandrhombi():
 
 def code_bi_dodec_rhombi():
     retour 19
+
+def code_bi_grandrhombi():
+    retour 20
+
+def code_bi_dodec_snub():
+    retour 21
+
+def code_bi_rhombi_snubhex():
+    retour 22
+
+def code_bi_tri_hexhex():
+    retour 23
+
+def code_bi_hexhex_snubhex():
+    retour 24
+
+def code_bi_tri_snubsq():
+    retour 25
