@@ -563,6 +563,32 @@ def _ajouter_motif_3462(cx, cy, a, larg, haut, orientation):
     retour 0
 
 
+def _ajouter_motif_3462_trihex_a(cx, cy, a, larg, haut):
+    soit h0x = sommet_hex_x(cx, cy, a, 0)
+    soit h0y = sommet_hex_y(cx, cy, a, 0)
+    soit h1x = sommet_hex_x(cx, cy, a, 1)
+    soit h1y = sommet_hex_y(cx, cy, a, 1)
+    soit h2x = sommet_hex_x(cx, cy, a, 2)
+    soit h2y = sommet_hex_y(cx, cy, a, 2)
+    soit h3x = sommet_hex_x(cx, cy, a, 3)
+    soit h3y = sommet_hex_y(cx, cy, a, 3)
+    soit h4x = sommet_hex_x(cx, cy, a, 4)
+    soit h4y = sommet_hex_y(cx, cy, a, 4)
+    soit h5x = sommet_hex_x(cx, cy, a, 5)
+    soit h5y = sommet_hex_y(cx, cy, a, 5)
+    _ajouter_tuile_6_direct(h0x, h0y, h1x, h1y, h2x, h2y, h3x, h3y, h4x, h4y, h5x, h5y, larg, haut)
+    pour i dans range(6):
+        soit p1x = sommet_hex_x(cx, cy, a, i)
+        soit p1y = sommet_hex_y(cx, cy, a, i)
+        soit p2x = sommet_hex_x(cx, cy, a, (i + 1) % 6)
+        soit p2y = sommet_hex_y(cx, cy, a, (i + 1) % 6)
+        si i == 1 ou i == 4:
+            _ajouter_carre_depuis_arete(p1x, p1y, p2x, p2y, larg, haut)
+        sinon:
+            _ajouter_triangle_depuis_arete_exterieur(p1x, p1y, p2x, p2y, cx, cy, larg, haut)
+    retour 0
+
+
 def _ajouter_patch_hexhex(cx, cy, a, larg, haut):
     s3 = math.sqrt(3.0)
     _ajouter_tuile_6_direct(
@@ -691,6 +717,10 @@ def _ajouter_patch_dodec_tri(cx, cy, a, larg, haut):
     retour 0
 
 
+def _ajouter_modele_bi_grandrhombi(modele, tx, ty, a, larg, haut):
+    pass
+
+
 # ── État global ────────────────────────────────────────────────
 
 _methode_active = 0
@@ -728,6 +758,29 @@ _cache_x11 = 0.0
 _cache_y11 = 0.0
 
 _sortie = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+_rotation_mode = 0
+_rotation_larg = 0.0
+_rotation_haut = 0.0
+
+
+def _configurer_rotation(mode, larg, haut):
+    global _rotation_mode, _rotation_larg, _rotation_haut
+    _rotation_mode = entier(mode)
+    _rotation_larg = larg
+    _rotation_haut = haut
+    retour 0
+
+
+def _rotation_x(x, y):
+    si _rotation_mode == 1:
+        retour _rotation_larg - y
+    retour x
+
+
+def _rotation_y(x, y):
+    si _rotation_mode == 1:
+        retour x
+    retour y
 
 
 def _ecrire_cache(n, x0=0.0, y0=0.0, x1=0.0, y1=0.0, x2=0.0, y2=0.0, x3=0.0, y3=0.0, x4=0.0, y4=0.0, x5=0.0, y5=0.0, x6=0.0, y6=0.0, x7=0.0, y7=0.0, x8=0.0, y8=0.0, x9=0.0, y9=0.0, x10=0.0, y10=0.0, x11=0.0, y11=0.0):
@@ -765,6 +818,7 @@ def _ecrire_cache(n, x0=0.0, y0=0.0, x1=0.0, y1=0.0, x2=0.0, y2=0.0, x3=0.0, y3=
 def _tuiles_reinit():
     global _compte_tuiles, _cible_tuile, _cache_trouve, _cache_n, _cache_actif
     global _cache_x0, _cache_y0, _cache_x1, _cache_y1, _cache_x2, _cache_y2, _cache_x3, _cache_y3, _cache_x4, _cache_y4, _cache_x5, _cache_y5, _cache_x6, _cache_y6, _cache_x7, _cache_y7, _cache_x8, _cache_y8, _cache_x9, _cache_y9, _cache_x10, _cache_y10, _cache_x11, _cache_y11
+    _configurer_rotation(0, 0.0, 0.0)
     _compte_tuiles = 0
     _cible_tuile = 2147483647
     _cache_trouve = 0
@@ -805,42 +859,68 @@ def _hors_champ(min_x, max_x, min_y, max_y, larg, haut):
 
 def _ajouter_tuile_3_direct(x0, y0, x1, y1, x2, y2, larg, haut):
     global _compte_tuiles, _cible_tuile, _cache_actif
-    soit min_x = min(min(x0, x1), x2)
-    soit max_x = max(max(x0, x1), x2)
-    soit min_y = min(min(y0, y1), y2)
-    soit max_y = max(max(y0, y1), y2)
+    soit rx0 = _rotation_x(x0, y0)
+    soit ry0 = _rotation_y(x0, y0)
+    soit rx1 = _rotation_x(x1, y1)
+    soit ry1 = _rotation_y(x1, y1)
+    soit rx2 = _rotation_x(x2, y2)
+    soit ry2 = _rotation_y(x2, y2)
+    soit min_x = min(min(rx0, rx1), rx2)
+    soit max_x = max(max(rx0, rx1), rx2)
+    soit min_y = min(min(ry0, ry1), ry2)
+    soit max_y = max(max(ry0, ry1), ry2)
     si _hors_champ(min_x, max_x, min_y, max_y, larg, haut) == 1:
         retour 0
     si _cache_actif == 1 et _cible_tuile == _compte_tuiles:
-        _ecrire_cache(3, x0, y0, x1, y1, x2, y2)
+        _ecrire_cache(3, rx0, ry0, rx1, ry1, rx2, ry2)
     _compte_tuiles = _compte_tuiles + 1
     retour 1
 
 
 def _ajouter_tuile_4_direct(x0, y0, x1, y1, x2, y2, x3, y3, larg, haut):
     global _compte_tuiles, _cible_tuile, _cache_actif
-    soit min_x = min(min(x0, x1), min(x2, x3))
-    soit max_x = max(max(x0, x1), max(x2, x3))
-    soit min_y = min(min(y0, y1), min(y2, y3))
-    soit max_y = max(max(y0, y1), max(y2, y3))
+    soit rx0 = _rotation_x(x0, y0)
+    soit ry0 = _rotation_y(x0, y0)
+    soit rx1 = _rotation_x(x1, y1)
+    soit ry1 = _rotation_y(x1, y1)
+    soit rx2 = _rotation_x(x2, y2)
+    soit ry2 = _rotation_y(x2, y2)
+    soit rx3 = _rotation_x(x3, y3)
+    soit ry3 = _rotation_y(x3, y3)
+    soit min_x = min(min(rx0, rx1), min(rx2, rx3))
+    soit max_x = max(max(rx0, rx1), max(rx2, rx3))
+    soit min_y = min(min(ry0, ry1), min(ry2, ry3))
+    soit max_y = max(max(ry0, ry1), max(ry2, ry3))
     si _hors_champ(min_x, max_x, min_y, max_y, larg, haut) == 1:
         retour 0
     si _cache_actif == 1 et _cible_tuile == _compte_tuiles:
-        _ecrire_cache(4, x0, y0, x1, y1, x2, y2, x3, y3)
+        _ecrire_cache(4, rx0, ry0, rx1, ry1, rx2, ry2, rx3, ry3)
     _compte_tuiles = _compte_tuiles + 1
     retour 1
 
 
 def _ajouter_tuile_6_direct(x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, larg, haut):
     global _compte_tuiles, _cible_tuile, _cache_actif
-    soit min_x = min(min(min(x0, x1), min(x2, x3)), min(x4, x5))
-    soit max_x = max(max(max(x0, x1), max(x2, x3)), max(x4, x5))
-    soit min_y = min(min(min(y0, y1), min(y2, y3)), min(y4, y5))
-    soit max_y = max(max(max(y0, y1), max(y2, y3)), max(y4, y5))
+    soit rx0 = _rotation_x(x0, y0)
+    soit ry0 = _rotation_y(x0, y0)
+    soit rx1 = _rotation_x(x1, y1)
+    soit ry1 = _rotation_y(x1, y1)
+    soit rx2 = _rotation_x(x2, y2)
+    soit ry2 = _rotation_y(x2, y2)
+    soit rx3 = _rotation_x(x3, y3)
+    soit ry3 = _rotation_y(x3, y3)
+    soit rx4 = _rotation_x(x4, y4)
+    soit ry4 = _rotation_y(x4, y4)
+    soit rx5 = _rotation_x(x5, y5)
+    soit ry5 = _rotation_y(x5, y5)
+    soit min_x = min(min(min(rx0, rx1), min(rx2, rx3)), min(rx4, rx5))
+    soit max_x = max(max(max(rx0, rx1), max(rx2, rx3)), max(rx4, rx5))
+    soit min_y = min(min(min(ry0, ry1), min(ry2, ry3)), min(ry4, ry5))
+    soit max_y = max(max(max(ry0, ry1), max(ry2, ry3)), max(ry4, ry5))
     si _hors_champ(min_x, max_x, min_y, max_y, larg, haut) == 1:
         retour 0
     si _cache_actif == 1 et _cible_tuile == _compte_tuiles:
-        _ecrire_cache(6, x0, y0, x1, y1, x2, y2, x3, y3, x4, y4, x5, y5)
+        _ecrire_cache(6, rx0, ry0, rx1, ry1, rx2, ry2, rx3, ry3, rx4, ry4, rx5, ry5)
     _compte_tuiles = _compte_tuiles + 1
     retour 1
 
@@ -1161,15 +1241,40 @@ def _gen_bi_elongtri_b(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
     periode_y = a + 3.0 * h
     y = -periode_y
+    soit rang = 0
     tantque y <= haut + periode_y:
-        x = -a
+        soit phase_haut = (rang % 2) * (a / 2.0)
+        soit phase_bas = ((rang + 1) % 2) * (a / 2.0)
+        soit y_tri = y + a
+
+        # Comme dans 2-uniform_n15, chaque rangée de carrés est décalée
+        # horizontalement de a/2 par rapport à la suivante, et les carrés
+        # sont séparés par trois bandes triangulaires complètes.
+        x = phase_haut - a
         tantque x <= larg + a:
             _ajouter_tuile_4_direct(x, y, x + a, y, x + a, y + a, x, y + a, larg, haut)
-            _ajouter_tuile_3_direct(x, y + a, x + a / 2.0, y + a + h, x + a, y + a, larg, haut)
-            _ajouter_tuile_3_direct(x, y + a + 2.0 * h, x + a / 2.0, y + a + h, x + a, y + a + 2.0 * h, larg, haut)
-            _ajouter_tuile_3_direct(x, y + a + 2.0 * h, x + a / 2.0, y + a + 3.0 * h, x + a, y + a + 2.0 * h, larg, haut)
             x = x + a
+
+        pour bande dans range(3):
+            soit y0 = y_tri + bande * h
+            soit phase_desc = phase_haut
+            soit phase_mont = phase_bas
+            si bande % 2 == 1:
+                phase_desc = phase_bas
+                phase_mont = phase_haut
+
+            x = phase_desc - a
+            tantque x <= larg + a:
+                _ajouter_tuile_3_direct(x, y0, x + a / 2.0, y0 + h, x + a, y0, larg, haut)
+                x = x + a
+
+            x = phase_mont - a
+            tantque x <= larg + a:
+                _ajouter_tuile_3_direct(x, y0 + h, x + a / 2.0, y0, x + a, y0 + h, larg, haut)
+                x = x + a
+
         y = y + periode_y
+        rang = rang + 1
     retour 0
 
 
@@ -1574,52 +1679,7 @@ def _gen_bi_dodec_grandrhombi(larg, haut, a):
 
 # custom — (3.4.6.4 ; 4.6.12) : rhombitrihexagonal and great rhombitrihexagonal tiling
 def _gen_bi_rhombi_grandrhombi(larg, haut, a):
-    pas_x = a * (5.0 + math.sqrt(3.0))
-    pas_y = a * (4.1 + math.sqrt(3.0))
-    rang = 0
-    y = -pas_y
-    tantque y <= haut + pas_y:
-        decal = (rang % 2) * (pas_x / 2.0)
-        x = -pas_x + decal
-        tantque x <= larg + pas_x:
-            soit d0x = sommet_dodec_x(x, y, a, 0)
-            soit d0y = sommet_dodec_y(x, y, a, 0)
-            soit d1x = sommet_dodec_x(x, y, a, 1)
-            soit d1y = sommet_dodec_y(x, y, a, 1)
-            soit d2x = sommet_dodec_x(x, y, a, 2)
-            soit d2y = sommet_dodec_y(x, y, a, 2)
-            soit d3x = sommet_dodec_x(x, y, a, 3)
-            soit d3y = sommet_dodec_y(x, y, a, 3)
-            soit d4x = sommet_dodec_x(x, y, a, 4)
-            soit d4y = sommet_dodec_y(x, y, a, 4)
-            soit d5x = sommet_dodec_x(x, y, a, 5)
-            soit d5y = sommet_dodec_y(x, y, a, 5)
-            soit d6x = sommet_dodec_x(x, y, a, 6)
-            soit d6y = sommet_dodec_y(x, y, a, 6)
-            soit d7x = sommet_dodec_x(x, y, a, 7)
-            soit d7y = sommet_dodec_y(x, y, a, 7)
-            soit d8x = sommet_dodec_x(x, y, a, 8)
-            soit d8y = sommet_dodec_y(x, y, a, 8)
-            soit d9x = sommet_dodec_x(x, y, a, 9)
-            soit d9y = sommet_dodec_y(x, y, a, 9)
-            soit d10x = sommet_dodec_x(x, y, a, 10)
-            soit d10y = sommet_dodec_y(x, y, a, 10)
-            soit d11x = sommet_dodec_x(x, y, a, 11)
-            soit d11y = sommet_dodec_y(x, y, a, 11)
-            _ajouter_tuile_12_direct(d0x, d0y, d1x, d1y, d2x, d2y, d3x, d3y, d4x, d4y, d5x, d5y, d6x, d6y, d7x, d7y, d8x, d8y, d9x, d9y, d10x, d10y, d11x, d11y, larg, haut)
-            pour i dans range(12):
-                soit p1x = sommet_dodec_x(x, y, a, i)
-                soit p1y = sommet_dodec_y(x, y, a, i)
-                soit p2x = sommet_dodec_x(x, y, a, (i + 1) % 12)
-                soit p2y = sommet_dodec_y(x, y, a, (i + 1) % 12)
-                si i % 2 == 0:
-                    _ajouter_hex_depuis_arete(p2x, p2y, p1x, p1y, larg, haut)
-                sinon:
-                    _ajouter_carre_depuis_arete(p2x, p2y, p1x, p1y, larg, haut)
-            x = x + pas_x
-        rang = rang + 1
-        y = y + pas_y
-    retour 0
+    pass
 
 
 # custom — (3.12² ; 3.4.6.4) : truncated hexagonal and rhombitrihexagonal tiling
@@ -1680,58 +1740,7 @@ def _gen_bi_dodec_rhombi(larg, haut, a):
 
 # (4.6.12 ; 3.4.6.4) : truncated trihexagonal + rhombitrihexagonal
 def _gen_bi_grandrhombi(larg, haut, a):
-    apo12 = apotheme_dodec(a)
-    pas_x = 2.0 * apo12
-    pas_y = math.sqrt(3.0) * apo12
-    rang = 0
-    y = -pas_y
-    tantque y <= haut + pas_y:
-        decal = (rang % 2) * (pas_x / 2.0)
-        x = -pas_x + decal
-        tantque x <= larg + pas_x:
-            soit d0x = sommet_dodec_x(x, y, a, 0)
-            soit d0y = sommet_dodec_y(x, y, a, 0)
-            soit d1x = sommet_dodec_x(x, y, a, 1)
-            soit d1y = sommet_dodec_y(x, y, a, 1)
-            soit d2x = sommet_dodec_x(x, y, a, 2)
-            soit d2y = sommet_dodec_y(x, y, a, 2)
-            soit d3x = sommet_dodec_x(x, y, a, 3)
-            soit d3y = sommet_dodec_y(x, y, a, 3)
-            soit d4x = sommet_dodec_x(x, y, a, 4)
-            soit d4y = sommet_dodec_y(x, y, a, 4)
-            soit d5x = sommet_dodec_x(x, y, a, 5)
-            soit d5y = sommet_dodec_y(x, y, a, 5)
-            soit d6x = sommet_dodec_x(x, y, a, 6)
-            soit d6y = sommet_dodec_y(x, y, a, 6)
-            soit d7x = sommet_dodec_x(x, y, a, 7)
-            soit d7y = sommet_dodec_y(x, y, a, 7)
-            soit d8x = sommet_dodec_x(x, y, a, 8)
-            soit d8y = sommet_dodec_y(x, y, a, 8)
-            soit d9x = sommet_dodec_x(x, y, a, 9)
-            soit d9y = sommet_dodec_y(x, y, a, 9)
-            soit d10x = sommet_dodec_x(x, y, a, 10)
-            soit d10y = sommet_dodec_y(x, y, a, 10)
-            soit d11x = sommet_dodec_x(x, y, a, 11)
-            soit d11y = sommet_dodec_y(x, y, a, 11)
-            _ajouter_tuile_12_direct(d0x, d0y, d1x, d1y, d2x, d2y, d3x, d3y, d4x, d4y, d5x, d5y, d6x, d6y, d7x, d7y, d8x, d8y, d9x, d9y, d10x, d10y, d11x, d11y, larg, haut)
-            # hexagons on even edges
-            pour i dans range(0, 12, 2):
-                soit p1x = sommet_dodec_x(x, y, a, i)
-                soit p1y = sommet_dodec_y(x, y, a, i)
-                soit p2x = sommet_dodec_x(x, y, a, i + 1)
-                soit p2y = sommet_dodec_y(x, y, a, i + 1)
-                _ajouter_hex_depuis_arete(p2x, p2y, p1x, p1y, larg, haut)
-            # squares on odd edges
-            pour i dans range(1, 12, 2):
-                soit p1x = sommet_dodec_x(x, y, a, i)
-                soit p1y = sommet_dodec_y(x, y, a, i)
-                soit p2x = sommet_dodec_x(x, y, a, (i + 1) % 12)
-                soit p2y = sommet_dodec_y(x, y, a, (i + 1) % 12)
-                _ajouter_carre_depuis_arete(p2x, p2y, p1x, p1y, larg, haut)
-            x = x + pas_x
-        rang = rang + 1
-        y = y + pas_y
-    retour 0
+    pass
 
 
 # (3.12² ; 3.4.3.12) : truncated hexagonal + dodecagonal
@@ -2070,46 +2079,48 @@ def _gen_bi_3462_rhombi(larg, haut, a):
 
 
 # 27 — (3.4².6 ; 3.6.3.6)₁ : 3.4².6 + trihexagonal, checkerboard
+
 def _gen_bi_3462_trihex_a(larg, haut, a):
     pas_x = a * (2.0 + math.sqrt(3.0))
     pas_y = a * (1.5 + math.sqrt(3.0))
+    _configurer_rotation(1, larg, haut)
     rang = 0
     y = -pas_y
-    tantque y <= haut + pas_y:
+    tantque y <= larg + pas_y:
         decal = (rang % 2) * (pas_x / 2.0)
-        col = 0
         x = -pas_x + decal
-        tantque x <= larg + pas_x:
-            si (rang + col) % 2 == 0:
-                _ajouter_motif_3462(x, y, a, larg, haut, (rang + col) % 3)
-            sinon:
-                _ajouter_motif_trihex(x, y, a, larg, haut)
-            col = col + 1
+        tantque x <= haut + pas_x:
+            _ajouter_motif_3462_trihex_a(x, y, a, haut, larg)
             x = x + pas_x
         rang = rang + 1
         y = y + pas_y
+    _configurer_rotation(0, 0.0, 0.0)
     retour 0
 
 
 # 28 — (3.4².6 ; 3.6.3.6)₂ : 3.4².6 + trihexagonal, row alternation
+
+
+
 def _gen_bi_3462_trihex_b(larg, haut, a):
     pas_x = a * (2.0 + math.sqrt(3.0))
     pas_y = a * (1.5 + math.sqrt(3.0))
+    _configurer_rotation(1, larg, haut)
     rang = 0
     y = -pas_y
-    tantque y <= haut + pas_y:
+    tantque y <= larg + pas_y:
         decal = (rang % 2) * (pas_x / 2.0)
         x = -pas_x + decal
-        tantque x <= larg + pas_x:
+        tantque x <= haut + pas_x:
             si rang % 2 == 0:
-                _ajouter_motif_3462(x, y, a, larg, haut, rang % 3)
+                _ajouter_motif_3462(x, y, a, haut, larg, rang % 3)
             sinon:
-                _ajouter_motif_trihex(x, y, a, larg, haut)
+                _ajouter_motif_trihex(x, y, a, haut, larg)
             x = x + pas_x
         rang = rang + 1
         y = y + pas_y
+    _configurer_rotation(0, 0.0, 0.0)
     retour 0
-
 
 # ── Dispatch principal ────────────────────────────────────────
 
