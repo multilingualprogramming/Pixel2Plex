@@ -922,14 +922,7 @@ def _gen_bi_sq_snubhex(larg, haut, a):
             decal = (rl % 2) * (pas_x / 2.0)
             pour col dans range(cols):
                 xl = -pas_x + decal + col * pas_x
-                _ajouter_tuile_6_direct(
-                    sommet_hex_x(xl, yl, a, 0), sommet_hex_y(xl, yl, a, 0),
-                    sommet_hex_x(xl, yl, a, 1), sommet_hex_y(xl, yl, a, 1),
-                    sommet_hex_x(xl, yl, a, 2), sommet_hex_y(xl, yl, a, 2),
-                    sommet_hex_x(xl, yl, a, 3), sommet_hex_y(xl, yl, a, 3),
-                    sommet_hex_x(xl, yl, a, 4), sommet_hex_y(xl, yl, a, 4),
-                    sommet_hex_x(xl, yl, a, 5), sommet_hex_y(xl, yl, a, 5),
-                    larg, haut)
+                _ajouter_tuile_6_direct(sommet_hex_x(xl, yl, a, 0), sommet_hex_y(xl, yl, a, 0), sommet_hex_x(xl, yl, a, 1), sommet_hex_y(xl, yl, a, 1), sommet_hex_x(xl, yl, a, 2), sommet_hex_y(xl, yl, a, 2), sommet_hex_x(xl, yl, a, 3), sommet_hex_y(xl, yl, a, 3), sommet_hex_x(xl, yl, a, 4), sommet_hex_y(xl, yl, a, 4), sommet_hex_x(xl, yl, a, 5), sommet_hex_y(xl, yl, a, 5), larg, haut)
                 pour i dans range(6):
                     soit pvx = sommet_hex_x(xl, yl, a, i)
                     soit pvy = sommet_hex_y(xl, yl, a, i)
