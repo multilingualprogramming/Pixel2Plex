@@ -875,7 +875,7 @@ def _gen_bi_elongtri_b(larg, haut, a):
         tantque x <= larg + a:
             _ajouter_tuile_4_direct(x, y, x + a, y, x + a, y + a, x, y + a, larg, haut)
             _ajouter_tuile_3_direct(x, y + a, x + a / 2.0, y + a + h, x + a, y + a, larg, haut)
-            _ajouter_tuile_3_direct(x, y + a + h, x + a / 2.0, y + a + 2.0 * h, x + a, y + a + h, larg, haut)
+            _ajouter_tuile_3_direct(x, y + a + 2.0 * h, x + a / 2.0, y + a + h, x + a, y + a + 2.0 * h, larg, haut)
             _ajouter_tuile_3_direct(x, y + a + 2.0 * h, x + a / 2.0, y + a + 3.0 * h, x + a, y + a + 2.0 * h, larg, haut)
             x = x + a
         y = y + periode_y
