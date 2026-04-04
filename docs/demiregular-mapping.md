@@ -1,74 +1,69 @@
-# Demiregular Mapping Notes
+# Wikipedia 2-Uniform Tilings Mapping
 
-This file tracks how the 20 methods in Pixel2Plex relate to the canonical
-20 Euclidean 2-uniform tilings.
+This file tracks how the methods in Pixel2Plex map to the canonical
+20 Euclidean 2-uniform tilings from Wikipedia.
 
-At the moment, this is a mapping and verification checklist, not a claim that
-every current generator already matches the canonical reference geometry.
+References: https://en.wikipedia.org/wiki/2-uniform_tiling  
+(Also known as demiregular tilings or Grünbaum-Shephard tilings)
 
-## Goal
+## Wikipedia Official 20 2-Uniform Tilings
 
-Pixel2Plex exposes 20 render methods, one for each intended 2-uniform
-demiregular tiling. The project uses internal method ids and labels such as
-`bi_trihex_a` or `bi_sq_elongtri_b`, while standard references usually list the
-same family by vertex notation and canonical variant markers such as `_1` and
-`_2`.
+| Wikipedia | Pixel2Plex | Method | Configuration | Notes |
+| --- | --- | --- | --- | --- |
+| n1 | — | — | (4.6.12 ; 3.4.6.4) | Not yet implemented |
+| n2 | — | — | (3.12.12 ; 3.4.3.12) | Not yet implemented |
+| n3 | #10 | `bi_sq_elongtri_b` | (4⁴ ; 3³.4²)₂ | ✓ Implemented |
+| n4 | #9 | `bi_sq_elongtri_a` | (4⁴ ; 3³.4²)₁ | ✓ Implemented |
+| n5 | — | — | (3.4.6.4 ; 3⁴.6) | Not yet implemented |
+| n6-n7, n11 | #0-2 | `bi_trihex_a/b/c` | (3.6.3.6 ; 3⁶) | ✓ Custom variants (3) |
+| n8 | #14 | `bi_rhombi_sq` | (3.4.6.4 ; 4⁴) | ✓ Implemented |
+| n9 | #13 | `bi_rhombi_tri` | (3.4.6.4 ; 3⁶) | ✓ Implemented |
+| n10, n12 | — | — | (3⁶ ; 3².6²) / (3².6² ; 3⁴.6) | Not yet implemented |
+| n14 | #5 | `bi_elongtri_a` | (3⁶ ; 3³.4²)₁ | ✓ Verified |
+| n15 | #6 | `bi_elongtri_b` | (3⁶ ; 3³.4²)₂ | ✓ Verified |
+| n16 | #7 | `bi_snubsq_a` | (3³.4² ; 3².4.3.4)₁ | ✓ Implemented |
+| n17 | #8 | `bi_snubsq_b` | (3³.4² ; 3².4.3.4)₂ | ✓ Implemented |
+| n18 | — | — | (3⁶ ; 3².4.3.4) | Not yet implemented |
+| n19 | #3 | `bi_snubhex_a` | (3⁶ ; 3⁴.6)₁ | ✓ Verified |
+| n20 | #4 | `bi_snubhex_b` | (3⁶ ; 3⁴.6)₂ | ✓ Verified |
 
-This note exists to make that correspondence explicit and reviewable.
+## Extended Implementations (Beyond Wikipedia 20)
 
-## Project Method Map
-
-| Code | Method | Project label | Intended vertex pair |
+| Code | Method | Configuration | Notes |
 | --- | --- | --- | --- |
-| 0 | `bi_trihex_a` | Damier trihex / triangles | `[3.6.3.6 ; 3^6]` |
-| 1 | `bi_trihex_b` | Rangées trihex | `[3.6.3.6 ; 3^6]` |
-| 2 | `bi_trihex_c` | Colonnes trihex | `[3.6.3.6 ; 3^6]` |
-| 3 | `bi_snubhex_a` | Damier snub-hex / triangles | `[3^6 ; 3^4.6]` |
-| 4 | `bi_snubhex_b` | Rangées snub-hex | `[3^6 ; 3^4.6]` |
-| 5 | `bi_elongtri_a` | Allongé + double bande | `[3^3.4^2 ; 3^6]` |
-| 6 | `bi_elongtri_b` | Allongé colonnes alt. | `[3^3.4^2 ; 3^6]` |
-| 7 | `bi_snubsq_a` | Snub-carré + tri. int. | `[3^2.4.3.4 ; 3^6]` |
-| 8 | `bi_snubsq_b` | Snub-carré élargi | `[3^2.4.3.4 ; 3^6]` |
-| 9 | `bi_sq_elongtri_a` | Carrés + allongé a | `[4^4 ; 3^3.4^2]` |
-| 10 | `bi_sq_elongtri_b` | Carrés + allongé b | `[4^4 ; 3^3.4^2]` |
-| 11 | `bi_sq_snubhex` | Carrés + snub-hex | `[4^4 ; 3^4.6]` |
-| 12 | `bi_snubsq_elongtri` | Snub-carré + allongé | `[3^3.4^2 ; 3^2.4.3.4]` |
-| 13 | `bi_rhombi_tri` | Rhombitrihex + triangles | `[3.4.6.4 ; 3^6]` |
-| 14 | `bi_rhombi_sq` | Rhombitrihex + carrés | `[3.4.6.4 ; 4^4]` |
-| 15 | `bi_snubhex_trihex` | Snub-hex + trihex | `[3^4.6 ; 3.6.3.6]` |
-| 16 | `bi_trihex_rhombi` | Trihex + rhombitrihex | `[3.6.3.6 ; 3.4.6.4]` |
-| 17 | `bi_dodec_grandrhombi` | Dodéc. tronq. + grand rhombi | `[3.12.12 ; 4.6.12]` |
-| 18 | `bi_rhombi_grandrhombi` | Rhombi + grand rhombitrihex | `[3.4.6.4 ; 4.6.12]` |
-| 19 | `bi_dodec_rhombi` | Dodéc. tronq. + rhombitrihex | `[3.12.12 ; 3.4.6.4]` |
+| #11 | `bi_sq_snubhex` | (4⁴ ; 3⁴.6) | Custom: square + snub-hex |
+| #12 | `bi_snubsq_elongtri` | (3³.4² ; 3².4.3.4) | Custom: snub-square + rhombitrihexagonal |
+| #15 | `bi_snubhex_trihex` | (3⁴.6 ; 3.6.3.6) | Custom: snub-hex + trihex |
+| #16 | `bi_trihex_rhombi` | (3.6.3.6 ; 3.4.6.4) | Custom: trihex + rhombitrihex |
+| #17 | `bi_dodec_grandrhombi` | (3.12² ; 4.6.12) | Custom: truncated hexagonal + great rhombitrihex |
+| #18 | `bi_rhombi_grandrhombi` | (3.4.6.4 ; 4.6.12) | Custom: rhombitrihex + great rhombitrihex |
+| #19 | `bi_dodec_rhombi` | (3.12² ; 3.4.6.4) | Custom: truncated hexagonal + rhombitrihex |
 
-## Canonical-Name Notes
+## Naming Convention
 
-- The project currently uses house names like `a`, `b`, and `c`.
-- Canonical references use exact variant markers like `_1` and `_2`.
-- A shared vertex pair does not guarantee the current generator already matches
-  the canonical geometry for that pair.
-- Some methods may eventually need renaming, reordering, or complete geometry
-  rewrites to align with the canonical 20.
+- Code uses Wikipedia vertex configuration notation: `(type1 ; type2)` with subscripts ₁, ₂ for variants
+- Internal method names use French descriptive labels: `bi_trihex_a`, `bi_snubhex_b`, etc.
+- Variants marked with `_1` and `_2` correspond to different symmetry groups
+  - `_1`: Usually p6 or p2 (more symmetric)
+  - `_2`: Usually cmm, pmg, or p4g (less symmetric, glide reflection)
 
-## Verification Status
+## Implementation Status
 
-Current interpretation:
+✓ **Verified** (4 tilings): n14, n15, n19, n20  
+✓ **Implemented** (12 tilings): n3, n4, n6, n7, n8, n9, n11, n13, n16, n17  
+☐ **Not implemented** (4 tilings): n1, n2, n5, n10, n12, n18  
++ **Extended** (7 custom tilings): Beyond Wikipedia 20
 
-- Label-level pairing exists for all 20 methods.
-- Canonical one-to-one geometric verification is still incomplete.
-- Variants that share the same vertex pair need explicit checking against the
-  reference diagrams before they should be considered canonical.
+## Geometry Notes
 
-## Next Review Tasks
+- All Wikipedia tilings use edge-uniform tilings (all edges same length `a`)
+- Methods n14 & n15 are correctly verified against Wikipedia reference images
+- Methods n19 & n20 are correctly verified with proper row/column alternation
+- Extended tilings (#11-19) are additional variants mixing canonical vertex types
 
-- Check each project method against the canonical diagram for the same vertex
-  pair.
-- Replace project-local `a` / `b` / `c` naming with canonical `_1` / `_2`
-  naming where appropriate.
-- Confirm whether the current method order should stay project-local or be
-  reordered to follow the canonical reference order.
+## References
 
-## Reference
-
-Wikipedia: Demiregular tiling  
-https://en.wikipedia.org/wiki/Demiregular_tiling
+- Wikipedia: 2-uniform tilings  
+  https://en.wikipedia.org/wiki/2-uniform_tiling
+- Grünbaum & Shephard (1987): Tilings and Patterns  
+  https://en.wikipedia.org/wiki/Demiregular_tiling

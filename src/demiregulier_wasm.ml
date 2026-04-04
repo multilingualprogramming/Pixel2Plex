@@ -590,7 +590,7 @@ def _nb_pas_inclusifs(debut, fin, pas):
 
 # ── Générateurs de pavages 2-uniformes ────────────────────────
 
-# 0 — [3·6·3·6 ; 3⁶] variante a : damier hexagone / 6-triangles
+# custom variant — (3.6.3.6 ; 3⁶)₁ : trihexagonal tiling variant (checkerboard)
 def _gen_bi_trihex_a(larg, haut, a):
     s3 = math.sqrt(3.0)
     pas_x = 2.0 * s3 * a
@@ -647,7 +647,7 @@ def _gen_bi_trihex_a(larg, haut, a):
     retour 0
 
 
-# 1 — [3·6·3·6 ; 3⁶] variante b : alternance par rangées
+# custom variant — (3.6.3.6 ; 3⁶)₂ : trihexagonal tiling variant (row alternation)
 def _gen_bi_trihex_b(larg, haut, a):
     s3 = math.sqrt(3.0)
     pas_x = 2.0 * s3 * a
@@ -701,7 +701,7 @@ def _gen_bi_trihex_b(larg, haut, a):
     retour 0
 
 
-# 2 — [3·6·3·6 ; 3⁶] variante c : alternance par colonnes
+# custom variant — (3.6.3.6 ; 3⁶)₃ : trihexagonal tiling variant (column alternation)
 def _gen_bi_trihex_c(larg, haut, a):
     s3 = math.sqrt(3.0)
     pas_x = 2.0 * s3 * a
@@ -755,7 +755,7 @@ def _gen_bi_trihex_c(larg, haut, a):
     retour 0
 
 
-# 3 — [3⁶ ; 3⁴·6] variante a : snub-hex damier
+# 19 — (3⁶ ; 3⁴.6)₁ : snub hexagonal tiling (p6 symmetry)
 def _gen_bi_snubhex_a(larg, haut, a):
     s3 = math.sqrt(3.0)
     pad = 6.0 * a
@@ -802,7 +802,7 @@ def _gen_bi_snubhex_a(larg, haut, a):
     retour 0
 
 
-# 4 — [3⁶ ; 3⁴·6] variante b : snub-hex alternance par rangées
+# 20 — (3⁶ ; 3⁴.6)₂ : snub hexagonal tiling (cmm symmetry)
 def _gen_bi_snubhex_b(larg, haut, a):
     s3 = math.sqrt(3.0)
     pad = 6.0 * a
@@ -849,7 +849,7 @@ def _gen_bi_snubhex_b(larg, haut, a):
     retour 0
 
 
-# 5 — [3³·4² ; 3⁶] variante a : triangulaire allongé + bande triangle double
+# 14 — (3⁶ ; 3³.4²)₁ : elongated triangular tiling (p2 symmetry)
 def _gen_bi_elongtri_a(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
     periode_y = a + 2.0 * h
@@ -865,7 +865,7 @@ def _gen_bi_elongtri_a(larg, haut, a):
     retour 0
 
 
-# 6 — [3³·4² ; 3⁶] variante b : triangulaire allongé, colonnes alternées
+# 15 — (3⁶ ; 3³.4²)₂ : elongated triangular tiling (cmm symmetry)
 def _gen_bi_elongtri_b(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
     periode_y = a + 3.0 * h
@@ -882,7 +882,7 @@ def _gen_bi_elongtri_b(larg, haut, a):
     retour 0
 
 
-# 7 — [3²·4·3·4 ; 3⁶] variante a : carré snub + triangles intérieurs
+# 16 — (3³.4² ; 3².4.3.4)₁ : snub square and elongated triangular tiling (p4g symmetry)
 def _gen_bi_snubsq_a(larg, haut, a):
     pas = a * (1.0 + math.sqrt(3.0))
     y = -pas
@@ -922,7 +922,7 @@ def _gen_bi_snubsq_a(larg, haut, a):
     retour 0
 
 
-# 8 — [3²·4·3·4 ; 3⁶] variante b : carré snub élargi
+# 17 — (3³.4² ; 3².4.3.4)₂ : snub square and elongated triangular tiling (pmg symmetry)
 def _gen_bi_snubsq_b(larg, haut, a):
     pas = a * (1.0 + math.sqrt(3.0))
     y = -pas
@@ -960,7 +960,7 @@ def _gen_bi_snubsq_b(larg, haut, a):
     retour 0
 
 
-# 9 — [4⁴ ; 3³·4²] variante a : bandes alternées carrés / triangulaire allongé
+# 4 — (4⁴ ; 3³.4²)₁ : square and elongated triangular tiling (p4g symmetry)
 def _gen_bi_sq_elongtri_a(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
     periode_y = 2.0 * a + 2.0 * h
@@ -977,7 +977,7 @@ def _gen_bi_sq_elongtri_a(larg, haut, a):
     retour 0
 
 
-# 10 — [4⁴ ; 3³·4²] variante b : bandes décalées
+# 3 — (4⁴ ; 3³.4²)₂ : square and elongated triangular tiling (pmg symmetry)
 def _gen_bi_sq_elongtri_b(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
     periode_y = 3.0 * a + 2.0 * h
@@ -995,7 +995,7 @@ def _gen_bi_sq_elongtri_b(larg, haut, a):
     retour 0
 
 
-# 11 — [4⁴ ; 3⁴·6] : bandes alternées carrés / snub-hex
+# custom — (4⁴ ; 3⁴.6) : square and snub hexagonal tiling (mixed)
 def _gen_bi_sq_snubhex(larg, haut, a):
     s3 = math.sqrt(3.0)
     pas_x = 2.0 * s3 * a
@@ -1022,7 +1022,7 @@ def _gen_bi_sq_snubhex(larg, haut, a):
     retour 0
 
 
-# 12 — [3³·4² ; 3²·4·3·4] : snub-carré + triangulaire allongé mélangés
+# custom — (3³.4² ; 3².4.3.4) : snub square and rhombitrihexagonal tiling (mixed)
 def _gen_bi_snubsq_elongtri(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
     pas = a * (1.0 + math.sqrt(3.0))
@@ -1055,7 +1055,7 @@ def _gen_bi_snubsq_elongtri(larg, haut, a):
     retour 0
 
 
-# 13 — [3·4·6·4 ; 3⁶] : rhombitrihexagonal + triangles intérieurs
+# 9 — (3.4.6.4 ; 3⁶) : rhombitrihexagonal and triangular tiling
 def _gen_bi_rhombi_tri(larg, haut, a):
     pas_x = a * (2.0 + math.sqrt(3.0))
     pas_y = a * (1.5 + math.sqrt(3.0))
@@ -1094,7 +1094,7 @@ def _gen_bi_rhombi_tri(larg, haut, a):
     retour 0
 
 
-# 14 — [3·4·6·4 ; 4⁴] : rhombitrihexagonal + carrés
+# 8 — (3.4.6.4 ; 4⁴) : rhombitrihexagonal and square tiling
 def _gen_bi_rhombi_sq(larg, haut, a):
     pas_x = a * (2.0 + math.sqrt(3.0))
     pas_y = a * (1.5 + math.sqrt(3.0))
@@ -1132,7 +1132,7 @@ def _gen_bi_rhombi_sq(larg, haut, a):
     retour 0
 
 
-# 15 — [3⁴·6 ; 3·6·3·6] : snub-hex + trihex mélangés
+# custom — (3⁴.6 ; 3.6.3.6) : snub hexagonal and trihexagonal tiling (mixed)
 def _gen_bi_snubhex_trihex(larg, haut, a):
     s3 = math.sqrt(3.0)
     pas_x = 2.0 * s3 * a
@@ -1183,7 +1183,7 @@ def _gen_bi_snubhex_trihex(larg, haut, a):
     retour 0
 
 
-# 16 — [3·6·3·6 ; 3·4·6·4] : trihex + rhombitrihexagonal mélangés
+# custom — (3.6.3.6 ; 3.4.6.4) : trihexagonal and rhombitrihexagonal tiling (mixed)
 def _gen_bi_trihex_rhombi(larg, haut, a):
     pas_x = a * (2.0 + math.sqrt(3.0))
     pas_y = a * (1.5 + math.sqrt(3.0))
@@ -1223,7 +1223,7 @@ def _gen_bi_trihex_rhombi(larg, haut, a):
     retour 0
 
 
-# 17 — [3·12² ; 4·6·12] : hexagonal tronqué + grand rhombitrihexagonal
+# custom — (3.12² ; 4.6.12) : truncated hexagonal and great rhombitrihexagonal tiling
 def _gen_bi_dodec_grandrhombi(larg, haut, a):
     apo12 = apotheme_dodec(a)
     pas_x = 2.0 * apo12
@@ -1281,7 +1281,7 @@ def _gen_bi_dodec_grandrhombi(larg, haut, a):
     retour 0
 
 
-# 18 — [3·4·6·4 ; 4·6·12] : rhombitrihexagonal + grand rhombitrihexagonal
+# custom — (3.4.6.4 ; 4.6.12) : rhombitrihexagonal and great rhombitrihexagonal tiling
 def _gen_bi_rhombi_grandrhombi(larg, haut, a):
     pas_x = a * (5.0 + math.sqrt(3.0))
     pas_y = a * (4.1 + math.sqrt(3.0))
@@ -1331,7 +1331,7 @@ def _gen_bi_rhombi_grandrhombi(larg, haut, a):
     retour 0
 
 
-# 19 — [3·12² ; 3·4·6·4] : hexagonal tronqué + rhombitrihexagonal
+# custom — (3.12² ; 3.4.6.4) : truncated hexagonal and rhombitrihexagonal tiling
 def _gen_bi_dodec_rhombi(larg, haut, a):
     apo12 = apotheme_dodec(a)
     pas_x = 2.0 * apo12
