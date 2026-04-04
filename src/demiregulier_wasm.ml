@@ -876,43 +876,35 @@ def _gen_bi_snubsq_b(larg, haut, a):
 # 9 — [4⁴ ; 3³·4²] variante a : bandes alternées carrés / triangulaire allongé
 def _gen_bi_sq_elongtri_a(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
-    periode_x = 3.0 * a
-    x = -periode_x
-    tantque x <= larg + periode_x:
-        y = -a
-        tantque y <= haut + a:
-            _ajouter_tuile_4_direct(x, y, x + a, y, x + a, y + a, x, y + a, larg, haut)
-            _ajouter_tuile_4_direct(x + a, y, x + 2.0 * a, y, x + 2.0 * a, y + a, x + a, y + a, larg, haut)
-            y = y + a
-        y = -a - 2.0 * h
-        tantque y <= haut + a + 2.0 * h:
-            _ajouter_tuile_4_direct(x + 2.0 * a, y, x + 3.0 * a, y, x + 3.0 * a, y + a, x + 2.0 * a, y + a, larg, haut)
-            _ajouter_tuile_3_direct(x + 2.0 * a, y + a, x + 2.5 * a, y + a + h, x + 3.0 * a, y + a, larg, haut)
-            _ajouter_tuile_3_direct(x + 2.0 * a, y + a + 2.0 * h, x + 2.5 * a, y + a + h, x + 3.0 * a, y + a + 2.0 * h, larg, haut)
-            y = y + a + 2.0 * h
-        x = x + periode_x
+    periode_y = 2.0 * a + 2.0 * h
+    y = -periode_y
+    tantque y <= haut + periode_y:
+        x = -a
+        tantque x <= larg + a:
+            _ajouter_tuile_4_direct(x, y + h, x + a, y + h, x + a, y + h + a, x, y + h + a, larg, haut)
+            _ajouter_tuile_4_direct(x, y + h + a, x + a, y + h + a, x + a, y + h + 2.0 * a, x, y + h + 2.0 * a, larg, haut)
+            _ajouter_tuile_3_direct(x, y + h, x + a / 2.0, y, x + a, y + h, larg, haut)
+            _ajouter_tuile_3_direct(x, y + h + 2.0 * a, x + a / 2.0, y + 2.0 * h + 2.0 * a, x + a, y + h + 2.0 * a, larg, haut)
+            x = x + a
+        y = y + periode_y
     retour 0
 
 
 # 10 — [4⁴ ; 3³·4²] variante b : bandes décalées
 def _gen_bi_sq_elongtri_b(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
-    periode_x = 4.0 * a
-    x = -periode_x
-    tantque x <= larg + periode_x:
-        y = -a
-        tantque y <= haut + a:
-            _ajouter_tuile_4_direct(x, y, x + a, y, x + a, y + a, x, y + a, larg, haut)
-            _ajouter_tuile_4_direct(x + a, y, x + 2.0 * a, y, x + 2.0 * a, y + a, x + a, y + a, larg, haut)
-            _ajouter_tuile_4_direct(x + 2.0 * a, y, x + 3.0 * a, y, x + 3.0 * a, y + a, x + 2.0 * a, y + a, larg, haut)
-            y = y + a
-        y = -a - 2.0 * h
-        tantque y <= haut + a + 2.0 * h:
-            _ajouter_tuile_4_direct(x + 3.0 * a, y, x + 4.0 * a, y, x + 4.0 * a, y + a, x + 3.0 * a, y + a, larg, haut)
-            _ajouter_tuile_3_direct(x + 3.0 * a, y + a, x + 3.5 * a, y + a + h, x + 4.0 * a, y + a, larg, haut)
-            _ajouter_tuile_3_direct(x + 3.0 * a, y + a + 2.0 * h, x + 3.5 * a, y + a + h, x + 4.0 * a, y + a + 2.0 * h, larg, haut)
-            y = y + a + 2.0 * h
-        x = x + periode_x
+    periode_y = 3.0 * a + 2.0 * h
+    y = -periode_y
+    tantque y <= haut + periode_y:
+        x = -a
+        tantque x <= larg + a:
+            _ajouter_tuile_4_direct(x, y + h, x + a, y + h, x + a, y + h + a, x, y + h + a, larg, haut)
+            _ajouter_tuile_4_direct(x, y + h + a, x + a, y + h + a, x + a, y + h + 2.0 * a, x, y + h + 2.0 * a, larg, haut)
+            _ajouter_tuile_4_direct(x, y + h + 2.0 * a, x + a, y + h + 2.0 * a, x + a, y + h + 3.0 * a, x, y + h + 3.0 * a, larg, haut)
+            _ajouter_tuile_3_direct(x, y + h, x + a / 2.0, y, x + a, y + h, larg, haut)
+            _ajouter_tuile_3_direct(x, y + h + 3.0 * a, x + a / 2.0, y + 2.0 * h + 3.0 * a, x + a, y + h + 3.0 * a, larg, haut)
+            x = x + a
+        y = y + periode_y
     retour 0
 
 
