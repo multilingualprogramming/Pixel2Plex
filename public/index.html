@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pixel2Plex</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header class="topbar">
+      <div class="topbar-brand">
+        <p class="eyebrow">multilingual fran&ccedil;ais &rarr; wasm</p>
+        <h1>Pixel2Plex</h1>
+      </div>
+      <nav class="tab-nav">
+        <button type="button" class="tab active" id="tab-studio">Studio</button>
+        <button type="button" class="tab" id="tab-gallery">Galerie</button>
+        <button type="button" class="tab" id="tab-sources">Sources</button>
+      </nav>
+    </header>
+
+    <main>
+
+      <!-- ── STUDIO ── -->
+      <section id="studio-panel" class="panel-grid">
+
+        <div class="viewer-shell">
+
+          <div class="upload-zone" id="upload-zone">
+            <div class="upload-icon">&#9671;</div>
+            <p class="upload-hint">D&eacute;posez une image ici ou
+              <label for="file-input" class="upload-link">cliquez pour en choisir une</label>
+            </p>
+            <p class="upload-sub">PNG, JPG, GIF, WebP &mdash; max&nbsp;20&nbsp;Mo</p>
+            <input type="file" id="file-input" accept="image/*" hidden />
+          </div>
+
+          <div class="canvas-area" id="canvas-area" hidden>
+            <div class="canvas-row">
+              <div class="canvas-card">
+                <p class="canvas-label">Original</p>
+                <canvas id="source-canvas"></canvas>
+              </div>
+              <div class="canvas-card">
+                <p class="canvas-label">R&eacute;sultat</p>
+                <div class="canvas-wrapper">
+                  <canvas id="output-canvas"></canvas>
+                  <div class="processing-overlay" id="processing-overlay">
+                    <div class="spinner"></div>
+                    <p>Traitement&hellip;</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button type="button" id="btn-new-image" class="ghost-btn">&#8617; Nouvelle image</button>
+              <button type="button" id="btn-apply">Appliquer</button>
+              <button type="button" id="btn-download" class="accent-btn" disabled>T&eacute;l&eacute;charger PNG</button>
+            </div>
+          </div>
+
+        </div>
+
+        <aside class="sidebar">
+
+          <div class="ctrl-section">
+            <p class="ctrl-title">Pavage d&eacute;mir&eacute;gulier</p>
+            <label class="select-wrap" for="method-select">
+              <select id="method-select" aria-label="Forme des tuiles">
+                <optgroup label="2-uniforme &mdash; [3&#xB7;6&#xB7;3&#xB7;6 ; 3&#x2076;]">
+                  <option value="bi_trihex_a" selected>Damier trihex&#x2215;triangles</option>
+                  <option value="bi_trihex_b">Rangées trihex&#x2215;triangles</option>
+                  <option value="bi_trihex_c">Colonnes trihex&#x2215;triangles</option>
+                </optgroup>
+                <optgroup label="2-uniforme &mdash; [3&#x2074;&#xB7;6 ; 3&#x2076;]">
+                  <option value="bi_snubhex_a">Damier snub-hex&#x2215;triangles</option>
+                  <option value="bi_snubhex_b">Rang&eacute;es snub-hex&#x2215;triangles</option>
+                </optgroup>
+                <optgroup label="2-uniforme &mdash; [3&#xB3;&#xB7;4&#xB2; ; 3&#x2076;]">
+                  <option value="bi_elongtri_a">Allong&eacute; + double bande tri.</option>
+                  <option value="bi_elongtri_b">Allong&eacute; en colonnes alternées</option>
+                </optgroup>
+                <optgroup label="2-uniforme &mdash; [3&#xB2;&#xB7;4&#xB7;3&#xB7;4 ; 3&#x2076;]">
+                  <option value="bi_snubsq_a">Snub-carré + triangles int&eacute;rieurs</option>
+                  <option value="bi_snubsq_b">Snub-carré + triangles &eacute;largis</option>
+                </optgroup>
+                <optgroup label="2-uniforme &mdash; [4&#x2074; ; 3&#xB3;&#xB7;4&#xB2;]">
+                  <option value="bi_sq_elongtri_a">Carrés + allong&eacute; (variante a)</option>
+                  <option value="bi_sq_elongtri_b">Carrés + allong&eacute; (variante b)</option>
+                </optgroup>
+                <optgroup label="2-uniforme &mdash; [4&#x2074; ; 3&#x2074;&#xB7;6]">
+                  <option value="bi_sq_snubhex">Carrés + snub-hex</option>
+                </optgroup>
+                <optgroup label="2-uniforme &mdash; [3&#xB3;&#xB7;4&#xB2; ; 3&#xB2;&#xB7;4&#xB7;3&#xB7;4]">
+                  <option value="bi_snubsq_elongtri">Snub-carré + allong&eacute;</option>
+                </optgroup>
+                <optgroup label="2-uniforme &mdash; [3&#xB7;4&#xB7;6&#xB7;4 ; 3&#x2076;]">
+                  <option value="bi_rhombi_tri">Rhombitrihex + triangles</option>
+                </optgroup>
+                <optgroup label="2-uniforme &mdash; [3&#xB7;4&#xB7;6&#xB7;4 ; 4&#x2074;]">
+                  <option value="bi_rhombi_sq">Rhombitrihex + carr&eacute;s</option>
+                </optgroup>
+                <optgroup label="2-uniforme &mdash; [3&#x2074;&#xB7;6 ; 3&#xB7;6&#xB7;3&#xB7;6]">
+                  <option value="bi_snubhex_trihex">Snub-hex + trihex</option>
+                </optgroup>
+                <optgroup label="2-uniforme &mdash; [3&#xB7;6&#xB7;3&#xB7;6 ; 3&#xB7;4&#xB7;6&#xB7;4]">
+                  <option value="bi_trihex_rhombi">Trihex + rhombitrihex</option>
+                </optgroup>
+                <optgroup label="2-uniforme &mdash; [3&#xB7;12&#xB2; ; 4&#xB7;6&#xB7;12]">
+                  <option value="bi_dodec_grandrhombi">Dodéc. tronqué + grand rhombi</option>
+                </optgroup>
+                <optgroup label="2-uniforme &mdash; [3&#xB7;4&#xB7;6&#xB7;4 ; 4&#xB7;6&#xB7;12]">
+                  <option value="bi_rhombi_grandrhombi">Rhombi + grand rhombitrihex</option>
+                </optgroup>
+                <optgroup label="2-uniforme &mdash; [3&#xB7;12&#xB2; ; 3&#xB7;4&#xB7;6&#xB7;4]">
+                  <option value="bi_dodec_rhombi">Dodéc. tronqué + rhombitrihex</option>
+                </optgroup>
+              </select>
+            </label>
+          </div>
+
+          <div class="ctrl-section">
+            <p class="ctrl-title">Taille des tuiles</p>
+            <div class="ctrl-row">
+              <input type="range" id="tile-size" min="5" max="120" value="30" aria-label="Taille tuile" />
+              <span id="tile-size-display" class="value-badge">30</span>
+              <span class="muted">px</span>
+            </div>
+          </div>
+
+          <div class="ctrl-section">
+            <p class="ctrl-title">Contour</p>
+            <div class="ctrl-row">
+              <label class="muted" for="outline-width">Largeur</label>
+              <input type="range" id="outline-width" min="0" max="6" step="1" value="0" aria-label="Largeur contour" />
+              <span id="outline-width-display" class="value-badge">0</span>
+              <span class="muted">px</span>
+            </div>
+            <div class="ctrl-row">
+              <label class="muted" for="outline-color">Couleur</label>
+              <input type="color" id="outline-color" value="#000000" />
+              <label class="muted" for="outline-opacity">Opacit&eacute;</label>
+              <input type="range" id="outline-opacity" min="0" max="100" step="1" value="47"
+                aria-label="Opacite contour" />
+              <span id="outline-opacity-display" class="value-badge">47</span>
+            </div>
+          </div>
+
+          <div class="ctrl-section">
+            <p class="ctrl-title">Rendu automatique</p>
+            <label class="checkbox-row">
+              <input type="checkbox" id="auto-apply" />
+              Recalculer &agrave; chaque changement
+            </label>
+          </div>
+
+        </aside>
+      </section>
+
+      <!-- ── GALERIE ── -->
+      <section id="gallery-panel" class="gallery-panel" hidden>
+        <div class="gallery-header">
+          <h2>Galerie des pavages d&eacute;mir&eacute;guliers</h2>
+          <p>Pavages <strong>k-uniformes</strong> (k &ge; 2) &mdash; chaque sommet appartient &agrave; exactement
+            <strong>k</strong> types de configurations de sommets distincts. Les 20 pavages&nbsp;2-uniformes sont
+            impl&eacute;ment&eacute;s. Les pavages 3-uniformes (61) et 4-uniformes (151) sont r&eacute;f&eacute;renc&eacute;s.</p>
+          <div class="gallery-filter-bar">
+            <button type="button" class="filter-btn active" data-k="2">2-uniformes (20)</button>
+            <button type="button" class="filter-btn" data-k="3">3-uniformes (61)</button>
+            <button type="button" class="filter-btn" data-k="4">4-uniformes (151)</button>
+          </div>
+        </div>
+
+        <!-- 2-uniformes -->
+        <div id="gallery-2u" class="gallery-k-section">
+          <div class="k-section-groups" id="gallery-grid-2u"></div>
+        </div>
+
+        <!-- 3-uniformes -->
+        <div id="gallery-3u" class="gallery-k-section" hidden>
+          <div class="k-placeholder">
+            <div class="k-placeholder-icon">&#9671;&#9651;&#9633;</div>
+            <h3>Pavages 3-uniformes</h3>
+            <p>61 pavages avec 3 types de configurations de sommets distincts.</p>
+            <p class="muted">Impl&eacute;mentation g&eacute;om&eacute;trique &agrave; venir.</p>
+          </div>
+        </div>
+
+        <!-- 4-uniformes -->
+        <div id="gallery-4u" class="gallery-k-section" hidden>
+          <div class="k-placeholder">
+            <div class="k-placeholder-icon">&#9671;&#9651;&#9633;&#11041;</div>
+            <h3>Pavages 4-uniformes</h3>
+            <p>151 pavages avec 4 types de configurations de sommets distincts.</p>
+            <p class="muted">Impl&eacute;mentation g&eacute;om&eacute;trique &agrave; venir.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── SOURCES ── -->
+      <section id="sources-panel" class="source-panel" hidden>
+        <div class="source-header">
+          <h2>Architecture &amp; sources</h2>
+          <p>
+            Le moteur de pavage est compil&eacute; depuis le langage
+            <strong>multilingual fran&ccedil;ais</strong> vers WebAssembly.
+            Le navigateur charge <code>demiregulier.wasm</code> et l&rsquo;orchestre via
+            <code>app.js</code>.
+          </p>
+        </div>
+
+        <div class="source-stack">
+
+          <section class="source-group" aria-labelledby="sg-fichiers">
+            <h3 id="sg-fichiers" class="source-group-title">Fichiers sources</h3>
+            <div class="source-list">
+
+              <article class="source-card source-card-file">
+                <h4><span class="filename-pill">src/demiregulier_wasm.ml</span></h4>
+                <p>Module WASM principal &mdash; primitives g&eacute;om&eacute;triques et
+                  20&nbsp;g&eacute;n&eacute;rateurs de pavages 2-uniformes en multilingual
+                  fran&ccedil;ais. Compil&eacute; vers <code>public/demiregulier.wasm</code>.</p>
+              </article>
+
+              <article class="source-card source-card-file">
+                <h4><span class="filename-pill">src/main.ml</span></h4>
+                <p>Point d&rsquo;entr&eacute;e&nbsp;: <code>importer demiregulier_wasm</code></p>
+              </article>
+
+              <article class="source-card source-card-file">
+                <h4><span class="filename-pill">scripts/compile_wasm.ml</span></h4>
+                <p>Script de compilation multilingual fran&ccedil;ais &mdash;
+                  assemble le bundle, g&eacute;n&egrave;re WAT via
+                  <code>WATCodeGenerator</code>, puis compile avec
+                  <code>wasmtime.wat2wasm</code>.</p>
+              </article>
+
+            </div>
+          </section>
+
+          <section class="source-group" aria-labelledby="sg-exports">
+            <h3 id="sg-exports" class="source-group-title">Interface WASM (noms fran&ccedil;ais)</h3>
+            <div class="source-list">
+
+              <article class="source-card source-card-export">
+                <h4><code>generer_tuiles(larg, haut, a, methode)</code></h4>
+                <p>G&eacute;n&egrave;re toutes les tuiles du pavage et retourne leur nombre.
+                  <em>methode</em> est un entier de 0 &agrave; 19.</p>
+              </article>
+
+              <article class="source-card source-card-export">
+                <h4><code>charger_tuile(i)</code></h4>
+                <p>Charge les coordonn&eacute;es des sommets de la tuile <em>i</em> dans le
+                  tampon <code>_sortie</code> et retourne le nombre de sommets (3, 4, 6, 8 ou 12).</p>
+              </article>
+
+              <article class="source-card source-card-export">
+                <h4><code>sortie_ptr()</code></h4>
+                <p>Adresse m&eacute;moire du tampon de sortie
+                  [n_sommets, x&#x2080;, y&#x2080;, &hellip;, x&#x2081;&#x2081;, y&#x2081;&#x2081;].</p>
+              </article>
+
+              <article class="source-card source-card-export">
+                <h4><code>code_bi_*()</code></h4>
+                <p>20&nbsp;fonctions retournant le code entier de chaque m&eacute;thode de pavage.</p>
+              </article>
+
+            </div>
+          </section>
+
+          <section class="source-group" aria-labelledby="sg-build">
+            <h3 id="sg-build" class="source-group-title">Compiler le WASM</h3>
+            <div class="source-list">
+              <article class="source-card source-card-code">
+                <h4>Pr&eacute;requis</h4>
+                <pre><code>pip install multilingualprogramming wasmtime</code></pre>
+              </article>
+              <article class="source-card source-card-code">
+                <h4>Compilation</h4>
+                <pre><code>cd Pixel2Plex
+multilingual run scripts/compile_wasm.ml</code></pre>
+                <p class="muted">G&eacute;n&egrave;re <code>public/demiregulier.wasm</code>
+                  et <code>public/demiregulier.wat</code>.</p>
+              </article>
+            </div>
+          </section>
+
+        </div>
+      </section>
+
+      <!-- Barre de statut -->
+      <section class="hero">
+        <p>Pixel2Plex pave une image avec les 20&nbsp;pavages 2-uniformes (d&eacute;mir&eacute;guliers),
+          fond&eacute;s sur des polygones r&eacute;guliers de m&ecirc;me ar&ecirc;te.</p>
+        <p id="wasm-status" class="hero-note">V&eacute;rification du moteur WASM&hellip;</p>
+      </section>
+
+    </main>
+
+    <script type="module" src="app.js?v=2026-04-04-1"></script>
+  </body>
+
+</html>

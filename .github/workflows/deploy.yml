@@ -1,0 +1,141 @@
+name: Build and deploy Pixel2Plex to GitHub Pages
+
+on:
+  pull_request:
+    branches: ["main"]
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Compile Multilingual sources to WebAssembly
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "24"
+
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements-build.txt
+
+      - name: Compile Multilingual sources to WebAssembly
+        run: python -m multilingualprogramming scripts/compile_wasm.ml
+
+      - name: Verify build artifacts
+        run: |
+          ls -la public
+          test -f public/index.html
+          test -f public/style.css
+          test -f public/app.js
+          test -f public/demiregulier.wasm
+          test -f public/demiregulier.wat
+
+      - name: Check JavaScript syntax
+        run: node --check public/app.js
+
+      - name: Validate WASM exports and method codes
+        run: |
+          node -e "
+          const fs = require('fs');
+          const bytes = fs.readFileSync('public/demiregulier.wasm');
+          const requiredMethods = [
+            'bi_trihex_a', 'bi_trihex_b', 'bi_trihex_c',
+            'bi_snubhex_a', 'bi_snubhex_b',
+            'bi_elongtri_a', 'bi_elongtri_b',
+            'bi_snubsq_a', 'bi_snubsq_b',
+            'bi_sq_elongtri_a', 'bi_sq_elongtri_b',
+            'bi_sq_snubhex', 'bi_snubsq_elongtri',
+            'bi_rhombi_tri', 'bi_rhombi_sq',
+            'bi_snubhex_trihex', 'bi_trihex_rhombi',
+            'bi_dodec_grandrhombi', 'bi_rhombi_grandrhombi',
+            'bi_dodec_rhombi',
+          ];
+          const module = new WebAssembly.Module(bytes);
+          const imports = {};
+          for (const entry of WebAssembly.Module.imports(module)) {
+            if (!imports[entry.module]) imports[entry.module] = {};
+            if (entry.kind === 'function') imports[entry.module][entry.name] = () => 0;
+            else if (entry.kind === 'memory') imports[entry.module][entry.name] = new WebAssembly.Memory({ initial: 16 });
+            else if (entry.kind === 'table') imports[entry.module][entry.name] = new WebAssembly.Table({ initial: 0, element: 'anyfunc' });
+            else if (entry.kind === 'global') imports[entry.module][entry.name] = new WebAssembly.Global({ value: 'i32', mutable: true }, 0);
+          }
+          if (!imports.env) imports.env = {};
+          WebAssembly.instantiate(module, imports).then((instance) => {
+            const exports = instance.exports;
+            const required = ['generer_tuiles', 'charger_tuile', 'sortie_ptr', '__ml_reset'];
+            for (const name of required) {
+              if (typeof exports[name] !== 'function') {
+                throw new Error('Missing required export: ' + name);
+              }
+            }
+            requiredMethods.forEach((method, index) => {
+              const fn = exports['code_' + method];
+              if (typeof fn !== 'function') {
+                throw new Error('Missing method export: code_' + method);
+              }
+              const code = Number(fn());
+              if (code !== index) {
+                throw new Error('Unexpected code for ' + method + ': ' + code + ' !== ' + index);
+              }
+            });
+            const tileCount = Number(exports.generer_tuiles(240, 180, 24, 0));
+            if (!(tileCount > 0)) {
+              throw new Error('WASM did not generate tiles for the reference method.');
+            }
+            const vertexCount = Number(exports.charger_tuile(0));
+            if (!(vertexCount >= 3 && vertexCount <= 12)) {
+              throw new Error('Unexpected vertex count from charger_tuile(0): ' + vertexCount);
+            }
+            console.log('WASM smoke test OK');
+          }).catch((error) => {
+            console.error(error && error.stack ? error.stack : String(error));
+            process.exit(1);
+          });
+          "
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: "public"
+
+  deploy:
+    name: Deploy to GitHub Pages
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

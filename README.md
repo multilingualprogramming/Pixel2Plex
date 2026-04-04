@@ -1,65 +1,95 @@
 # Pixel2Plex
-Transform any image into demiregular tessellations. 
 
-# Pixel2Plex
+Pixel2Plex turns raster images into mosaics built from the 20 two-uniform
+(demiregular) tessellations of the plane.
 
-**Pixel2Plex** tiles any image using *demiregular tessellations* — the edge-to-edge
-tilings of the plane that combine two or more distinct vertex configurations.
-It extends [Pixel2Polygon](https://github.com/multilingualprogramming/pixel2polygon),
-which covers regular and semiregular (Archimedean) tilings.
+It extends the ideas from
+[Pixel2Polygon](https://github.com/multilingualprogramming/pixel2polygon):
+instead of regular or Archimedean tilings, this app renders richer
+edge-to-edge patterns whose vertices alternate between multiple configurations.
 
 ## Live demo
 
-🔗 [multilingualprogramming.github.io/pixel2plex](https://multilingualprogramming.github.io/pixel2plex/)
-
-## What are demiregular tilings?
-
-Regular and semiregular tilings have the same vertex configuration at every vertex.
-Demiregular tilings (also called *k-uniform tilings* with k ≥ 2) relax this constraint:
-the plane is still tiled edge-to-edge with regular polygons, but two or more distinct
-vertex types coexist. This produces richer, more complex patterns — closer to
-patchwork than wallpaper.
-
-The 20 demiregular tilings include combinations such as:
-
-- `3.3.3.3.3.3 / 3.3.3.3.6` — triangles and hexagons, two vertex types
-- `3.3.3.4.4 / 3.3.4.3.4` — squares and triangles interleaved
-- and 18 more...
+https://multilingualprogramming.github.io/pixel2plex/
 
 ## Features
 
-- 🖼️ Drop any PNG, JPG, GIF or WebP image (up to 20 MB)
-- 🔷 Choose among all demiregular tiling patterns
-- 🎨 Average pixel colour per tile for faithful image reproduction
-- ✏️ Adjustable tile size and optional outline (width, colour, opacity)
-- ⚡ Geometry computed in WebAssembly for fast rendering
-- 💾 Export result as PNG
+- 20 demiregular (2-uniform) tiling patterns
+- Drag-and-drop, click-to-upload, and PNG export
+- Adjustable tile size and optional outlines
+- Geometry computed in WebAssembly compiled from French Multilingual sources
+- Static frontend with GitHub Pages deployment
 
-## Usage
+## Project structure
 
-1. Open the [live demo](https://multilingualprogramming.github.io/pixel2plex/)
-2. Drop or select an image
-3. Pick a demiregular tiling pattern
-4. Adjust tile size and outline
-5. Download the result
-
-## Architecture
-
-Like Pixel2Polygon, the geometry engine is written in
-[Multilingual](https://github.com/multilingualprogramming/multilingualprogramming)
-(français) and compiled to **WebAssembly**. The browser runs the WASM binary
-for vertex computation and colour averaging, while the UI composes the tessellation
-on an HTML canvas.
-
-## Building
-```bash
-pip install multilingualprogramming wasmtime
-multilingual run scripts/compile_wasm.ml
+```text
+Pixel2Plex/
+|-- src/
+|   |-- demiregulier_wasm.ml
+|   `-- main.ml
+|-- scripts/
+|   `-- compile_wasm.ml
+|-- public/
+|   |-- index.html
+|   |-- style.css
+|   `-- app.js
+|-- tests/
+|   `-- smoke.js
+`-- requirements-build.txt
 ```
 
-This generates `public/pixel2plex.wasm` and `public/pixel2plex.wat`.
+## Building the WASM
 
-## Related
+Install the build dependencies:
 
-- [Pixel2Polygon](https://github.com/multilingualprogramming/pixel2polygon) —
-  regular & semiregular (Archimedean) tilings
+```bash
+pip install -r requirements-build.txt
+```
+
+Compile the WebAssembly bundle:
+
+```bash
+python -m multilingualprogramming scripts/compile_wasm.ml
+```
+
+This generates:
+
+- `public/demiregulier.wasm`
+- `public/demiregulier.wat`
+
+The build script also copies the Multilingual source files into `public/` for
+inspection alongside the generated WASM output.
+
+## Running locally
+
+Serve the `public/` directory with any static file server that sends the
+`application/wasm` MIME type for `.wasm` files.
+
+```bash
+python -m http.server 8080 --directory public
+```
+
+Then open `http://localhost:8080`.
+
+## Smoke tests
+
+Run the frontend and WASM smoke suite with:
+
+```bash
+node tests/smoke.js
+```
+
+The test suite validates:
+
+- the DOM contract used by the frontend
+- the render pipeline for all 20 methods
+- the exported WASM API and method codes
+- tile buffer readability for compiled WebAssembly output
+
+## CI and deployment
+
+The repository includes GitHub Actions for:
+
+- smoke tests on pushes and pull requests
+- WebAssembly build verification
+- GitHub Pages deployment from `main`

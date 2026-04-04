@@ -1,0 +1,4 @@
+# Runtime dependencies for compiling demiregulier.wasm
+# Install with: pip install -r requirements-build.txt
+git+https://github.com/johnsamuelwrites/multilingual.git
+wasmtime
