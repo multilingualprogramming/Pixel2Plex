@@ -348,8 +348,7 @@ def _snubhex_a_actif(i, j):
 def _snubhex_b_actif(i, j):
     si non _est_centre_snubhex(i, j):
         retour Faux
-    soit n = _centre_snubhex_n(i, j)
-    retour (n % 2) == 0
+    retour (j % 2) == 0
 
 
 def _triangle_touche_centre_actif(ix0, iy0, ix1, iy1, ix2, iy2, variante):
