@@ -229,6 +229,22 @@ def tri_arete_y3(x1, y1, x2, y2):
     retour (y1 + y2) / 2.0 + ny * h
 
 
+def _distance2(x1, y1, x2, y2):
+    soit dx = x2 - x1
+    soit dy = y2 - y1
+    retour dx * dx + dy * dy
+
+
+def _ajouter_triangle_depuis_arete_exterieur(p1x, p1y, p2x, p2y, cx, cy, larg, haut):
+    soit t1x = tri_arete_x3(p1x, p1y, p2x, p2y)
+    soit t1y = tri_arete_y3(p1x, p1y, p2x, p2y)
+    soit t2x = tri_arete_x3(p2x, p2y, p1x, p1y)
+    soit t2y = tri_arete_y3(p2x, p2y, p1x, p1y)
+    si _distance2(t1x, t1y, cx, cy) >= _distance2(t2x, t2y, cx, cy):
+        retour _ajouter_tuile_3_direct(p1x, p1y, p2x, p2y, t1x, t1y, larg, haut)
+    retour _ajouter_tuile_3_direct(p1x, p1y, p2x, p2y, t2x, t2y, larg, haut)
+
+
 def _ajouter_carre_depuis_arete(p1x, p1y, p2x, p2y, larg, haut):
     soit dx = p2x - p1x
     soit dy = p2y - p1y
@@ -669,7 +685,14 @@ def _gen_bi_snubhex_a(larg, haut, a):
                     soit n1y = -dx1 / lon1
                     soit n2x = dy2 / lon2
                     soit n2y = -dx2 / lon2
-                    _ajouter_tuile_3_direct(pvx, pvy, pvx + n1x * at, pvy + n1y * at, pvx + n2x * at, pvy + n2y * at, larg, haut)
+                    soit ax = pvx + n1x * at
+                    soit ay = pvy + n1y * at
+                    soit bx = pvx + n2x * at
+                    soit by = pvy + n2y * at
+                    soit tri_min_y = min(min(pvy, ay), by)
+                    soit tri_max_y = max(max(pvy, ay), by)
+                    si tri_max_y <= y ou tri_min_y >= y + a:
+                        _ajouter_tuile_3_direct(pvx, pvy, ax, ay, bx, by, larg, haut)
             sinon:
                 _ajouter_tuile_3_direct(x, y, hx0, hy0, hx1, hy1, larg, haut)
                 _ajouter_tuile_3_direct(x, y, hx1, hy1, hx2, hy2, larg, haut)
@@ -918,7 +941,7 @@ def _gen_bi_sq_snubhex(larg, haut, a):
         rangs_loc = _nb_pas_inclusifs(0, pas_y, pas_y)
         cols = _nb_pas_inclusifs(-pas_x, larg + pas_x, pas_x)
         pour rl dans range(rangs_loc):
-            yl = y + a + rl * pas_y
+            yl = y + 2.0 * a + rl * pas_y
             decal = (rl % 2) * (pas_x / 2.0)
             pour col dans range(cols):
                 xl = -pas_x + decal + col * pas_x
@@ -988,6 +1011,7 @@ def _gen_bi_rhombi_tri(larg, haut, a):
     y = -pas_y
     tantque y <= haut + pas_y:
         decal = (rang % 2) * (pas_x / 2.0)
+        col = 0
         x = -pas_x + decal
         tantque x <= larg + pas_x:
             soit h0x = sommet_hex_x(x, y, a, 0)
@@ -1008,11 +1032,10 @@ def _gen_bi_rhombi_tri(larg, haut, a):
                 soit p1y = sommet_hex_y(x, y, a, i)
                 soit p2x = sommet_hex_x(x, y, a, (i + 1) % 6)
                 soit p2y = sommet_hex_y(x, y, a, (i + 1) % 6)
-                _ajouter_carre_depuis_arete(p1x, p1y, p2x, p2y, larg, haut)
-            # triangles intérieurs (zone 3⁶) aux sommets du carré
-            _ajouter_tuile_3_direct(x, y, h0x, h0y, h1x, h1y, larg, haut)
-            _ajouter_tuile_3_direct(x, y, h2x, h2y, h3x, h3y, larg, haut)
-            _ajouter_tuile_3_direct(x, y, h4x, h4y, h5x, h5y, larg, haut)
+                si i % 2 == 0:
+                    _ajouter_triangle_depuis_arete_exterieur(p1x, p1y, p2x, p2y, x, y, larg, haut)
+                sinon:
+                    _ajouter_carre_depuis_arete(p1x, p1y, p2x, p2y, larg, haut)
             x = x + pas_x
         rang = rang + 1
         y = y + pas_y
@@ -1027,6 +1050,7 @@ def _gen_bi_rhombi_sq(larg, haut, a):
     y = -pas_y
     tantque y <= haut + pas_y:
         decal = (rang % 2) * (pas_x / 2.0)
+        col = 0
         x = -pas_x + decal
         tantque x <= larg + pas_x:
             soit h0x = sommet_hex_x(x, y, a, 0)
@@ -1209,8 +1233,8 @@ def _gen_bi_dodec_grandrhombi(larg, haut, a):
                 soit p1y = sommet_dodec_y(x, y, a, i)
                 soit p2x = sommet_dodec_x(x, y, a, i + 1)
                 soit p2y = sommet_dodec_y(x, y, a, i + 1)
-                soit t3x = tri_arete_x3(p1x, p1y, p2x, p2y)
-                soit t3y = tri_arete_y3(p1x, p1y, p2x, p2y)
+                soit t3x = tri_arete_x3(p2x, p2y, p1x, p1y)
+                soit t3y = tri_arete_y3(p2x, p2y, p1x, p1y)
                 _ajouter_tuile_3_direct(p1x, p1y, p2x, p2y, t3x, t3y, larg, haut)
             # hexagones sur arêtes impaires (4·6·12)
             pour i dans range(1, 12, 2):
@@ -1311,20 +1335,20 @@ def _gen_bi_dodec_rhombi(larg, haut, a):
             soit d11x = sommet_dodec_x(x, y, a, 11)
             soit d11y = sommet_dodec_y(x, y, a, 11)
             _ajouter_tuile_12_direct(d0x, d0y, d1x, d1y, d2x, d2y, d3x, d3y, d4x, d4y, d5x, d5y, d6x, d6y, d7x, d7y, d8x, d8y, d9x, d9y, d10x, d10y, d11x, d11y, larg, haut)
-            pour i dans range(0, 12, 2):
-                soit p1x = sommet_dodec_x(x, y, a, i)
-                soit p1y = sommet_dodec_y(x, y, a, i)
-                soit p2x = sommet_dodec_x(x, y, a, i + 1)
-                soit p2y = sommet_dodec_y(x, y, a, i + 1)
-                soit t3x = tri_arete_x3(p1x, p1y, p2x, p2y)
-                soit t3y = tri_arete_y3(p1x, p1y, p2x, p2y)
-                _ajouter_tuile_3_direct(p1x, p1y, p2x, p2y, t3x, t3y, larg, haut)
-            pour i dans range(1, 12, 2):
-                soit p1x = sommet_dodec_x(x, y, a, i)
-                soit p1y = sommet_dodec_y(x, y, a, i)
-                soit p2x = sommet_dodec_x(x, y, a, (i + 1) % 12)
-                soit p2y = sommet_dodec_y(x, y, a, (i + 1) % 12)
-                _ajouter_carre_depuis_arete(p2x, p2y, p1x, p1y, larg, haut)
+            si (rang + col) % 2 == 0:
+                pour i dans range(0, 12, 2):
+                    soit p1x = sommet_dodec_x(x, y, a, i)
+                    soit p1y = sommet_dodec_y(x, y, a, i)
+                    soit p2x = sommet_dodec_x(x, y, a, i + 1)
+                    soit p2y = sommet_dodec_y(x, y, a, i + 1)
+                    _ajouter_triangle_depuis_arete_exterieur(p1x, p1y, p2x, p2y, x, y, larg, haut)
+                pour i dans range(1, 12, 2):
+                    soit p1x = sommet_dodec_x(x, y, a, i)
+                    soit p1y = sommet_dodec_y(x, y, a, i)
+                    soit p2x = sommet_dodec_x(x, y, a, (i + 1) % 12)
+                    soit p2y = sommet_dodec_y(x, y, a, (i + 1) % 12)
+                    _ajouter_carre_depuis_arete(p2x, p2y, p1x, p1y, larg, haut)
+            col = col + 1
             x = x + pas_x
         rang = rang + 1
         y = y + pas_y
