@@ -317,6 +317,51 @@ def _ajouter_etoile_triangle_hex(cx, cy, a, larg, haut):
     retour 0
 
 
+def _sommet_reseau_tri_x(i, j, a):
+    retour (math.sqrt(3.0) * a / 2.0) * i
+
+
+def _sommet_reseau_tri_y(i, j, a):
+    retour (a / 2.0) * i + a * j
+
+
+def _est_centre_snubhex(i, j):
+    retour ((i + 2 * j) % 6) == 0
+
+
+def _centre_snubhex_m(i, j):
+    retour entier((i - j) / 6)
+
+
+def _centre_snubhex_n(i, j):
+    retour entier((i + 2 * j) / 6)
+
+
+def _snubhex_a_actif(i, j):
+    si non _est_centre_snubhex(i, j):
+        retour Faux
+    soit m = _centre_snubhex_m(i, j)
+    soit n = _centre_snubhex_n(i, j)
+    retour ((m + n) % 2) == 0
+
+
+def _snubhex_b_actif(i, j):
+    si non _est_centre_snubhex(i, j):
+        retour Faux
+    soit n = _centre_snubhex_n(i, j)
+    retour (n % 2) == 0
+
+
+def _triangle_touche_centre_actif(ix0, iy0, ix1, iy1, ix2, iy2, variante):
+    si variante == 0:
+        si _snubhex_a_actif(ix0, iy0) ou _snubhex_a_actif(ix1, iy1) ou _snubhex_a_actif(ix2, iy2):
+            retour Vrai
+        retour Faux
+    si _snubhex_b_actif(ix0, iy0) ou _snubhex_b_actif(ix1, iy1) ou _snubhex_b_actif(ix2, iy2):
+        retour Vrai
+    retour Faux
+
+
 def _ajouter_carre_depuis_arete(p1x, p1y, p2x, p2y, larg, haut):
     soit dx = p2x - p1x
     soit dy = p2y - p1y
@@ -714,68 +759,94 @@ def _gen_bi_trihex_c(larg, haut, a):
 # 3 — [3⁶ ; 3⁴·6] variante a : snub-hex damier
 def _gen_bi_snubhex_a(larg, haut, a):
     s3 = math.sqrt(3.0)
-    pas_x = 2.0 * s3 * a
-    pas_y = 3.0 * a
-    rangs = _nb_pas_inclusifs(-pas_y, haut + pas_y, pas_y)
-    cols = _nb_pas_inclusifs(-pas_x, larg + pas_x, pas_x)
-    pour rang dans range(rangs):
-        y = -pas_y + rang * pas_y
-        decal = (rang % 2) * (pas_x / 2.0)
-        pour col dans range(cols):
-            x = -pas_x + decal + col * pas_x
-            soit hx0 = sommet_hex_x(x, y, a, 0)
-            soit hy0 = sommet_hex_y(x, y, a, 0)
-            soit hx1 = sommet_hex_x(x, y, a, 1)
-            soit hy1 = sommet_hex_y(x, y, a, 1)
-            soit hx2 = sommet_hex_x(x, y, a, 2)
-            soit hy2 = sommet_hex_y(x, y, a, 2)
-            soit hx3 = sommet_hex_x(x, y, a, 3)
-            soit hy3 = sommet_hex_y(x, y, a, 3)
-            soit hx4 = sommet_hex_x(x, y, a, 4)
-            soit hy4 = sommet_hex_y(x, y, a, 4)
-            soit hx5 = sommet_hex_x(x, y, a, 5)
-            soit hy5 = sommet_hex_y(x, y, a, 5)
-            soit sous_reseau = ((col - rang) % 3) == 0
-            soit cle = entier((col - rang) / 3)
-            si sous_reseau et ((cle + rang) % 2 == 0):
-                _ajouter_tuile_6_direct(hx0, hy0, hx1, hy1, hx2, hy2, hx3, hy3, hx4, hy4, hx5, hy5, larg, haut)
-                _ajouter_snubhex_triangles(x, y, a, larg, haut)
-            sinon:
-                _ajouter_etoile_triangle_hex(x, y, a, larg, haut)
+    pad = 6.0 * a
+    i_min = entier(math.floor((-pad) / (s3 * a / 2.0))) - 4
+    i_max = entier(math.ceil((larg + pad) / (s3 * a / 2.0))) + 4
+    j_min = entier(math.floor((-pad - (a / 2.0) * i_max) / a)) - 4
+    j_max = entier(math.ceil((haut + pad - (a / 2.0) * i_min) / a)) + 4
+
+    pour i dans range(i_min, i_max):
+        pour j dans range(j_min, j_max):
+            soit x0 = _sommet_reseau_tri_x(i, j, a)
+            soit y0 = _sommet_reseau_tri_y(i, j, a)
+            soit x1 = _sommet_reseau_tri_x(i + 1, j, a)
+            soit y1 = _sommet_reseau_tri_y(i + 1, j, a)
+            soit x2 = _sommet_reseau_tri_x(i, j + 1, a)
+            soit y2 = _sommet_reseau_tri_y(i, j + 1, a)
+            soit x3 = _sommet_reseau_tri_x(i + 1, j + 1, a)
+            soit y3 = _sommet_reseau_tri_y(i + 1, j + 1, a)
+
+            si non _triangle_touche_centre_actif(i, j, i + 1, j, i, j + 1, 0):
+                _ajouter_tuile_3_direct(x0, y0, x1, y1, x2, y2, larg, haut)
+            si non _triangle_touche_centre_actif(i + 1, j, i + 1, j + 1, i, j + 1, 0):
+                _ajouter_tuile_3_direct(x1, y1, x3, y3, x2, y2, larg, haut)
+
+    pour i dans range(i_min, i_max + 1):
+        pour j dans range(j_min, j_max + 1):
+            si _snubhex_a_actif(i, j):
+                _ajouter_tuile_6_direct(
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 0),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 0),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 1),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 1),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 2),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 2),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 3),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 3),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 4),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 4),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 5),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 5),
+                    larg,
+                    haut
+                )
     retour 0
 
 
 # 4 — [3⁶ ; 3⁴·6] variante b : snub-hex alternance par rangées
 def _gen_bi_snubhex_b(larg, haut, a):
     s3 = math.sqrt(3.0)
-    pas_x = 2.0 * s3 * a
-    pas_y = 3.0 * a
-    rangs = _nb_pas_inclusifs(-pas_y, haut + pas_y, pas_y)
-    cols = _nb_pas_inclusifs(-pas_x, larg + pas_x, pas_x)
-    pour rang dans range(rangs):
-        y = -pas_y + rang * pas_y
-        decal = (rang % 2) * (pas_x / 2.0)
-        pour col dans range(cols):
-            x = -pas_x + decal + col * pas_x
-            soit hx0 = sommet_hex_x(x, y, a, 0)
-            soit hy0 = sommet_hex_y(x, y, a, 0)
-            soit hx1 = sommet_hex_x(x, y, a, 1)
-            soit hy1 = sommet_hex_y(x, y, a, 1)
-            soit hx2 = sommet_hex_x(x, y, a, 2)
-            soit hy2 = sommet_hex_y(x, y, a, 2)
-            soit hx3 = sommet_hex_x(x, y, a, 3)
-            soit hy3 = sommet_hex_y(x, y, a, 3)
-            soit hx4 = sommet_hex_x(x, y, a, 4)
-            soit hy4 = sommet_hex_y(x, y, a, 4)
-            soit hx5 = sommet_hex_x(x, y, a, 5)
-            soit hy5 = sommet_hex_y(x, y, a, 5)
-            soit sous_reseau = ((col - rang) % 3) == 0
-            soit cle = entier((col - rang) / 3)
-            si sous_reseau et (rang % 2 == 0):
-                _ajouter_tuile_6_direct(hx0, hy0, hx1, hy1, hx2, hy2, hx3, hy3, hx4, hy4, hx5, hy5, larg, haut)
-                _ajouter_snubhex_triangles(x, y, a, larg, haut)
-            sinon:
-                _ajouter_etoile_triangle_hex(x, y, a, larg, haut)
+    pad = 6.0 * a
+    i_min = entier(math.floor((-pad) / (s3 * a / 2.0))) - 4
+    i_max = entier(math.ceil((larg + pad) / (s3 * a / 2.0))) + 4
+    j_min = entier(math.floor((-pad - (a / 2.0) * i_max) / a)) - 4
+    j_max = entier(math.ceil((haut + pad - (a / 2.0) * i_min) / a)) + 4
+
+    pour i dans range(i_min, i_max):
+        pour j dans range(j_min, j_max):
+            soit x0 = _sommet_reseau_tri_x(i, j, a)
+            soit y0 = _sommet_reseau_tri_y(i, j, a)
+            soit x1 = _sommet_reseau_tri_x(i + 1, j, a)
+            soit y1 = _sommet_reseau_tri_y(i + 1, j, a)
+            soit x2 = _sommet_reseau_tri_x(i, j + 1, a)
+            soit y2 = _sommet_reseau_tri_y(i, j + 1, a)
+            soit x3 = _sommet_reseau_tri_x(i + 1, j + 1, a)
+            soit y3 = _sommet_reseau_tri_y(i + 1, j + 1, a)
+
+            si non _triangle_touche_centre_actif(i, j, i + 1, j, i, j + 1, 1):
+                _ajouter_tuile_3_direct(x0, y0, x1, y1, x2, y2, larg, haut)
+            si non _triangle_touche_centre_actif(i + 1, j, i + 1, j + 1, i, j + 1, 1):
+                _ajouter_tuile_3_direct(x1, y1, x3, y3, x2, y2, larg, haut)
+
+    pour i dans range(i_min, i_max + 1):
+        pour j dans range(j_min, j_max + 1):
+            si _snubhex_b_actif(i, j):
+                _ajouter_tuile_6_direct(
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 0),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 0),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 1),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 1),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 2),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 2),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 3),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 3),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 4),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 4),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 5),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 5),
+                    larg,
+                    haut
+                )
     retour 0
 
 
