@@ -880,47 +880,49 @@ def _gen_bi_snubsq_b(larg, haut, a):
 # 9 — [4⁴ ; 3³·4²] variante a : bandes alternées carrés / triangulaire allongé
 def _gen_bi_sq_elongtri_a(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
-    periode_y = 2.0 * a + 2.0 * h
+    periode_y = 3.0 * a + 2.0 * h
     y = -periode_y
+    rang = 0
     tantque y <= haut + periode_y:
-        # bande carrés
-        x = -a
+        decal = (rang % 2) * (a / 2.0)
+        # bande carrés 4^4 : deux rangées superposées
+        x = -a + decal
         tantque x <= larg + a:
             _ajouter_tuile_4_direct(x, y, x + a, y, x + a, y + a, x, y + a, larg, haut)
+            _ajouter_tuile_4_direct(x, y + a, x + a, y + a, x + a, y + 2.0 * a, x, y + 2.0 * a, larg, haut)
             x = x + a
-        # bande triangulaire allongé
-        x = -a
+        # bande 3^3.4^2 insérée au-dessus de la bande carrée
+        x = -a + decal
         tantque x <= larg + a:
-            _ajouter_tuile_3_direct(x, y + a + h, x + a / 2.0, y + a, x + a, y + a + h, larg, haut)
-            _ajouter_tuile_4_direct(x, y + a + h, x + a, y + a + h, x + a, y + a + h + a, x, y + a + h + a, larg, haut)
-            _ajouter_tuile_3_direct(x, y + a + h + a, x + a / 2.0, y + 2.0 * a + 2.0 * h, x + a, y + a + h + a, larg, haut)
+            _ajouter_tuile_3_direct(x, y + 2.0 * a + h, x + a / 2.0, y + 2.0 * a, x + a, y + 2.0 * a + h, larg, haut)
+            _ajouter_tuile_4_direct(x, y + 2.0 * a + h, x + a, y + 2.0 * a + h, x + a, y + 3.0 * a + h, x, y + 3.0 * a + h, larg, haut)
+            _ajouter_tuile_3_direct(x, y + 3.0 * a + h, x + a / 2.0, y + 3.0 * a + 2.0 * h, x + a, y + 3.0 * a + h, larg, haut)
             x = x + a
         y = y + periode_y
+        rang = rang + 1
     retour 0
 
 
 # 10 — [4⁴ ; 3³·4²] variante b : bandes décalées
 def _gen_bi_sq_elongtri_b(larg, haut, a):
     h = math.sqrt(3.0) * a / 2.0
-    periode_y = 2.0 * a + 2.0 * h
+    periode_y = 3.0 * a + 2.0 * h
     y = -periode_y
-    rang = 0
     tantque y <= haut + periode_y:
-        decal = (rang % 2) * (a / 2.0)
-        # bande carrés
-        x = -a + decal
+        # bande carrés 4^4
+        x = -a
         tantque x <= larg + a:
             _ajouter_tuile_4_direct(x, y, x + a, y, x + a, y + a, x, y + a, larg, haut)
+            _ajouter_tuile_4_direct(x, y + a, x + a, y + a, x + a, y + 2.0 * a, x, y + 2.0 * a, larg, haut)
             x = x + a
-        # bande triangulaire allongé
-        x = -a + decal
+        # bande 3^3.4^2 décalée d'un demi-carré
+        x = -a + a / 2.0
         tantque x <= larg + a:
-            _ajouter_tuile_3_direct(x, y + a + h, x + a / 2.0, y + a, x + a, y + a + h, larg, haut)
-            _ajouter_tuile_4_direct(x, y + a + h, x + a, y + a + h, x + a, y + a + h + a, x, y + a + h + a, larg, haut)
-            _ajouter_tuile_3_direct(x, y + a + h + a, x + a / 2.0, y + 2.0 * a + 2.0 * h, x + a, y + a + h + a, larg, haut)
+            _ajouter_tuile_3_direct(x, y + 2.0 * a + h, x + a / 2.0, y + 2.0 * a, x + a, y + 2.0 * a + h, larg, haut)
+            _ajouter_tuile_4_direct(x, y + 2.0 * a + h, x + a, y + 2.0 * a + h, x + a, y + 3.0 * a + h, x, y + 3.0 * a + h, larg, haut)
+            _ajouter_tuile_3_direct(x, y + 3.0 * a + h, x + a / 2.0, y + 3.0 * a + 2.0 * h, x + a, y + 3.0 * a + h, larg, haut)
             x = x + a
         y = y + periode_y
-        rang = rang + 1
     retour 0
 
 
