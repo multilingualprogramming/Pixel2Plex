@@ -718,7 +718,48 @@ def _ajouter_patch_dodec_tri(cx, cy, a, larg, haut):
 
 
 def _ajouter_modele_bi_grandrhombi(modele, tx, ty, a, larg, haut):
-    pass
+    soit e = a / 44.287
+
+    # Maille extraite de 2-uniform_n1.svg, normalisée sur une arête de 44.287.
+    _ajouter_tuile_3_direct(tx + (-5.049) * e, ty + 33.261 * e, tx + 17.094 * e, ty + (-5.093) * e, tx + 39.238 * e, ty + 33.261 * e, larg, haut)
+    _ajouter_tuile_3_direct(tx + 138.088 * e, ty + 204.476 * e, tx + 160.232 * e, ty + 242.829 * e, tx + 115.945 * e, ty + 242.829 * e, larg, haut)
+    _ajouter_tuile_3_direct(tx + (-5.049) * e, ty + 287.116 * e, tx + 39.238 * e, ty + 287.116 * e, tx + 17.094 * e, ty + 325.47 * e, larg, haut)
+    _ajouter_tuile_3_direct(tx + 115.945 * e, ty + 77.548 * e, tx + 160.232 * e, ty + 77.548 * e, tx + 138.088 * e, ty + 115.901 * e, larg, haut)
+
+    _ajouter_tuile_4_direct(tx + 198.586 * e, ty + 309.26 * e, tx + 236.939 * e, ty + 287.116 * e, tx + 259.083 * e, ty + 325.47 * e, tx + 220.729 * e, ty + 347.613 * e, larg, haut)
+    _ajouter_tuile_4_direct(tx + 115.945 * e, ty + 242.829 * e, tx + 160.232 * e, ty + 242.829 * e, tx + 160.232 * e, ty + 287.116 * e, tx + 115.945 * e, ty + 287.116 * e, larg, haut)
+    _ajouter_tuile_4_direct(tx + 138.088 * e, ty + 204.476 * e, tx + 176.442 * e, ty + 182.332 * e, tx + 198.586 * e, ty + 220.686 * e, tx + 160.232 * e, ty + 242.829 * e, larg, haut)
+    _ajouter_tuile_4_direct(tx + (-5.049) * e, ty + 33.261 * e, tx + 39.238 * e, ty + 33.261 * e, tx + 39.238 * e, ty + 77.548 * e, tx + (-5.049) * e, ty + 77.548 * e, larg, haut)
+    _ajouter_tuile_4_direct(tx + 17.094 * e, ty + 325.47 * e, tx + 39.238 * e, ty + 287.116 * e, tx + 77.591 * e, ty + 309.26 * e, tx + 55.448 * e, ty + 347.613 * e, larg, haut)
+    _ajouter_tuile_4_direct(tx + 99.735 * e, ty + 182.332 * e, tx + 138.088 * e, ty + 204.476 * e, tx + 115.945 * e, ty + 242.829 * e, tx + 77.591 * e, ty + 220.686 * e, larg, haut)
+    _ajouter_tuile_4_direct(tx + 160.232 * e, ty + 77.548 * e, tx + 198.586 * e, ty + 99.691 * e, tx + 176.442 * e, ty + 138.045 * e, tx + 138.088 * e, ty + 115.901 * e, larg, haut)
+    _ajouter_tuile_4_direct(tx + (-5.049) * e, ty + 287.116 * e, tx + (-5.049) * e, ty + 242.829 * e, tx + 39.238 * e, ty + 242.829 * e, tx + 39.238 * e, ty + 287.116 * e, larg, haut)
+    _ajouter_tuile_4_direct(tx + 77.591 * e, ty + 99.691 * e, tx + 115.945 * e, ty + 77.548 * e, tx + 138.088 * e, ty + 115.901 * e, tx + 99.735 * e, ty + 138.045 * e, larg, haut)
+    _ajouter_tuile_4_direct(tx + 115.945 * e, ty + 33.261 * e, tx + 160.232 * e, ty + 33.261 * e, tx + 160.232 * e, ty + 77.548 * e, tx + 115.945 * e, ty + 77.548 * e, larg, haut)
+
+    _ajouter_tuile_6_direct(tx + 198.586 * e, ty + 309.26 * e, tx + 160.232 * e, ty + 287.116 * e, tx + 160.232 * e, ty + 242.829 * e, tx + 198.586 * e, ty + 220.686 * e, tx + 236.939 * e, ty + 242.829 * e, tx + 236.939 * e, ty + 287.116 * e, larg, haut)
+    _ajouter_tuile_6_direct(tx + 39.238 * e, ty + 242.829 * e, tx + 77.591 * e, ty + 220.686 * e, tx + 115.945 * e, ty + 242.829 * e, tx + 115.945 * e, ty + 287.116 * e, tx + 77.591 * e, ty + 309.26 * e, tx + 39.238 * e, ty + 287.116 * e, larg, haut)
+    _ajouter_tuile_6_direct(tx + 99.735 * e, ty + 138.045 * e, tx + 138.088 * e, ty + 115.901 * e, tx + 176.442 * e, ty + 138.045 * e, tx + 176.442 * e, ty + 182.332 * e, tx + 138.088 * e, ty + 204.476 * e, tx + 99.735 * e, ty + 182.332 * e, larg, haut)
+    _ajouter_tuile_6_direct(tx + 160.232 * e, ty + 33.261 * e, tx + 198.586 * e, ty + 11.117 * e, tx + 236.939 * e, ty + 33.261 * e, tx + 236.939 * e, ty + 77.548 * e, tx + 198.586 * e, ty + 99.691 * e, tx + 160.232 * e, ty + 77.548 * e, larg, haut)
+    _ajouter_tuile_6_direct(tx + 39.238 * e, ty + 33.261 * e, tx + 77.591 * e, ty + 11.117 * e, tx + 115.945 * e, ty + 33.261 * e, tx + 115.945 * e, ty + 77.548 * e, tx + 77.591 * e, ty + 99.691 * e, tx + 39.238 * e, ty + 77.548 * e, larg, haut)
+
+    _ajouter_tuile_12_direct(
+        tx + 198.586 * e, ty + 309.26 * e,
+        tx + 220.729 * e, ty + 347.613 * e,
+        tx + 220.729 * e, ty + 391.901 * e,
+        tx + 198.586 * e, ty + 430.254 * e,
+        tx + 160.232 * e, ty + 452.398 * e,
+        tx + 115.945 * e, ty + 452.398 * e,
+        tx + 77.591 * e, ty + 430.254 * e,
+        tx + 55.448 * e, ty + 391.901 * e,
+        tx + 55.448 * e, ty + 347.613 * e,
+        tx + 77.591 * e, ty + 309.26 * e,
+        tx + 115.945 * e, ty + 287.116 * e,
+        tx + 160.232 * e, ty + 287.116 * e,
+        larg,
+        haut
+    )
+    retour 0
 
 
 # ── État global ────────────────────────────────────────────────
@@ -1740,7 +1781,16 @@ def _gen_bi_dodec_rhombi(larg, haut, a):
 
 # (4.6.12 ; 3.4.6.4) : truncated trihexagonal + rhombitrihexagonal
 def _gen_bi_grandrhombi(larg, haut, a):
-    pass
+    soit pas_x = 241.989 * (a / 44.287)
+    soit pas_y = 419.137 * (a / 44.287)
+    y = -pas_y
+    tantque y <= haut + pas_y:
+        x = -pas_x
+        tantque x <= larg + pas_x:
+            _ajouter_modele_bi_grandrhombi(0, x, y, a, larg, haut)
+            x = x + pas_x
+        y = y + pas_y
+    retour 0
 
 
 # (3.12² ; 3.4.3.12) : truncated hexagonal + dodecagonal
