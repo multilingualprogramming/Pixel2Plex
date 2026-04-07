@@ -535,6 +535,51 @@ def _ajouter_motif_rhombi(cx, cy, a, larg, haut):
     retour 0
 
 
+def _ajouter_motif_rhombi_full(cx, cy, a, larg, haut):
+    soit h0x = sommet_hex_x(cx, cy, a, 0)
+    soit h0y = sommet_hex_y(cx, cy, a, 0)
+    soit h1x = sommet_hex_x(cx, cy, a, 1)
+    soit h1y = sommet_hex_y(cx, cy, a, 1)
+    soit h2x = sommet_hex_x(cx, cy, a, 2)
+    soit h2y = sommet_hex_y(cx, cy, a, 2)
+    soit h3x = sommet_hex_x(cx, cy, a, 3)
+    soit h3y = sommet_hex_y(cx, cy, a, 3)
+    soit h4x = sommet_hex_x(cx, cy, a, 4)
+    soit h4y = sommet_hex_y(cx, cy, a, 4)
+    soit h5x = sommet_hex_x(cx, cy, a, 5)
+    soit h5y = sommet_hex_y(cx, cy, a, 5)
+    _ajouter_tuile_6_direct(h0x, h0y, h1x, h1y, h2x, h2y, h3x, h3y, h4x, h4y, h5x, h5y, larg, haut)
+    # squares on all 6 edges
+    pour i dans range(6):
+        soit p1x = sommet_hex_x(cx, cy, a, i)
+        soit p1y = sommet_hex_y(cx, cy, a, i)
+        soit p2x = sommet_hex_x(cx, cy, a, (i + 1) % 6)
+        soit p2y = sommet_hex_y(cx, cy, a, (i + 1) % 6)
+        _ajouter_carre_depuis_arete(p1x, p1y, p2x, p2y, larg, haut)
+    # triangles at all 6 vertices (filling 60deg gap between adjacent squares)
+    pour i dans range(6):
+        soit prev = (i + 5) % 6
+        soit next = (i + 1) % 6
+        soit hix = sommet_hex_x(cx, cy, a, i)
+        soit hiy = sommet_hex_y(cx, cy, a, i)
+        soit hpx = sommet_hex_x(cx, cy, a, prev)
+        soit hpy = sommet_hex_y(cx, cy, a, prev)
+        soit hnx = sommet_hex_x(cx, cy, a, next)
+        soit hny = sommet_hex_y(cx, cy, a, next)
+        # outer corner A: from square on edge h[prev]->h[i]
+        soit dx_prev = hix - hpx
+        soit dy_prev = hiy - hpy
+        soit ax = hix + dy_prev
+        soit ay = hiy - dx_prev
+        # outer corner B: from square on edge h[i]->h[next]
+        soit dx_next = hnx - hix
+        soit dy_next = hny - hiy
+        soit bx = hix + dy_next
+        soit by = hiy - dx_next
+        _ajouter_tuile_3_direct(hix, hiy, ax, ay, bx, by, larg, haut)
+    retour 0
+
+
 def _ajouter_motif_3462(cx, cy, a, larg, haut, orientation):
     soit h0x = sommet_hex_x(cx, cy, a, 0)
     soit h0y = sommet_hex_y(cx, cy, a, 0)
@@ -2048,14 +2093,9 @@ def _gen_bi_rhombi_snubsq(larg, haut, a):
     y = -pas_y
     tantque y <= haut + pas_y:
         decal = (rang % 2) * (pas_x / 2.0)
-        col = 0
         x = -pas_x + decal
         tantque x <= larg + pas_x:
-            si (rang + col) % 2 == 0:
-                _ajouter_motif_rhombi(x, y, a, larg, haut)
-            sinon:
-                _ajouter_patch_snubsq(x, y, a, larg, haut, 0)
-            col = col + 1
+            _ajouter_motif_rhombi_full(x, y, a, larg, haut)
             x = x + pas_x
         rang = rang + 1
         y = y + pas_y
