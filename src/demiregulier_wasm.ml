@@ -1951,34 +1951,43 @@ def _gen_bi_hexhex_snubhex(larg, haut, a):
         decal = (rang % 2) * (pas_x / 2.0)
         x = -pas_x + decal
         tantque x <= larg + pas_x:
-            # hex at (x, y)
-            soit h0x = sommet_hex_x(x, y, a, 0)
-            soit h0y = sommet_hex_y(x, y, a, 0)
-            soit h1x = sommet_hex_x(x, y, a, 1)
-            soit h1y = sommet_hex_y(x, y, a, 1)
-            soit h2x = sommet_hex_x(x, y, a, 2)
-            soit h2y = sommet_hex_y(x, y, a, 2)
-            soit h3x = sommet_hex_x(x, y, a, 3)
-            soit h3y = sommet_hex_y(x, y, a, 3)
-            soit h4x = sommet_hex_x(x, y, a, 4)
-            soit h4y = sommet_hex_y(x, y, a, 4)
-            soit h5x = sommet_hex_x(x, y, a, 5)
-            soit h5y = sommet_hex_y(x, y, a, 5)
-            _ajouter_tuile_6_direct(h0x, h0y, h1x, h1y, h2x, h2y, h3x, h3y, h4x, h4y, h5x, h5y, larg, haut)
-            si rang % 2 == 0:
-                # on even rows: add triangles on edges 1-2, 3-4, 5-0 (alternating pattern for 3².6² vertices)
-                pour i dans range(6):
-                    si i % 2 == 1:
-                        soit p1x = sommet_hex_x(x, y, a, i)
-                        soit p1y = sommet_hex_y(x, y, a, i)
-                        soit p2x = sommet_hex_x(x, y, a, (i + 1) % 6)
-                        soit p2y = sommet_hex_y(x, y, a, (i + 1) % 6)
-                        soit tx = tri_arete_x3(p1x, p1y, p2x, p2y)
-                        soit ty = tri_arete_y3(p1x, p1y, p2x, p2y)
-                        _ajouter_tuile_3_direct(p1x, p1y, p2x, p2y, tx, ty, larg, haut)
-            sinon:
-                # on odd rows: snub-hex triangles (3⁴.6 vertex type)
-                _ajouter_snubhex_triangles(x, y, a, larg, haut)
+            # hex A at (x, y)
+            soit a0x = sommet_hex_x(x, y, a, 0)
+            soit a0y = sommet_hex_y(x, y, a, 0)
+            soit a1x = sommet_hex_x(x, y, a, 1)
+            soit a1y = sommet_hex_y(x, y, a, 1)
+            soit a2x = sommet_hex_x(x, y, a, 2)
+            soit a2y = sommet_hex_y(x, y, a, 2)
+            soit a3x = sommet_hex_x(x, y, a, 3)
+            soit a3y = sommet_hex_y(x, y, a, 3)
+            soit a4x = sommet_hex_x(x, y, a, 4)
+            soit a4y = sommet_hex_y(x, y, a, 4)
+            soit a5x = sommet_hex_x(x, y, a, 5)
+            soit a5y = sommet_hex_y(x, y, a, 5)
+            _ajouter_tuile_6_direct(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, a4x, a4y, a5x, a5y, larg, haut)
+            # hex B at (x + s3*a/2, y + 1.5*a) shares edge 2-3 of A
+            soit bx = x + s3 * a / 2.0
+            soit by = y + 1.5 * a
+            soit b0x = sommet_hex_x(bx, by, a, 0)
+            soit b0y = sommet_hex_y(bx, by, a, 0)
+            soit b1x = sommet_hex_x(bx, by, a, 1)
+            soit b1y = sommet_hex_y(bx, by, a, 1)
+            soit b2x = sommet_hex_x(bx, by, a, 2)
+            soit b2y = sommet_hex_y(bx, by, a, 2)
+            soit b3x = sommet_hex_x(bx, by, a, 3)
+            soit b3y = sommet_hex_y(bx, by, a, 3)
+            soit b4x = sommet_hex_x(bx, by, a, 4)
+            soit b4y = sommet_hex_y(bx, by, a, 4)
+            soit b5x = sommet_hex_x(bx, by, a, 5)
+            soit b5y = sommet_hex_y(bx, by, a, 5)
+            _ajouter_tuile_6_direct(b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, b4x, b4y, b5x, b5y, larg, haut)
+            # add triangles on alternating edges to create proper vertex types
+            # on A: skip shared edge 2, add on edges 0, 4
+            _ajouter_triangle_depuis_arete_exterieur(a0x, a0y, a1x, a1y, x, y, larg, haut)
+            _ajouter_triangle_depuis_arete_exterieur(a4x, a4y, a5x, a5y, x, y, larg, haut)
+            # on B: skip shared edge 5, add on edges 1, 3
+            _ajouter_triangle_depuis_arete_exterieur(b1x, b1y, b2x, b2y, bx, by, larg, haut)
+            _ajouter_triangle_depuis_arete_exterieur(b3x, b3y, b4x, b4y, bx, by, larg, haut)
             x = x + pas_x
         rang = rang + 1
         y = y + pas_y
