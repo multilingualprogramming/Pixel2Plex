@@ -1951,7 +1951,7 @@ def _gen_bi_hexhex_snubhex(larg, haut, a):
         decal = (rang % 2) * (pas_x / 2.0)
         x = -pas_x + decal
         tantque x <= larg + pas_x:
-            # hex at (x, y) with snub-hex triangles on even rows, simple triangles on odd
+            # hex at (x, y)
             soit h0x = sommet_hex_x(x, y, a, 0)
             soit h0y = sommet_hex_y(x, y, a, 0)
             soit h1x = sommet_hex_x(x, y, a, 1)
@@ -1966,18 +1966,19 @@ def _gen_bi_hexhex_snubhex(larg, haut, a):
             soit h5y = sommet_hex_y(x, y, a, 5)
             _ajouter_tuile_6_direct(h0x, h0y, h1x, h1y, h2x, h2y, h3x, h3y, h4x, h4y, h5x, h5y, larg, haut)
             si rang % 2 == 0:
-                # snub-hex triangles (3⁴.6 vertex type)
-                _ajouter_snubhex_triangles(x, y, a, larg, haut)
-            sinon:
-                # simple edge triangles (3².6² vertex type)
+                # on even rows: add triangles on edges 1-2, 3-4, 5-0 (alternating pattern for 3².6² vertices)
                 pour i dans range(6):
-                    soit p1x = sommet_hex_x(x, y, a, i)
-                    soit p1y = sommet_hex_y(x, y, a, i)
-                    soit p2x = sommet_hex_x(x, y, a, (i + 1) % 6)
-                    soit p2y = sommet_hex_y(x, y, a, (i + 1) % 6)
-                    soit tx = tri_arete_x3(p1x, p1y, p2x, p2y)
-                    soit ty = tri_arete_y3(p1x, p1y, p2x, p2y)
-                    _ajouter_tuile_3_direct(p1x, p1y, p2x, p2y, tx, ty, larg, haut)
+                    si i % 2 == 1:
+                        soit p1x = sommet_hex_x(x, y, a, i)
+                        soit p1y = sommet_hex_y(x, y, a, i)
+                        soit p2x = sommet_hex_x(x, y, a, (i + 1) % 6)
+                        soit p2y = sommet_hex_y(x, y, a, (i + 1) % 6)
+                        soit tx = tri_arete_x3(p1x, p1y, p2x, p2y)
+                        soit ty = tri_arete_y3(p1x, p1y, p2x, p2y)
+                        _ajouter_tuile_3_direct(p1x, p1y, p2x, p2y, tx, ty, larg, haut)
+            sinon:
+                # on odd rows: snub-hex triangles (3⁴.6 vertex type)
+                _ajouter_snubhex_triangles(x, y, a, larg, haut)
             x = x + pas_x
         rang = rang + 1
         y = y + pas_y
