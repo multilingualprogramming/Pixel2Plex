@@ -34,6 +34,36 @@ def sommet_hex_y(cx, cy, a, idx):
     retour cy - r / 2.0
 
 
+def sommet_hex_flat_x(cx, cy, a, idx):
+    s3 = math.sqrt(3.0)
+    si idx == 0:
+        retour cx + a
+    si idx == 1:
+        retour cx + a / 2.0
+    si idx == 2:
+        retour cx - a / 2.0
+    si idx == 3:
+        retour cx - a
+    si idx == 4:
+        retour cx - a / 2.0
+    retour cx + a / 2.0
+
+
+def sommet_hex_flat_y(cx, cy, a, idx):
+    s3 = math.sqrt(3.0)
+    si idx == 0:
+        retour cy
+    si idx == 1:
+        retour cy + a * s3 / 2.0
+    si idx == 2:
+        retour cy + a * s3 / 2.0
+    si idx == 3:
+        retour cy
+    si idx == 4:
+        retour cy - a * s3 / 2.0
+    retour cy - a * s3 / 2.0
+
+
 def hauteur_tri(a):
     retour a * math.sqrt(3.0) / 2.0
 
@@ -577,6 +607,59 @@ def _ajouter_motif_rhombi_full(cx, cy, a, larg, haut):
         soit bx = hix + dy_next
         soit by = hiy - dx_next
         _ajouter_tuile_3_direct(hix, hiy, ax, ay, bx, by, larg, haut)
+    retour 0
+
+
+def _ajouter_motif_rhombi_flat_full(cx, cy, a, larg, haut):
+    # flat-top hex vertices (clockwise: right, bottom-right, bottom-left, left, top-left, top-right)
+    soit h0x = sommet_hex_flat_x(cx, cy, a, 0)
+    soit h0y = sommet_hex_flat_y(cx, cy, a, 0)
+    soit h1x = sommet_hex_flat_x(cx, cy, a, 1)
+    soit h1y = sommet_hex_flat_y(cx, cy, a, 1)
+    soit h2x = sommet_hex_flat_x(cx, cy, a, 2)
+    soit h2y = sommet_hex_flat_y(cx, cy, a, 2)
+    soit h3x = sommet_hex_flat_x(cx, cy, a, 3)
+    soit h3y = sommet_hex_flat_y(cx, cy, a, 3)
+    soit h4x = sommet_hex_flat_x(cx, cy, a, 4)
+    soit h4y = sommet_hex_flat_y(cx, cy, a, 4)
+    soit h5x = sommet_hex_flat_x(cx, cy, a, 5)
+    soit h5y = sommet_hex_flat_y(cx, cy, a, 5)
+    # draw hex
+    _ajouter_tuile_6_direct(h0x, h0y, h1x, h1y, h2x, h2y, h3x, h3y, h4x, h4y, h5x, h5y, larg, haut)
+    # squares on all 6 edges
+    pour i dans range(6):
+        soit p1x = sommet_hex_flat_x(cx, cy, a, i)
+        soit p1y = sommet_hex_flat_y(cx, cy, a, i)
+        soit p2x = sommet_hex_flat_x(cx, cy, a, (i + 1) % 6)
+        soit p2y = sommet_hex_flat_y(cx, cy, a, (i + 1) % 6)
+        _ajouter_carre_depuis_arete(p1x, p1y, p2x, p2y, larg, haut)
+    # vertex triangles and gap-filling triangles at all 6 vertices
+    pour i dans range(6):
+        soit prev = (i + 5) % 6
+        soit next = (i + 1) % 6
+        soit hix = sommet_hex_flat_x(cx, cy, a, i)
+        soit hiy = sommet_hex_flat_y(cx, cy, a, i)
+        soit hpx = sommet_hex_flat_x(cx, cy, a, prev)
+        soit hpy = sommet_hex_flat_y(cx, cy, a, prev)
+        soit hnx = sommet_hex_flat_x(cx, cy, a, next)
+        soit hny = sommet_hex_flat_y(cx, cy, a, next)
+        # outer corner A: from square on edge h[prev]->h[i]
+        soit dx_prev = hix - hpx
+        soit dy_prev = hiy - hpy
+        soit ax = hix + dy_prev
+        soit ay = hiy - dx_prev
+        # outer corner B: from square on edge h[i]->h[next]
+        soit dx_next = hnx - hix
+        soit dy_next = hny - hiy
+        soit bx = hix + dy_next
+        soit by = hiy - dx_next
+        # vertex triangle: fills 60deg gap between adjacent squares at h[i]
+        _ajouter_tuile_3_direct(hix, hiy, ax, ay, bx, by, larg, haut)
+        # gap triangle: fills 60deg gap at triple-junction between 3 motifs
+        # third vertex is reflection of h[i] across midpoint of (ax,ay)-(bx,by)
+        soit gx = ax + bx - hix
+        soit gy = ay + by - hiy
+        _ajouter_tuile_3_direct(ax, ay, bx, by, gx, gy, larg, haut)
     retour 0
 
 
@@ -2104,23 +2187,18 @@ def _gen_bi_rhombi_snubsq(larg, haut, a):
 
 # 24 — (3.4.6.4 ; 3³.4²) : rhombitrihexagonal + elongated-triangular patchwork
 def _gen_bi_rhombi_elongtri(larg, haut, a):
-    pas_x = a * (2.0 + math.sqrt(3.0))
-    pas_y = a * (1.5 + math.sqrt(3.0))
+    soit col_x = a * (1.5 + math.sqrt(3.0))
+    soit row_y = a * (2.0 + math.sqrt(3.0)) / 2.0
     rang = 0
-    y = -pas_y
-    tantque y <= haut + pas_y:
-        decal = (rang % 2) * (pas_x / 2.0)
-        col = 0
-        x = -pas_x + decal
-        tantque x <= larg + pas_x:
-            si (rang + col) % 2 == 0:
-                _ajouter_motif_rhombi(x, y, a, larg, haut)
-            sinon:
-                _ajouter_patch_elongtri(x, y, a, larg, haut, 0)
-            col = col + 1
-            x = x + pas_x
+    y = -2.0 * row_y
+    tantque y <= haut + 2.0 * row_y:
+        decal = (rang % 2) * col_x
+        x = -2.0 * col_x + decal
+        tantque x <= larg + 2.0 * col_x:
+            _ajouter_motif_rhombi_flat_full(x, y, a, larg, haut)
+            x = x + 2.0 * col_x
         rang = rang + 1
-        y = y + pas_y
+        y = y + row_y
     retour 0
 
 
