@@ -1459,25 +1459,15 @@ def _gen_bi_snubhex_a(larg, haut, a):
 # For complete mathematics, see PHASE1_MATHEMATICS.md
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def _gen_bi_snubhex_b(larg, haut, a):
-    # REWRITTEN: Snub Hexagonal (Variant B)
-    # Simplified shifted checkerboard placement: hexagons at (i, j) where i%2==1 AND j%2==0
-    # This shifts the pattern by one column compared to Variant A
-    # All triangles from the lattice, except those whose centers touch hexagon centers
-
     s3 = math.sqrt(3.0)
-    pad = 8.0 * a
-
-    # Compute bounds for triangular lattice iteration
+    pad = 6.0 * a
     i_min = entier(math.floor((-pad) / (s3 * a / 2.0))) - 4
     i_max = entier(math.ceil((larg + pad) / (s3 * a / 2.0))) + 4
     j_min = entier(math.floor((-pad - (a / 2.0) * i_max) / a)) - 4
     j_max = entier(math.ceil((haut + pad - (a / 2.0) * i_min) / a)) + 4
 
-    # Generate triangles
-    # Two triangles per lattice unit: one upward, one downward
     pour i dans range(i_min, i_max):
         pour j dans range(j_min, j_max):
-            # Lattice vertices
             soit x0 = _sommet_reseau_tri_x(i, j, a)
             soit y0 = _sommet_reseau_tri_y(i, j, a)
             soit x1 = _sommet_reseau_tri_x(i + 1, j, a)
@@ -1487,43 +1477,27 @@ def _gen_bi_snubhex_b(larg, haut, a):
             soit x3 = _sommet_reseau_tri_x(i + 1, j + 1, a)
             soit y3 = _sommet_reseau_tri_y(i + 1, j + 1, a)
 
-            # Triangle 1: (i, j) - (i+1, j) - (i, j+1)
-            # Skip if any vertex is a hexagon center: (i, j), (i+1, j), (i, j+1)
-            # For variant B: hexagon centers are at positions where i is odd and j is even
-            soit hex_i_j = ((i % 2) == 1) et ((j % 2) == 0)
-            soit hex_i1_j = (((i + 1) % 2) == 1) et ((j % 2) == 0)
-            soit hex_i_j1 = ((i % 2) == 1) et (((j + 1) % 2) == 0)
-
-            si non (hex_i_j ou hex_i1_j ou hex_i_j1):
+            si non _triangle_touche_centre_actif(i, j, i + 1, j, i, j + 1, 1):
                 _ajouter_tuile_3_direct(x0, y0, x1, y1, x2, y2, larg, haut)
-
-            # Triangle 2: (i+1, j) - (i+1, j+1) - (i, j+1)
-            soit hex_i1_j1 = (((i + 1) % 2) == 1) et (((j + 1) % 2) == 0)
-
-            si non (hex_i1_j ou hex_i1_j1 ou hex_i_j1):
+            si non _triangle_touche_centre_actif(i + 1, j, i + 1, j + 1, i, j + 1, 1):
                 _ajouter_tuile_3_direct(x1, y1, x3, y3, x2, y2, larg, haut)
 
-    # Generate hexagons at shifted checkerboard positions
     pour i dans range(i_min, i_max + 1):
         pour j dans range(j_min, j_max + 1):
-            # Place hexagon only at odd i, even j positions (shifted by one column)
-            si ((i % 2) == 1) et ((j % 2) == 0):
-                soit cx = _sommet_reseau_tri_x(i, j, a)
-                soit cy = _sommet_reseau_tri_y(i, j, a)
-
+            si _snubhex_b_actif(i, j):
                 _ajouter_tuile_6_direct(
-                    sommet_hex_x(cx, cy, a, 0),
-                    sommet_hex_y(cx, cy, a, 0),
-                    sommet_hex_x(cx, cy, a, 1),
-                    sommet_hex_y(cx, cy, a, 1),
-                    sommet_hex_x(cx, cy, a, 2),
-                    sommet_hex_y(cx, cy, a, 2),
-                    sommet_hex_x(cx, cy, a, 3),
-                    sommet_hex_y(cx, cy, a, 3),
-                    sommet_hex_x(cx, cy, a, 4),
-                    sommet_hex_y(cx, cy, a, 4),
-                    sommet_hex_x(cx, cy, a, 5),
-                    sommet_hex_y(cx, cy, a, 5),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 0),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 0),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 1),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 1),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 2),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 2),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 3),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 3),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 4),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 4),
+                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 5),
+                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 5),
                     larg,
                     haut
                 )
