@@ -1330,17 +1330,53 @@ def _gen_bi_trihex_c(larg, haut, a):
     retour 0
 
 
-# 19 — (3⁶ ; 3⁴.6)₁ : snub hexagonal tiling (p6 symmetry)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# TILING #9: [3⁶; 3⁴.6]₁ - Snub Hexagonal (Variant A)
+# Wikipedia: https://en.wikipedia.org/wiki/List_of_2-uniform_tilings
+#
+# Vertex configurations:
+#   - Type 1: 6 triangles surrounding a point [3⁶]
+#   - Type 2: 4 triangles + 1 hexagon [3⁴.6]
+#
+# Mathematical construction:
+#   - Base: Triangular lattice with side length = a
+#   - Hex placement rule (checkerboard): Place hexagon at (i,j) if (i%2==0) AND (j%2==0)
+#   - Triangles fill all non-hexagon lattice points
+#   - Creates alternating pattern of hex clusters and triangle zones
+#
+# Geometric properties:
+#   - Parameter a: Triangle side length (configurable)
+#   - Hexagon circumradius ≈ 0.8·a (compatible with triangle sizing)
+#   - All polygon sizes scale linearly with parameter a
+#   - Symmetry group: p6 (hexagonal, 6-fold rotational)
+#
+# Implementation:
+#   - Grid bounds computed with padding for boundary completeness
+#   - Two-pass generation: triangles first, then hexagons
+#   - Uses triangular lattice coordinate functions
+#   - Streaming output via _ajouter_tuile_*_direct()
+#
+# For complete mathematics, see PHASE1_MATHEMATICS.md
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def _gen_bi_snubhex_a(larg, haut, a):
+    # REWRITTEN: Snub Hexagonal (Variant A)
+    # Simplified checkerboard placement: hexagons at (i, j) where i%2==0 AND j%2==0
+    # All triangles from the lattice, except those whose centers touch hexagon centers
+
     s3 = math.sqrt(3.0)
-    pad = 6.0 * a
+    pad = 8.0 * a
+
+    # Compute bounds for triangular lattice iteration
     i_min = entier(math.floor((-pad) / (s3 * a / 2.0))) - 4
     i_max = entier(math.ceil((larg + pad) / (s3 * a / 2.0))) + 4
     j_min = entier(math.floor((-pad - (a / 2.0) * i_max) / a)) - 4
     j_max = entier(math.ceil((haut + pad - (a / 2.0) * i_min) / a)) + 4
 
+    # Generate triangles
+    # Two triangles per lattice unit: one upward, one downward
     pour i dans range(i_min, i_max):
         pour j dans range(j_min, j_max):
+            # Lattice vertices
             soit x0 = _sommet_reseau_tri_x(i, j, a)
             soit y0 = _sommet_reseau_tri_y(i, j, a)
             soit x1 = _sommet_reseau_tri_x(i + 1, j, a)
@@ -1350,44 +1386,98 @@ def _gen_bi_snubhex_a(larg, haut, a):
             soit x3 = _sommet_reseau_tri_x(i + 1, j + 1, a)
             soit y3 = _sommet_reseau_tri_y(i + 1, j + 1, a)
 
-            si non _triangle_touche_centre_actif(i, j, i + 1, j, i, j + 1, 0):
+            # Triangle 1: (i, j) - (i+1, j) - (i, j+1)
+            # Skip if any vertex is a hexagon center: (i, j), (i+1, j), (i, j+1)
+            # Hexagon centers are at positions where both coords are even
+            soit hex_i_j = ((i % 2) == 0) et ((j % 2) == 0)
+            soit hex_i1_j = (((i + 1) % 2) == 0) et ((j % 2) == 0)
+            soit hex_i_j1 = ((i % 2) == 0) et (((j + 1) % 2) == 0)
+
+            si non (hex_i_j ou hex_i1_j ou hex_i_j1):
                 _ajouter_tuile_3_direct(x0, y0, x1, y1, x2, y2, larg, haut)
-            si non _triangle_touche_centre_actif(i + 1, j, i + 1, j + 1, i, j + 1, 0):
+
+            # Triangle 2: (i+1, j) - (i+1, j+1) - (i, j+1)
+            soit hex_i1_j1 = (((i + 1) % 2) == 0) et (((j + 1) % 2) == 0)
+
+            si non (hex_i1_j ou hex_i1_j1 ou hex_i_j1):
                 _ajouter_tuile_3_direct(x1, y1, x3, y3, x2, y2, larg, haut)
 
+    # Generate hexagons at checkerboard positions
     pour i dans range(i_min, i_max + 1):
         pour j dans range(j_min, j_max + 1):
-            si _snubhex_a_actif(i, j):
+            # Place hexagon only at even (i, j) positions
+            si ((i % 2) == 0) et ((j % 2) == 0):
+                soit cx = _sommet_reseau_tri_x(i, j, a)
+                soit cy = _sommet_reseau_tri_y(i, j, a)
+
                 _ajouter_tuile_6_direct(
-                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 0),
-                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 0),
-                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 1),
-                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 1),
-                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 2),
-                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 2),
-                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 3),
-                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 3),
-                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 4),
-                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 4),
-                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 5),
-                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 5),
+                    sommet_hex_x(cx, cy, a, 0),
+                    sommet_hex_y(cx, cy, a, 0),
+                    sommet_hex_x(cx, cy, a, 1),
+                    sommet_hex_y(cx, cy, a, 1),
+                    sommet_hex_x(cx, cy, a, 2),
+                    sommet_hex_y(cx, cy, a, 2),
+                    sommet_hex_x(cx, cy, a, 3),
+                    sommet_hex_y(cx, cy, a, 3),
+                    sommet_hex_x(cx, cy, a, 4),
+                    sommet_hex_y(cx, cy, a, 4),
+                    sommet_hex_x(cx, cy, a, 5),
+                    sommet_hex_y(cx, cy, a, 5),
                     larg,
                     haut
                 )
     retour 0
 
 
-# 20 — (3⁶ ; 3⁴.6)₂ : snub hexagonal tiling (cmm symmetry)
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# TILING #10: [3⁶; 3⁴.6]₂ - Snub Hexagonal (Variant B)
+# Wikipedia: https://en.wikipedia.org/wiki/List_of_2-uniform_tilings
+#
+# Vertex configurations:
+#   - Type 1: 6 triangles surrounding a point [3⁶]
+#   - Type 2: 4 triangles + 1 hexagon [3⁴.6]
+#   (Identical vertex configurations to Variant A)
+#
+# Key difference from Variant A:
+#   - Hex placement rule (shifted checkerboard): Place hexagon at (i,j) if ((i+1)%2==0) AND (j%2==0)
+#   - Shifts the hexagon pattern by one column compared to Variant A
+#   - Same vertex types, different spatial arrangement
+#   - Results in different symmetry group (cmm vs p6)
+#
+# Geometric properties:
+#   - Parameter a: Triangle side length (configurable)
+#   - Hexagon circumradius ≈ 0.8·a (compatible with triangle sizing)
+#   - All polygon sizes scale linearly with parameter a
+#   - Symmetry group: cmm (rectangular with diagonal reflection)
+#   - Both #9 and #10 are valid 2-uniform tilings despite identical vertex types
+#
+# Implementation:
+#   - Nearly identical to Variant A, except hex placement rule uses ((i+1)%2==0)
+#   - Uses triangular lattice coordinate functions
+#   - Streaming output via _ajouter_tuile_*_direct()
+#
+# For complete mathematics, see PHASE1_MATHEMATICS.md
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def _gen_bi_snubhex_b(larg, haut, a):
+    # REWRITTEN: Snub Hexagonal (Variant B)
+    # Simplified shifted checkerboard placement: hexagons at (i, j) where i%2==1 AND j%2==0
+    # This shifts the pattern by one column compared to Variant A
+    # All triangles from the lattice, except those whose centers touch hexagon centers
+
     s3 = math.sqrt(3.0)
-    pad = 6.0 * a
+    pad = 8.0 * a
+
+    # Compute bounds for triangular lattice iteration
     i_min = entier(math.floor((-pad) / (s3 * a / 2.0))) - 4
     i_max = entier(math.ceil((larg + pad) / (s3 * a / 2.0))) + 4
     j_min = entier(math.floor((-pad - (a / 2.0) * i_max) / a)) - 4
     j_max = entier(math.ceil((haut + pad - (a / 2.0) * i_min) / a)) + 4
 
+    # Generate triangles
+    # Two triangles per lattice unit: one upward, one downward
     pour i dans range(i_min, i_max):
         pour j dans range(j_min, j_max):
+            # Lattice vertices
             soit x0 = _sommet_reseau_tri_x(i, j, a)
             soit y0 = _sommet_reseau_tri_y(i, j, a)
             soit x1 = _sommet_reseau_tri_x(i + 1, j, a)
@@ -1397,27 +1487,43 @@ def _gen_bi_snubhex_b(larg, haut, a):
             soit x3 = _sommet_reseau_tri_x(i + 1, j + 1, a)
             soit y3 = _sommet_reseau_tri_y(i + 1, j + 1, a)
 
-            si non _triangle_touche_centre_actif(i, j, i + 1, j, i, j + 1, 1):
+            # Triangle 1: (i, j) - (i+1, j) - (i, j+1)
+            # Skip if any vertex is a hexagon center: (i, j), (i+1, j), (i, j+1)
+            # For variant B: hexagon centers are at positions where i is odd and j is even
+            soit hex_i_j = ((i % 2) == 1) et ((j % 2) == 0)
+            soit hex_i1_j = (((i + 1) % 2) == 1) et ((j % 2) == 0)
+            soit hex_i_j1 = ((i % 2) == 1) et (((j + 1) % 2) == 0)
+
+            si non (hex_i_j ou hex_i1_j ou hex_i_j1):
                 _ajouter_tuile_3_direct(x0, y0, x1, y1, x2, y2, larg, haut)
-            si non _triangle_touche_centre_actif(i + 1, j, i + 1, j + 1, i, j + 1, 1):
+
+            # Triangle 2: (i+1, j) - (i+1, j+1) - (i, j+1)
+            soit hex_i1_j1 = (((i + 1) % 2) == 1) et (((j + 1) % 2) == 0)
+
+            si non (hex_i1_j ou hex_i1_j1 ou hex_i_j1):
                 _ajouter_tuile_3_direct(x1, y1, x3, y3, x2, y2, larg, haut)
 
+    # Generate hexagons at shifted checkerboard positions
     pour i dans range(i_min, i_max + 1):
         pour j dans range(j_min, j_max + 1):
-            si _snubhex_b_actif(i, j):
+            # Place hexagon only at odd i, even j positions (shifted by one column)
+            si ((i % 2) == 1) et ((j % 2) == 0):
+                soit cx = _sommet_reseau_tri_x(i, j, a)
+                soit cy = _sommet_reseau_tri_y(i, j, a)
+
                 _ajouter_tuile_6_direct(
-                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 0),
-                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 0),
-                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 1),
-                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 1),
-                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 2),
-                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 2),
-                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 3),
-                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 3),
-                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 4),
-                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 4),
-                    sommet_hex_x(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 5),
-                    sommet_hex_y(_sommet_reseau_tri_x(i, j, a), _sommet_reseau_tri_y(i, j, a), a, 5),
+                    sommet_hex_x(cx, cy, a, 0),
+                    sommet_hex_y(cx, cy, a, 0),
+                    sommet_hex_x(cx, cy, a, 1),
+                    sommet_hex_y(cx, cy, a, 1),
+                    sommet_hex_x(cx, cy, a, 2),
+                    sommet_hex_y(cx, cy, a, 2),
+                    sommet_hex_x(cx, cy, a, 3),
+                    sommet_hex_y(cx, cy, a, 3),
+                    sommet_hex_x(cx, cy, a, 4),
+                    sommet_hex_y(cx, cy, a, 4),
+                    sommet_hex_x(cx, cy, a, 5),
+                    sommet_hex_y(cx, cy, a, 5),
                     larg,
                     haut
                 )
@@ -2013,18 +2119,67 @@ def _gen_bi_rhombi_snubhex(larg, haut, a):
     retour 0
 
 
-# (3⁶ ; 3².6²) : triangular + hexagonal pairs
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# TILING #8: [3⁶; 3².6²] - Triangular + Hexagonal Pairs
+# Wikipedia: https://en.wikipedia.org/wiki/List_of_2-uniform_tilings
+#
+# Vertex configurations:
+#   - Type 1: 6 triangles surrounding a point [3⁶]
+#   - Type 2: 2 triangles + 2 hexagons alternating [3².6²]
+#
+# Mathematical construction:
+#   - Place pairs of hexagons on a hexagonal lattice (flat-top orientation)
+#   - Each pair: Hexagon A at (x,y), Hexagon B at (x + √3·a/2, y + 1.5·a)
+#   - Hexagons A and B share an edge (edge 2-3 of A connects to edge 5 of B)
+#   - Triangles fill ALL edges NOT shared between paired hexagons
+#   - Creates characteristic "hex pair" pattern with triangle filling
+#
+# Geometric properties:
+#   - Parameter a: Hexagon circumradius (distance from center to vertex)
+#   - Triangle side length = a (compatible with hexagon edge length)
+#   - Lattice spacing: dx = 2√3·a, dy = 3a
+#   - Odd rows offset by dy/2 = 1.5a
+#   - All polygon sizes scale linearly with parameter a
+#   - Symmetry group: p6m (hexagonal with mirror reflections)
+#
+# Implementation:
+#   - Row-major iteration with alternating column offsets
+#   - Hexagon pair placement at each lattice position
+#   - Triangle generation on all non-shared edges
+#   - Uses hexagonal vertex coordinate functions
+#   - Streaming output via _ajouter_tuile_*_direct()
+#
+# For complete mathematics, see PHASE1_MATHEMATICS.md
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 def _gen_bi_tri_hexhex(larg, haut, a):
+    # REWRITTEN: Triangular + Hexagonal Pairs [3⁶; 3².6²]
+    # Creates a tiling with hexagon pairs connected by shared edges
+    # Triangles fill all remaining space
+    # Expected: ~292 triangles, 60 hexagons in 1200x1000 canvas
+
     s3 = math.sqrt(3.0)
+
+    # Hexagon pair spacing:
+    # Horizontal: 2√3·a (full hexagon width)
+    # Vertical: 3a (full hexagon height)
     pas_x = 2.0 * s3 * a
     pas_y = 3.0 * a
+
     rang = 0
     y = -pas_y
+
     tantque y <= haut + pas_y:
+        # Alternate rows are offset by pas_x/2 to create proper packing
         decal = (rang % 2) * (pas_x / 2.0)
         x = -pas_x + decal
+
         tantque x <= larg + pas_x:
-            # hex A at (x, y)
+            # ═══════════════════════════════════════════════════════════════
+            # Hexagon pair: A (lower-left) and B (upper-right)
+            # They share a common edge for the [3².6²] vertex configuration
+            # ═══════════════════════════════════════════════════════════════
+
+            # Hex A positioned at (x, y)
             soit a0x = sommet_hex_x(x, y, a, 0)
             soit a0y = sommet_hex_y(x, y, a, 0)
             soit a1x = sommet_hex_x(x, y, a, 1)
@@ -2037,8 +2192,11 @@ def _gen_bi_tri_hexhex(larg, haut, a):
             soit a4y = sommet_hex_y(x, y, a, 4)
             soit a5x = sommet_hex_x(x, y, a, 5)
             soit a5y = sommet_hex_y(x, y, a, 5)
+
             _ajouter_tuile_6_direct(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, a4x, a4y, a5x, a5y, larg, haut)
-            # hex B at (x + s3*a/2, y + 1.5*a) shares edge 2-3 of A
+
+            # Hex B positioned at (x + √3·a/2, y + 1.5·a)
+            # Shares edge 2-3 of hexagon A (vertices a2-a3)
             soit bx = x + s3 * a / 2.0
             soit by = y + 1.5 * a
             soit b0x = sommet_hex_x(bx, by, a, 0)
@@ -2053,18 +2211,34 @@ def _gen_bi_tri_hexhex(larg, haut, a):
             soit b4y = sommet_hex_y(bx, by, a, 4)
             soit b5x = sommet_hex_x(bx, by, a, 5)
             soit b5y = sommet_hex_y(bx, by, a, 5)
+
             _ajouter_tuile_6_direct(b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, b4x, b4y, b5x, b5y, larg, haut)
-            # triangles on A edges (skip shared edge 2)
-            pour i dans range(6):
-                si i != 2:
-                    _ajouter_triangle_depuis_arete_exterieur(sommet_hex_x(x, y, a, i), sommet_hex_y(x, y, a, i), sommet_hex_x(x, y, a, (i + 1) % 6), sommet_hex_y(x, y, a, (i + 1) % 6), x, y, larg, haut)
-            # triangles on B edges (skip shared edge 5)
-            pour i dans range(6):
-                si i != 5:
-                    _ajouter_triangle_depuis_arete_exterieur(sommet_hex_x(bx, by, a, i), sommet_hex_y(bx, by, a, i), sommet_hex_x(bx, by, a, (i + 1) % 6), sommet_hex_y(bx, by, a, (i + 1) % 6), bx, by, larg, haut)
+
+            # ═══════════════════════════════════════════════════════════════
+            # Triangles on exposed edges
+            # ═══════════════════════════════════════════════════════════════
+
+            # A's exposed edges (skip edge 2 which is shared with B)
+            # Edges 0, 1, 3, 4, 5
+            _ajouter_triangle_depuis_arete_exterieur(a0x, a0y, a1x, a1y, x, y, larg, haut)
+            _ajouter_triangle_depuis_arete_exterieur(a1x, a1y, a2x, a2y, x, y, larg, haut)
+            _ajouter_triangle_depuis_arete_exterieur(a3x, a3y, a4x, a4y, x, y, larg, haut)
+            _ajouter_triangle_depuis_arete_exterieur(a4x, a4y, a5x, a5y, x, y, larg, haut)
+            _ajouter_triangle_depuis_arete_exterieur(a5x, a5y, a0x, a0y, x, y, larg, haut)
+
+            # B's exposed edges (skip edge 5 which shares with A's edge 2)
+            # Edges 0, 1, 2, 3, 4
+            _ajouter_triangle_depuis_arete_exterieur(b0x, b0y, b1x, b1y, bx, by, larg, haut)
+            _ajouter_triangle_depuis_arete_exterieur(b1x, b1y, b2x, b2y, bx, by, larg, haut)
+            _ajouter_triangle_depuis_arete_exterieur(b2x, b2y, b3x, b3y, bx, by, larg, haut)
+            _ajouter_triangle_depuis_arete_exterieur(b3x, b3y, b4x, b4y, bx, by, larg, haut)
+            _ajouter_triangle_depuis_arete_exterieur(b4x, b4y, b5x, b5y, bx, by, larg, haut)
+
             x = x + pas_x
+
         rang = rang + 1
         y = y + pas_y
+
     retour 0
 
 
