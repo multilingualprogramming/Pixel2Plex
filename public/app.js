@@ -444,16 +444,7 @@ async function rendreSortie() {
     ctx.fillStyle = `rgb(${Math.round(rT/ns)},${Math.round(gT/ns)},${Math.round(bT/ns)})`;
     ctx.fillRect(0, 0, w, h);
 
-    let cote = entierSur(state.side, 30, 1);
-    const coteMin = coteSurete(w, h, state.method);
-    if (cote < coteMin) {
-      cote = coteMin;
-      state.side = cote;
-      const el = document.getElementById("tile-size");
-      if (el) el.value = String(cote);
-      const el2 = document.getElementById("tile-size-display");
-      if (el2) el2.textContent = String(cote);
-    }
+    const cote = entierSur(state.side, 30, 1);
 
     const code    = entierSur(METHODES[state.method], 0, 0);
     const nTuiles = Number(wasm.generer_tuiles(w, h, cote, code));

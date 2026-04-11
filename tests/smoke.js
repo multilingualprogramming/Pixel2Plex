@@ -474,6 +474,32 @@ async function testRenderSanitisesTileSize() {
   assert.ok(capturedSide >= 1);
 }
 
+async function testRenderUsesSelectedTileSize() {
+  const { api, elements } = buildHarness();
+  elements.get("source-canvas").width = 1600;
+  elements.get("source-canvas").height = 1200;
+  let capturedSide;
+  let capturedCode;
+  api.state.side = 5;
+  api.state.method = "bi_snubhex_a";
+  api.setWasm(buildMockWasm(
+    [[0, 0], [10, 0], [10, 10], [0, 10]],
+    {
+      generer_tuiles(_w, _h, side, code) {
+        capturedSide = side;
+        capturedCode = code;
+        return 1;
+      },
+      charger_tuile() {
+        return 4;
+      },
+    }
+  ));
+  await api.rendreSortie();
+  assert.strictEqual(capturedSide, 5);
+  assert.strictEqual(capturedCode, api.METHODES.bi_snubhex_a);
+}
+
 async function testAllMethodsRender() {
   for (const method of METHODS) {
     const { api, elements } = buildHarness();
@@ -579,6 +605,7 @@ async function run() {
   await testMlResetCalledBeforeEachRender();
   await testRenderSkipsInvalidTiles();
   await testRenderSanitisesTileSize();
+  await testRenderUsesSelectedTileSize();
   await testAllMethodsRender();
   await testWasmExportsPresent();
   await testWasmMethodCodesMatch();

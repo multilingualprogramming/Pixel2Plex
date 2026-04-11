@@ -2505,6 +2505,8 @@ def _gen_bi_3462_trihex_b(larg, haut, a):
     retour 0
 
 # ── Dispatch principal ────────────────────────────────────────
+# Le parametre `a` correspond a la valeur "Taille des tuiles" de l'interface
+# et est conserve dans `_gen_a` pour le rejeu des tuiles en cache.
 
 def generer_tuiles(larg, haut, a, methode):
     global _methode_active, _gen_larg, _gen_haut, _gen_a
