@@ -217,3 +217,7 @@ public/demiregulier.wasm
 public/demiregulier.wat
 public/demiregulier_wasm.ml
 public/main.ml
+
+# Reference and verification SVGs (Wikipedia images and reference files)
+2-uniform_*.svg
+verify_*.svg
