@@ -1963,7 +1963,72 @@ def _gen_bi_dodec_grandrhombi(larg, haut, a):
 
 # custom — (3.4.6.4 ; 4.6.12) : rhombitrihexagonal and great rhombitrihexagonal tiling
 def _gen_bi_rhombi_grandrhombi(larg, haut, a):
-    pass
+    apo12 = apotheme_dodec(a)
+    pas_x = 2.0 * apo12
+    pas_y = math.sqrt(3.0) * apo12
+    rang = 0
+    y = -pas_y
+    tantque y <= haut + pas_y:
+        decal = (rang % 2) * (pas_x / 2.0)
+        col = 0
+        x = -pas_x + decal
+        tantque x <= larg + pas_x:
+            soit d0x = sommet_dodec_x(x, y, a, 0)
+            soit d0y = sommet_dodec_y(x, y, a, 0)
+            soit d1x = sommet_dodec_x(x, y, a, 1)
+            soit d1y = sommet_dodec_y(x, y, a, 1)
+            soit d2x = sommet_dodec_x(x, y, a, 2)
+            soit d2y = sommet_dodec_y(x, y, a, 2)
+            soit d3x = sommet_dodec_x(x, y, a, 3)
+            soit d3y = sommet_dodec_y(x, y, a, 3)
+            soit d4x = sommet_dodec_x(x, y, a, 4)
+            soit d4y = sommet_dodec_y(x, y, a, 4)
+            soit d5x = sommet_dodec_x(x, y, a, 5)
+            soit d5y = sommet_dodec_y(x, y, a, 5)
+            soit d6x = sommet_dodec_x(x, y, a, 6)
+            soit d6y = sommet_dodec_y(x, y, a, 6)
+            soit d7x = sommet_dodec_x(x, y, a, 7)
+            soit d7y = sommet_dodec_y(x, y, a, 7)
+            soit d8x = sommet_dodec_x(x, y, a, 8)
+            soit d8y = sommet_dodec_y(x, y, a, 8)
+            soit d9x = sommet_dodec_x(x, y, a, 9)
+            soit d9y = sommet_dodec_y(x, y, a, 9)
+            soit d10x = sommet_dodec_x(x, y, a, 10)
+            soit d10y = sommet_dodec_y(x, y, a, 10)
+            soit d11x = sommet_dodec_x(x, y, a, 11)
+            soit d11y = sommet_dodec_y(x, y, a, 11)
+            _ajouter_tuile_12_direct(d0x, d0y, d1x, d1y, d2x, d2y, d3x, d3y, d4x, d4y, d5x, d5y, d6x, d6y, d7x, d7y, d8x, d8y, d9x, d9y, d10x, d10y, d11x, d11y, larg, haut)
+            si (rang + col) % 2 == 0:
+                pour i dans range(0, 12, 2):
+                    soit p1x = sommet_dodec_x(x, y, a, i)
+                    soit p1y = sommet_dodec_y(x, y, a, i)
+                    soit p2x = sommet_dodec_x(x, y, a, i + 1)
+                    soit p2y = sommet_dodec_y(x, y, a, i + 1)
+                    _ajouter_carre_depuis_arete(p2x, p2y, p1x, p1y, larg, haut)
+                pour i dans range(1, 12, 2):
+                    soit p1x = sommet_dodec_x(x, y, a, i)
+                    soit p1y = sommet_dodec_y(x, y, a, i)
+                    soit p2x = sommet_dodec_x(x, y, a, (i + 1) % 12)
+                    soit p2y = sommet_dodec_y(x, y, a, (i + 1) % 12)
+                    _ajouter_hex_depuis_arete(p2x, p2y, p1x, p1y, larg, haut)
+            sinon:
+                pour i dans range(0, 12, 2):
+                    soit p1x = sommet_dodec_x(x, y, a, i)
+                    soit p1y = sommet_dodec_y(x, y, a, i)
+                    soit p2x = sommet_dodec_x(x, y, a, i + 1)
+                    soit p2y = sommet_dodec_y(x, y, a, i + 1)
+                    _ajouter_hex_depuis_arete(p2x, p2y, p1x, p1y, larg, haut)
+                pour i dans range(1, 12, 2):
+                    soit p1x = sommet_dodec_x(x, y, a, i)
+                    soit p1y = sommet_dodec_y(x, y, a, i)
+                    soit p2x = sommet_dodec_x(x, y, a, (i + 1) % 12)
+                    soit p2y = sommet_dodec_y(x, y, a, (i + 1) % 12)
+                    _ajouter_carre_depuis_arete(p2x, p2y, p1x, p1y, larg, haut)
+            col = col + 1
+            x = x + pas_x
+        rang = rang + 1
+        y = y + pas_y
+    retour 0
 
 
 # custom — (3.12² ; 3.4.6.4) : truncated hexagonal and rhombitrihexagonal tiling
