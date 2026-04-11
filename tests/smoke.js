@@ -153,8 +153,6 @@ function buildHarness() {
     "tab-sources",
     "gallery-grid-2u",
     "gallery-2u",
-    "gallery-3u",
-    "gallery-4u",
     "processing-overlay",
     "source-canvas",
     "output-canvas",
@@ -165,13 +163,6 @@ function buildHarness() {
   elements.get("tab-studio").classList.add("tab");
   elements.get("tab-gallery").classList.add("tab");
   elements.get("tab-sources").classList.add("tab");
-
-  const filterButtons = [2, 3, 4].map((k) => {
-    const btn = new MockElement(`filter-${k}`);
-    btn.classList.add("filter-btn");
-    btn.dataset.k = String(k);
-    return btn;
-  });
 
   const document = {
     getElementById(id) {
@@ -187,7 +178,6 @@ function buildHarness() {
       return null;
     },
     querySelectorAll(selector) {
-      if (selector === ".filter-btn") return filterButtons;
       return [];
     },
   };

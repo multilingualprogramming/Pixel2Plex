@@ -573,12 +573,6 @@ function basculerOnglet(nom) {
   }
 }
 
-function basculerFiltreK(k) {
-  document.querySelectorAll(".filter-btn").forEach(b => b.classList.toggle("active", b.dataset.k === String(k)));
-  document.getElementById("gallery-2u").hidden = (k !== 2);
-  document.getElementById("gallery-3u").hidden = (k !== 3);
-  document.getElementById("gallery-4u").hidden = (k !== 4);
-}
 
 // ── Contrôles ────────────────────────────────────────────────
 
@@ -681,14 +675,6 @@ function lierControles() {
   document.getElementById("tab-gallery").addEventListener("click", () => {
     basculerOnglet("gallery");
     rendreGalerie2u();
-  });
-
-  document.querySelectorAll(".filter-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const k = Number(btn.dataset.k);
-      basculerFiltreK(k);
-      if (k === 2) rendreGalerie2u();
-    });
   });
 }
 

@@ -19,11 +19,15 @@
         <p class="eyebrow">multilingual fran&ccedil;ais &rarr; wasm</p>
         <h1>Pixel2Plex</h1>
       </div>
-      <nav class="tab-nav">
-        <button type="button" class="tab active" id="tab-studio">Studio</button>
-        <button type="button" class="tab" id="tab-gallery">Galerie</button>
-        <button type="button" class="tab" id="tab-sources">Sources</button>
-      </nav>
+      <div class="topbar-actions">
+        <a class="topbar-link" href="https://github.com/multilingualprogramming/Pixel2Plex" target="_blank"
+          rel="noreferrer">GitHub</a>
+        <nav class="tab-nav">
+          <button type="button" class="tab active" id="tab-studio">Studio</button>
+          <button type="button" class="tab" id="tab-gallery">Galerie</button>
+          <button type="button" class="tab" id="tab-sources">Sources</button>
+        </nav>
+      </div>
     </header>
 
     <main>
@@ -187,39 +191,12 @@
       <section id="gallery-panel" class="gallery-panel" hidden>
         <div class="gallery-header">
           <h2>Galerie des pavages d&eacute;mir&eacute;guliers</h2>
-          <p>Pavages <strong>k-uniformes</strong> (k &ge; 2) &mdash; chaque sommet appartient &agrave; exactement
-            <strong>k</strong> types de configurations de sommets distincts. Les 20 pavages&nbsp;2-uniformes canoniques et
-            des variantes sont impl&eacute;ment&eacute;s. Les pavages 3-uniformes (61) et 4-uniformes (151) sont r&eacute;f&eacute;renc&eacute;s.</p>
-          <div class="gallery-filter-bar">
-            <button type="button" class="filter-btn active" data-k="2">2-uniformes (20)</button>
-            <button type="button" class="filter-btn" data-k="3">3-uniformes (61)</button>
-            <button type="button" class="filter-btn" data-k="4">4-uniformes (151)</button>
-          </div>
+          <p>Les 20 pavages&nbsp;2-uniformes canoniques et leurs variantes impl&eacute;ment&eacute;es sont r&eacute;unis
+            ici.</p>
         </div>
 
-        <!-- 2-uniformes -->
         <div id="gallery-2u" class="gallery-k-section">
           <div class="k-section-groups" id="gallery-grid-2u"></div>
-        </div>
-
-        <!-- 3-uniformes -->
-        <div id="gallery-3u" class="gallery-k-section" hidden>
-          <div class="k-placeholder">
-            <div class="k-placeholder-icon">&#9671;&#9651;&#9633;</div>
-            <h3>Pavages 3-uniformes</h3>
-            <p>61 pavages avec 3 types de configurations de sommets distincts.</p>
-            <p class="muted">Impl&eacute;mentation g&eacute;om&eacute;trique &agrave; venir.</p>
-          </div>
-        </div>
-
-        <!-- 4-uniformes -->
-        <div id="gallery-4u" class="gallery-k-section" hidden>
-          <div class="k-placeholder">
-            <div class="k-placeholder-icon">&#9671;&#9651;&#9633;&#11041;</div>
-            <h3>Pavages 4-uniformes</h3>
-            <p>151 pavages avec 4 types de configurations de sommets distincts.</p>
-            <p class="muted">Impl&eacute;mentation g&eacute;om&eacute;trique &agrave; venir.</p>
-          </div>
         </div>
       </section>
 
@@ -258,7 +235,8 @@
                 <p>Script de compilation multilingual fran&ccedil;ais &mdash;
                   assemble le bundle, g&eacute;n&egrave;re WAT via
                   <code>WATCodeGenerator</code>, puis compile avec
-                  <code>wasmtime.wat2wasm</code>.</p>
+                  <code>wasmtime.wat2wasm</code>.
+                </p>
               </article>
 
             </div>
@@ -272,7 +250,8 @@
                 <h4><code>generer_tuiles(larg, haut, a, methode)</code></h4>
                 <p>G&eacute;n&egrave;re toutes les tuiles du pavage et retourne leur nombre.
                   <em>a</em> correspond &agrave; la valeur <strong>Taille des tuiles</strong> du studio, et
-                  <em>methode</em> est un entier de 0 &agrave; 33.</p>
+                  <em>methode</em> est un entier de 0 &agrave; 33.
+                </p>
               </article>
 
               <article class="source-card source-card-export">
