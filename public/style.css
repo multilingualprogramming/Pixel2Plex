@@ -80,13 +80,6 @@ pre {
 
 .topbar-brand { display: flex; flex-direction: column; gap: 1px; }
 
-.topbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
 
 .topbar h1 {
   margin: 0;
@@ -108,26 +101,7 @@ pre {
   font-family: "JetBrains Mono", monospace;
 }
 
-.topbar-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 36px;
-  padding: 7px 14px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: rgba(138, 210, 122, 0.10);
-  color: var(--accent-2);
-  font-size: 0.82rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.18s, border-color 0.18s, color 0.18s;
-}
 
-.topbar-link:hover {
-  background: rgba(138, 210, 122, 0.22);
-  border-color: var(--accent);
-  color: var(--text);
-}
 
 /* ── Tabs ── */
 
@@ -156,6 +130,12 @@ pre {
   color: var(--text);
   border-color: var(--border);
   background: rgba(138, 210, 122, 0.17);
+}
+
+.tab-link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
 }
 
 /* ── Main layout ── */
