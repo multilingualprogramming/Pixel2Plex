@@ -521,7 +521,7 @@ function ensureProjectWasm() {
   if (fs.existsSync(WASM_PATH)) return;
   childProcess.execFileSync(
     "python",
-    ["-m", "multilingualprogramming", "scripts/compile_wasm.ml"],
+    ["-m", "multilingualprogramming", "scripts/compile_wasm.multi"],
     { cwd: ROOT, stdio: "pipe" }
   );
   assert.ok(fs.existsSync(WASM_PATH));

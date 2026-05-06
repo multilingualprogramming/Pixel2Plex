@@ -1,0 +1,1 @@
+importer demiregulier_wasm

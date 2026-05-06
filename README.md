@@ -31,10 +31,10 @@ demiregular tilings.
 ```text
 Pixel2Plex/
 |-- src/
-|   |-- demiregulier_wasm.ml
-|   `-- main.ml
+|   |-- demiregulier_wasm.multi
+|   `-- main.multi
 |-- scripts/
-|   `-- compile_wasm.ml
+|   `-- compile_wasm.multi
 |-- public/
 |   |-- index.html
 |   |-- style.css
@@ -55,7 +55,7 @@ pip install -r requirements-build.txt
 Compile the WebAssembly bundle:
 
 ```bash
-python -m multilingualprogramming scripts/compile_wasm.ml
+python -m multilingualprogramming scripts/compile_wasm.multi
 ```
 
 This generates:
