@@ -23,8 +23,6 @@ function countPolygonsByType(svgContent) {
   return counts;
 }
 
-const baseDir = process.cwd();
-
 const files = [
   { name: "Code 3: bi_snubhex_a", expected: "653 tri + 39 hex = 692" },
   { name: "Code 4: bi_snubhex_b", expected: "650 tri + 39 hex = 689" },
