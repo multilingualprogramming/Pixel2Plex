@@ -44,7 +44,7 @@ jobs:
           python -m pip install -r requirements-build.txt
 
       - name: Compile Multilingual sources to WebAssembly
-        run: python -m multilingualprogramming scripts/compile_wasm.ml
+        run: python -m multilingualprogramming scripts/compile_wasm.multi
 
       - name: Verify build artifacts
         run: |
